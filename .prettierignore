@@ -1,0 +1,2 @@
+# Вывод Prisma — форматирование даёт лишний дифф относительно prisma generate
+generated

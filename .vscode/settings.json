@@ -1,0 +1,16 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+    "^~/.*\\/_lib\\/(?!index(?:\\.tsx?)?$).+",
+    "^\\.\\./.*\\/_lib\\/(?!index(?:\\.tsx?)?$).+",
+    "^\\.\\./_lib\\/(?!index(?:\\.tsx?)?$).+"
+  ],
+  "javascript.preferences.autoImportSpecifierExcludeRegexes": [
+    "^~/.*\\/_lib\\/(?!index(?:\\.tsx?)?$).+",
+    "^\\.\\./.*\\/_lib\\/(?!index(?:\\.tsx?)?$).+",
+    "^\\.\\./_lib\\/(?!index(?:\\.tsx?)?$).+"
+  ],
+  "prisma.pinToPrisma6": true
+}

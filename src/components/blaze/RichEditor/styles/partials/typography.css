@@ -1,0 +1,39 @@
+.rich-editor .ProseMirror .heading-node {
+  @apply relative font-semibold;
+}
+
+.rich-editor .ProseMirror .heading-node:first-child {
+  @apply mt-0;
+}
+
+.rich-editor .ProseMirror h1 {
+  @apply mb-4 mt-[46px] text-[1.375rem] leading-7 tracking-[-0.004375rem];
+}
+
+.rich-editor .ProseMirror h2 {
+  @apply mb-3.5 mt-8 text-[1.1875rem] leading-7 tracking-[0.003125rem];
+}
+
+.rich-editor .ProseMirror h3 {
+  @apply mb-3 mt-6 text-[1.0625rem] leading-6 tracking-[0.00625rem];
+}
+
+.rich-editor .ProseMirror h4 {
+  @apply mb-2 mt-4 text-[0.9375rem] leading-6;
+}
+
+.rich-editor .ProseMirror h5 {
+  @apply mb-2 mt-4 text-sm;
+}
+
+.rich-editor .ProseMirror h5 {
+  @apply mb-2 mt-4 text-sm;
+}
+
+.rich-editor .ProseMirror a.link {
+  @apply cursor-pointer text-primary;
+}
+
+.rich-editor .ProseMirror a.link:hover {
+  @apply underline;
+}

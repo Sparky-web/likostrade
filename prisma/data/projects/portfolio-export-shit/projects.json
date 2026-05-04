@@ -1,0 +1,325 @@
+[
+  {
+    "id": "likos_proj_el_azimut_trast",
+    "title": "Комплект НКУ: силовой шкаф, шкаф управления и пульт аспирации",
+    "shortDescription": "Три НКУ для производства: ПЧ MD500 75/90 кВт, управление аспирацией и паспорта по ГОСТ.",
+    "dateCompleted": "2024-07-09",
+    "price": "500 000 ₽",
+    "timeToComplete": "60 дней",
+    "task": "<p>Требовалось спроектировать и изготовить комплект <strong>низковольтного оборудования</strong>: <strong>силовой шкаф</strong>, <strong>шкаф управления</strong> и <strong>пульт аспирационной установки</strong>. Необходимы распределение и защита силовых цепей, управление приводами с <strong>частотными преобразователями</strong>, местное управление вентиляцией и фильтрацией.</p>",
+    "workProgress": "<p>Подобрали аппаратуру (<strong>ПЧ MD500 75/90 кВт</strong>, <strong>MD310 11 кВт</strong>, автоматика, дроссели), разработали схемы и паспорта <strong>трёх НКУ</strong>, выполнили сборку, наладку и доработки по замечаниям заказчика (аспирация, клеммники, индикация на панели).</p>",
+    "result": "<p>Передан <strong>комплект из трёх шкафов</strong> с полной документацией. Оборудование соответствует ГОСТ и ТР ТС, готово к эксплуатации на производстве.</p>",
+    "mainImageId": "likos_proj_el_azimut_trast_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_azimut_trast_01.jpg",
+      "likos_proj_el_azimut_trast_02.jpg",
+      "likos_proj_el_azimut_trast_03.jpg",
+      "likos_proj_el_azimut_trast_04.jpg",
+      "likos_proj_el_azimut_trast_05.jpg",
+      "likos_proj_el_azimut_trast_06.jpg",
+      "likos_proj_el_azimut_trast_07.jpg",
+      "likos_proj_el_azimut_trast_08.jpg",
+      "likos_proj_el_azimut_trast_09.jpg",
+      "likos_proj_el_azimut_trast_10.jpg",
+      "likos_proj_el_azimut_trast_11.jpg",
+      "likos_proj_el_azimut_trast_12.jpg",
+      "likos_proj_el_azimut_trast_13.jpg",
+      "likos_proj_el_azimut_trast_14.jpg",
+      "likos_proj_el_azimut_trast_15.jpg",
+      "likos_proj_el_azimut_trast_16.jpg",
+      "likos_proj_el_azimut_trast_17.jpg",
+      "likos_proj_el_azimut_trast_18.jpg",
+      "likos_proj_el_azimut_trast_19.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_nku_obshcheprom",
+      "likos_el_shkafy_privoda"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_biser_dkc",
+    "title": "Модульные щиты DKC для медучреждения",
+    "shortDescription": "Комплект модульных шкафов для больницы в Бисерти — подбор DKC, сборка и маркировка перед монтажом.",
+    "dateCompleted": "2022-10-20",
+    "price": "300 000 ₽",
+    "timeToComplete": "45 дней",
+    "task": "<p>Для больницы в Бисерти требовался комплект <strong>модульных шкафов DKC</strong> и сопутствующего щитового оборудования для объекта здравоохранения. Необходима комплектация модульными автоматами по проектной спецификации.</p>",
+    "workProgress": "<p>Подобрали шкафы <strong>DKC</strong> и аппаратуру, согласовали комплектацию, выполнили сборку щитов, маркировку и проверку перед отгрузкой на объект.</p>",
+    "result": "<p>Комплект <strong>шкафов для медучреждения</strong> изготовлен и передан заказчику. Оборудование готово к монтажу на объекте здравоохранения.</p>",
+    "mainImageId": "likos_proj_el_biser_dkc_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_biser_dkc_01.jpg",
+      "likos_proj_el_biser_dkc_02.jpg",
+      "likos_proj_el_biser_dkc_03.jpg",
+      "likos_proj_el_biser_dkc_04.jpg",
+      "likos_proj_el_biser_dkc_05.jpg",
+      "likos_proj_el_biser_dkc_06.jpg",
+      "likos_proj_el_biser_dkc_07.jpg",
+      "likos_proj_el_biser_dkc_08.jpg",
+      "likos_proj_el_biser_dkc_09.jpg",
+      "likos_proj_el_biser_dkc_10.jpg",
+      "likos_proj_el_biser_dkc_11.jpg",
+      "likos_proj_el_biser_dkc_12.jpg",
+      "likos_proj_el_biser_dkc_13.jpg",
+      "likos_proj_el_biser_dkc_14.jpg",
+      "likos_proj_el_biser_dkc_15.jpg",
+      "likos_proj_el_biser_dkc_16.jpg",
+      "likos_proj_el_biser_dkc_17.jpg",
+      "likos_proj_el_biser_dkc_18.jpg",
+      "likos_proj_el_biser_dkc_19.jpg",
+      "likos_proj_el_biser_dkc_20.jpg",
+      "likos_proj_el_biser_dkc_21.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_nku_obshcheprom"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_panorama_shr",
+    "title": "Распределительный шкаф ШР с управлением насосами",
+    "shortDescription": "Напольный ШР IP54 до 400 А: пять насосных линий с ATS22 и документация по проекту ГНТ.34.2020.",
+    "dateCompleted": "2022-06-14",
+    "price": "от 250 000 ₽",
+    "timeToComplete": "45 дней",
+    "task": "<p>Требовался напольный <strong>распределительный шкаф ШР</strong> (НКУ) для промышленного объекта: приём и распределение питания <strong>380 В</strong>, цепи управления <strong>230 В</strong>, защита и коммутация групп потребителей, <strong>пять насосных линий</strong> с плавным пуском, местным и дистанционным управлением и сигнализацией. Работы — по проектной документации <strong>ГНТ.34.2020.03-04.01.2.ЭС.ОЛ1</strong>.</p><p>Основные требования: степень защиты <strong>IP54</strong>, номинальный ток до <strong>400 А</strong>, габариты не более <strong>1700×1600×400 мм</strong>, комплектация аппаратурой <strong>Schneider Electric</strong> (корпуса Spacial, автоматы Compact NSX / Easypact, Acti9, устройства плавного пуска Altistart ATS22).</p>",
+    "workProgress": "<ol><li>1. Изучили проект и электрические схемы объекта.</li><li>2. Подобрали аппаратуру и корпуса, согласовали спецификацию с заказчиком.</li><li>3. Разработали комплект конструкторской документации шкафа ШР (однолинейная схема, схемы подключения, монтажные решения).</li><li>4. Выполили сборку в шкафах Spacial: вводной автомат <strong>320 А</strong>, групповые автоматы <strong>63 А</strong>, модульная защита Acti9, <strong>5 контакторов</strong> и <strong>5 устройств плавного пуска ATS22</strong>, разводка силовых и контрольных цепей, маркировка.</li><li>5. Настроили реле и параметры плавного пуска, проверили цепи управления и сигнализацию.</li><li>6. Оформили паспорт НКУ, таблички на шкаф, эксплуатационную документацию и передали комплект для монтажа на объекте.</li></ol>",
+    "result": "<p>Изготовлен и передан <strong>шкаф распределительный ШР</strong> с пятью каналами управления насосами через <strong>ATS22</strong>, комплектом конструкторской документации, паспортом и сертификатами соответствия ТР ТС. Оборудование соответствует заявленным характеристикам (<strong>IP54</strong>, категория размещения <strong>УХЛ4</strong>), готово к подключению и вводу в эксплуатацию.</p>",
+    "mainImageId": "likos_proj_el_panorama_shr_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_panorama_shr_01.jpg",
+      "likos_proj_el_panorama_shr_02.jpg",
+      "likos_proj_el_panorama_shr_03.jpg",
+      "likos_proj_el_panorama_shr_04.jpg",
+      "likos_proj_el_panorama_shr_05.jpg",
+      "likos_proj_el_panorama_shr_06.jpg",
+      "likos_proj_el_panorama_shr_07.jpg",
+      "likos_proj_el_panorama_shr_08.jpg",
+      "likos_proj_el_panorama_shr_09.jpg",
+      "likos_proj_el_panorama_shr_10.jpg",
+      "likos_proj_el_panorama_shr_11.jpg",
+      "likos_proj_el_panorama_shr_12.jpg",
+      "likos_proj_el_panorama_shr_13.jpg",
+      "likos_proj_el_panorama_shr_14.jpg",
+      "likos_proj_el_panorama_shr_15.jpg",
+      "likos_proj_el_panorama_shr_16.jpg",
+      "likos_proj_el_panorama_shr_17.jpg",
+      "likos_proj_el_panorama_shr_18.jpg",
+      "likos_proj_el_panorama_shr_19.jpg",
+      "likos_proj_el_panorama_shr_20.jpg",
+      "likos_proj_el_panorama_shr_21.jpg",
+      "likos_proj_el_panorama_shr_22.jpg",
+      "likos_proj_el_panorama_shr_23.jpg",
+      "likos_proj_el_panorama_shr_24.jpg",
+      "likos_proj_el_panorama_shr_25.jpg",
+      "likos_proj_el_panorama_shr_26.jpg",
+      "likos_proj_el_panorama_shr_27.jpg",
+      "likos_proj_el_panorama_shr_28.jpg",
+      "likos_proj_el_panorama_shr_29.jpg",
+      "likos_proj_el_panorama_shr_30.jpg",
+      "likos_proj_el_panorama_shr_31.jpg",
+      "likos_proj_el_panorama_shr_32.jpg",
+      "likos_proj_el_panorama_shr_33.jpg",
+      "likos_proj_el_panorama_shr_34.jpg",
+      "likos_proj_el_panorama_shr_35.jpg",
+      "likos_proj_el_panorama_shr_36.jpg",
+      "likos_proj_el_panorama_shr_37.jpg",
+      "likos_proj_el_panorama_shr_38.jpg",
+      "likos_proj_el_panorama_shr_39.jpg",
+      "likos_proj_el_panorama_shr_40.jpg",
+      "likos_proj_el_panorama_shr_41.jpg",
+      "likos_proj_el_panorama_shr_42.jpg",
+      "likos_proj_el_panorama_shr_43.jpg",
+      "likos_proj_el_panorama_shr_44.jpg",
+      "likos_proj_el_panorama_shr_45.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_nku_obshcheprom",
+      "likos_el_shkafy_privoda"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_shun_zoopark",
+    "title": "Щиты управления насосами",
+    "shortDescription": "Четыре щита для водоснабжения зоопарка: насосы 1,5–2,5 кВт, общая индикация и дистанционное управление.",
+    "dateCompleted": "2022-06-14",
+    "price": "180 000 ₽",
+    "timeToComplete": "14 дней",
+    "task": "<p>Требовался комплект <strong>щитов управления насосами</strong> воды по техническому заданию: два щита на насосы <strong>2,5 кВт</strong> (380 В), один щит на насос <strong>1,5 кВт</strong>, общий щит индикации и управления <strong>пятью насосами</strong>. Во всех — местное и дистанционное управление, гермовводы, световая индикация, открывающаяся крышка.</p>",
+    "workProgress": "<p>Разработали и изготовили <strong>четыре щита</strong> по ТЗ: унифицировали аппаратуру управления и защиты, предусмотрели переключатели режимов и индикацию состояния насосов на общем щите. Выполнили сборку, проверку и маркировку.</p>",
+    "result": "<p>Получен комплект из <strong>четырёх щитов управления</strong> насосами водоснабжения. Оборудование обеспечивает надёжную работу насосных групп, наглядную индикацию и удобное обслуживание персоналом.</p>",
+    "mainImageId": "likos_proj_el_shun_zoopark_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_shun_zoopark_01.jpg",
+      "likos_proj_el_shun_zoopark_02.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_shkafy_privoda"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_shr_mehrentseva",
+    "title": "Щит распределительный",
+    "shortDescription": "ШР для распределения питания и защиты отходящих линий на объекте — схема, сборка и маркировка.",
+    "dateCompleted": "2022-02-01",
+    "price": "80 000 ₽",
+    "timeToComplete": "21 день",
+    "task": "<p>Требовалось изготовить <strong>щит распределительный (ШР)</strong> для распределения питания и защиты отходящих линий на объекте.</p>",
+    "workProgress": "<p>Разработали схему щита, подобрали автоматические выключатели и комплектующие, выполнили сборку и маркировку, провели проверку перед отгрузкой.</p>",
+    "result": "<p><strong>Щит распределительный</strong> изготовлен и передан заказчику, готов к монтажу и подключению потребителей.</p>",
+    "mainImageId": "likos_proj_el_shr_mehrentseva_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_shr_mehrentseva_01.jpg",
+      "likos_proj_el_shr_mehrentseva_02.jpg",
+      "likos_proj_el_shr_mehrentseva_03.jpg",
+      "likos_proj_el_shr_mehrentseva_04.jpg",
+      "likos_proj_el_shr_mehrentseva_05.jpg",
+      "likos_proj_el_shr_mehrentseva_06.jpg",
+      "likos_proj_el_shr_mehrentseva_07.jpg",
+      "likos_proj_el_shr_mehrentseva_08.jpg",
+      "likos_proj_el_shr_mehrentseva_09.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_nku_obshcheprom"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_shkaf_generator",
+    "title": "ВРУ и шкаф подключения генератора",
+    "shortDescription": "Силовой шкаф IP66 для ДГУ 400 кВт: рубильники, ввод от ТП и паспорт ВРУ для монтажа.",
+    "dateCompleted": "2021-08-17",
+    "price": "350 000 ₽",
+    "timeToComplete": "30 дней",
+    "task": "<p>Требовалось изготовить <strong>шкаф для подключения генератора</strong> мощностью <strong>400 кВт</strong>: линии от ТП, кабельные вводы, <strong>четырёхполюсные рубильники</strong> в корпусе <strong>IP66</strong> габаритом порядка <strong>1000×1800 мм</strong>.</p>",
+    "workProgress": "<p>Разработали схему <strong>ВРУ</strong>, подобрали силовую аппаратуру и рубильники, изготовили шкаф с учётом степени защиты <strong>IP66</strong>. Выполнили монтаж, проверку и оформили паспорт для передачи заказчику.</p>",
+    "result": "<p><strong>Шкаф генератора / ВРУ</strong> изготовлен с паспортом и схемами. Оборудование готово к подключению дизель-генераторной установки на объекте.</p>",
+    "mainImageId": "likos_proj_el_shkaf_generator_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_shkaf_generator_01.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_nku_obshcheprom"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_shkaf_2_auto",
+    "title": "Распределительный шкаф на два автомата",
+    "shortDescription": "Компактный навесной шкаф с двумя автоматами защиты — по параметрам сети объекта.",
+    "dateCompleted": "2021-08-03",
+    "price": "45 000 ₽",
+    "timeToComplete": "14 дней",
+    "task": "<p>Требовался компактный <strong>распределительный шкаф</strong> с <strong>двумя автоматическими выключателями</strong> для защиты и коммутации электрических цепей на объекте.</p>",
+    "workProgress": "<p>Подобрали автоматы и аппаратуру по параметрам сети, разработали схему подключения, выполнили монтаж в корпусе с маркировкой и проверкой цепей.</p>",
+    "result": "<p>Готовый <strong>шкаф на два автомата</strong> передан заказчику, пригоден для навесного или внутреннего монтажа по месту.</p>",
+    "mainImageId": "likos_proj_el_shkaf_2_auto_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_shkaf_2_auto_01.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_nku_obshcheprom"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_shk_gradirnya_2vent",
+    "title": "Шкаф управления градирней с резервным вентилятором",
+    "shortDescription": "Автоматика градирни 2+1: два рабочих и резервный вентилятор с переключением и паспортом.",
+    "dateCompleted": "2020-12-21",
+    "price": "200 000 ₽",
+    "timeToComplete": "45 дней",
+    "task": "<p>Требовалось спроектировать и изготовить <strong>шкаф управления вентиляторами градирни</strong> по схеме <strong>2+1</strong>: два рабочих вентилятора и один резервный. Необходимы автоматика, защита двигателей и удобство обслуживания.</p>",
+    "workProgress": "<p>Разработали проект шкафа по аналогии с предыдущими объектами градирен, адаптировали схему под резервный вентилятор. Подобрали аппаратуру, выполнили монтаж и маркировку, проверили логику переключения рабочих и резервного вентиляторов. Подготовили паспортную и монтажную документацию.</p>",
+    "result": "<p>Передан готовый <strong>шкаф управления</strong> с резервированием вентиляторов. Система обеспечивает надёжную работу градирни и возможность быстрого переключения на резервный агрегат.</p>",
+    "mainImageId": "likos_proj_el_shk_gradirnya_2vent_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_shk_gradirnya_2vent_01.jpg",
+      "likos_proj_el_shk_gradirnya_2vent_02.jpg",
+      "likos_proj_el_shk_gradirnya_2vent_03.jpg",
+      "likos_proj_el_shk_gradirnya_2vent_04.jpg",
+      "likos_proj_el_shk_gradirnya_2vent_05.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_apk_teplitsy",
+      "likos_el_shkafy_privoda"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_4tr_nasosy",
+    "title": "Шкафы управления насосами",
+    "shortDescription": "Три шкафа ШУ-1/ШУ-1-5/ШУВ для насосов 1,5–7,5 кВт — защита двигателей и комплект паспортов.",
+    "dateCompleted": "2020-08-05",
+    "price": "150 000 ₽",
+    "timeToComplete": "14 дней",
+    "task": "<p>Требовалось изготовить комплект <strong>шкафов управления</strong> для группы насосов разной мощности: <strong>1,5 кВт</strong>, <strong>3 кВт</strong> и <strong>два по 7,5 кВт</strong> (три изделия по паспортам ШУ-1, ШУ-1-5, ШУВ). Необходимы защита двигателей, рабочие схемы и паспорта на каждый шкаф.</p>",
+    "workProgress": "<p>Разработали схемы для линий <strong>1,5 А</strong> и <strong>3 А</strong>, подобрали автоматы защиты двигателей и аппаратуру управления. Изготовили три шкафа, оформили паспорта, выполнили проверку и маркировку.</p>",
+    "result": "<p>Заказчик получил <strong>три шкафа управления</strong> с паспортами и схемами. Все группы двигателей защищены и готовы к подключению на объекте.</p>",
+    "mainImageId": "likos_proj_el_4tr_nasosy_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_4tr_nasosy_01.jpg",
+      "likos_proj_el_4tr_nasosy_02.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_shkafy_privoda"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_gaiskiy_gok",
+    "title": "Шкафы управления градирнями",
+    "shortDescription": "ША-1 и ША-2 на Altivar для ГОК: температура, вибрация на панель оператора и упрощённый монтаж UTP.",
+    "dateCompleted": "2020-07-10",
+    "price": "180 000 ₽",
+    "timeToComplete": "45 дней",
+    "task": "<p>Требовалось изготовить <strong>шкафы автоматики</strong> для управления градирнями на промышленной площадке: надёжное управление вентиляторами и насосами, передача данных о температуре и вибрации на панель оператора, упрощённая схема подключения.</p>",
+    "workProgress": "<p>Проанализировали технологические требования: кабель <strong>UTP4</strong>, получение температуры через аналоговый вход ПЛК от ЧРП, сигналы вибрации по сухим контактам. Подобрали аппаратуру на базе преобразователей <strong>Schneider Electric Altivar</strong>, разработали электрические схемы <strong>ША-1</strong> и <strong>ША-2</strong>, изготовили шкафы, смонтировали и провели проверку. Подготовили паспорта, инструкции и комплект документации для монтажа на объекте.</p>",
+    "result": "<p>Передан комплект <strong>шкафов управления градирнями</strong> с понятной схемой подключения и полным пакетом документов. Решение позволяет оператору контролировать параметры с панели и упростить монтаж на площадке. Оборудование готово к эксплуатации в промышленных условиях.</p>",
+    "mainImageId": "likos_proj_el_gaiskiy_gok_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_gaiskiy_gok_01.jpg",
+      "likos_proj_el_gaiskiy_gok_02.jpg",
+      "likos_proj_el_gaiskiy_gok_03.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_shkafy_privoda"
+    ],
+    "isHidden": false
+  },
+  {
+    "id": "likos_proj_el_gradirnya_4vent",
+    "title": "Шкаф управления вентиляторами градирни",
+    "shortDescription": "ШУВ на IEK для четырёх вентиляторов в насосной — схемы, паспорт ШУВ-1 и монтажная документация.",
+    "dateCompleted": "2020-03-06",
+    "price": "200 000 ₽",
+    "timeToComplete": "30 дней",
+    "task": "<p>Требовался <strong>шкаф управления (ШУВ)</strong> для <strong>четырёх вентиляторов градирни</strong>, устанавливаемый в помещении насосной. Нужен шкаф на аппаратуре IEK с полным комплектом схем, паспортом и документацией.</p>",
+    "workProgress": "<p>Изучили техническое задание и схемы ШУВ на четыре вентилятора. Подобрали аппаратуру, разработали однолинейные и монтажные схемы, оформили паспорт <strong>ШУВ-1</strong>. Выполнили сборку в шкафу, проверку цепей управления и защиты, подготовили сопроводительную документацию.</p>",
+    "result": "<p>Изготовлен и передан <strong>шкаф управления вентиляторами</strong> с документацией. ШУВ рассчитан на эксплуатацию в насосной, обеспечивает управление четырьмя вентиляторами градирни по проектным схемам.</p>",
+    "mainImageId": "likos_proj_el_gradirnya_4vent_main.jpg",
+    "additionalImages": [
+      "likos_proj_el_gradirnya_4vent_01.jpg",
+      "likos_proj_el_gradirnya_4vent_02.jpg",
+      "likos_proj_el_gradirnya_4vent_03.jpg"
+    ],
+    "categories": [
+      "likos_cat_elektroshchity_nku",
+      "likos_el_shkafy_privoda"
+    ],
+    "isHidden": false
+  }
+]

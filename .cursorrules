@@ -1,0 +1,3 @@
+# Monorepo Guidelines
+
+Базовые правила для агента Cursor задаются в `.cursor/rules/monorepo-guidelines.mdc` (`alwaysApply: true`). Редактируйте этот файл — он единственный источник истины для стека, структуры страниц и соглашений по коду.

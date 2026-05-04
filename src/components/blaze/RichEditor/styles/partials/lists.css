@@ -1,0 +1,23 @@
+.rich-editor .ProseMirror ol {
+  @apply list-decimal;
+}
+
+.rich-editor .ProseMirror ol ol {
+  list-style: lower-alpha;
+}
+
+.rich-editor .ProseMirror ol ol ol {
+  list-style: lower-roman;
+}
+
+.rich-editor .ProseMirror ul {
+  list-style: disc;
+}
+
+.rich-editor .ProseMirror ul ul {
+  list-style: circle;
+}
+
+.rich-editor .ProseMirror ul ul ul {
+  list-style: square;
+}

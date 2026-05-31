@@ -24,6 +24,8 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  // Self-hosted за reverse proxy: без trustHost в production падает UntrustedHost.
+  trustHost: true,
   providers: [
     /**
      * ...add more providers here.

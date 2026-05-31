@@ -8,6 +8,8 @@ export const env = createEnv({
    */
   server: {
     AUTH_SECRET: process.env.NODE_ENV === "production" ? z.string() : z.string().optional(),
+    AUTH_URL: z.string().url().optional(),
+    AUTH_TRUST_HOST: z.enum(["true", "1"]).optional(),
     DATABASE_URL: z.string().url(),
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     UPLOAD_DIR_PUBLIC: z.string().default("./public/uploads"),
@@ -28,6 +30,8 @@ export const env = createEnv({
    */
   runtimeEnv: {
     AUTH_SECRET: process.env.AUTH_SECRET,
+    AUTH_URL: process.env.AUTH_URL,
+    AUTH_TRUST_HOST: process.env.AUTH_TRUST_HOST,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     UPLOAD_DIR_PUBLIC: process.env.UPLOAD_DIR_PUBLIC,

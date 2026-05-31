@@ -1,8 +1,4 @@
-import {
-  CopyIcon,
-  ExternalLinkIcon,
-  LinkBreak2Icon,
-} from "@radix-ui/react-icons";
+import { CopyIcon, ExternalLinkIcon, LinkBreak2Icon } from "@radix-ui/react-icons";
 import * as React from "react";
 
 import { Separator } from "~/components/ui/separator";
@@ -15,11 +11,7 @@ interface LinkPopoverBlockProps {
   onEdit: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
-  url,
-  onClear,
-  onEdit,
-}) => {
+export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({ url, onClear, onEdit }) => {
   const [copyTitle, setCopyTitle] = React.useState<string>("Copy");
 
   const handleCopy = React.useCallback(
@@ -43,18 +35,11 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
   return (
     <div className="bg-background flex h-10 overflow-hidden rounded p-2 shadow-lg">
       <div className="inline-flex items-center gap-1">
-        <ToolbarButton
-          tooltip="Edit link"
-          onClick={onEdit}
-          className="w-auto px-2"
-        >
+        <ToolbarButton tooltip="Edit link" onClick={onEdit} className="w-auto px-2">
           Edit link
         </ToolbarButton>
         <Separator orientation="vertical" />
-        <ToolbarButton
-          tooltip="Open link in a new tab"
-          onClick={handleOpenLink}
-        >
+        <ToolbarButton tooltip="Open link in a new tab" onClick={handleOpenLink}>
           <ExternalLinkIcon className="size-4" />
         </ToolbarButton>
         <Separator orientation="vertical" />
@@ -66,7 +51,7 @@ export const LinkPopoverBlock: React.FC<LinkPopoverBlockProps> = ({
           tooltip={copyTitle}
           onClick={handleCopy}
           tooltipOptions={{
-            onPointerDownOutside: (e) => {
+            onPointerDownOutside: (e: any) => {
               if (e.target === e.currentTarget) e.preventDefault();
             },
           }}

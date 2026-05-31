@@ -15,6 +15,7 @@
     "db:seed:projects:purge": "node --env-file=.env ./scripts/seed-projects.mjs --purge-likos",
     "db:seed:categories:replace": "node --env-file=.env ./scripts/seed-categories.mjs --replace-all",
     "db:purge:categories-non-likos": "node --env-file=.env ./scripts/seed-categories.mjs --purge-non-likos",
+    "db:cleanup:orphan-files": "node --env-file=.env ./scripts/cleanup-orphan-files.mjs",
     "download:category-images": "bash ./scripts/download-category-images-unsplash.sh",
     "dev": "next dev --turbo",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",

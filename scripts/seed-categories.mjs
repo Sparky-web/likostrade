@@ -188,12 +188,45 @@ async function setAllProjectsCategories(tx, categoryId) {
   }
 }
 
+/** Отвязывает у видео категории из переданного списка id (остальные связи сохраняются). */
+async function disconnectVideosFromCategoryIds(tx, categoryIds) {
+  if (categoryIds.length === 0) return;
+
+  const videos = await tx.video.findMany({
+    where: { categories: { some: { id: { in: categoryIds } } } },
+    select: { id: true, categories: { select: { id: true } } },
+  });
+
+  for (const video of videos) {
+    const remaining = video.categories.map((category) => category.id).filter((id) => !categoryIds.includes(id));
+    await tx.video.update({
+      where: { id: video.id },
+      data: { categories: { set: remaining.map((id) => ({ id })) } },
+    });
+  }
+}
+
+/** Снимает все категории со всех видео. */
+async function clearAllVideoCategories(tx) {
+  const videos = await tx.video.findMany({ select: { id: true } });
+  for (const { id } of videos) {
+    await tx.video.update({
+      where: { id },
+      data: { categories: { set: [] } },
+    });
+  }
+}
+
 async function purgeLikosCategories() {
   await prisma.$transaction(async (tx) => {
-    await tx.video.updateMany({
-      where: { categoryId: { startsWith: LIKOS_PREFIX } },
-      data: { categoryId: null },
+    const likosCategories = await tx.category.findMany({
+      where: { id: { startsWith: LIKOS_PREFIX } },
+      select: { id: true },
     });
+    await disconnectVideosFromCategoryIds(
+      tx,
+      likosCategories.map((category) => category.id),
+    );
 
     const projectRefs = await tx.project.findFirst({
       where: { categories: { some: { id: { startsWith: LIKOS_PREFIX } } } },
@@ -225,7 +258,7 @@ async function replaceAllCategories() {
   }
 
   await prisma.$transaction(async (tx) => {
-    await tx.video.updateMany({ data: { categoryId: null } });
+    await clearAllVideoCategories(tx);
 
     await setAllProjectsCategories(tx, FALLBACK_PROJECT_CATEGORY_ID);
 
@@ -275,10 +308,7 @@ async function purgeCategoriesWithoutLikosInId() {
   }
 
   await prisma.$transaction(async (tx) => {
-    await tx.video.updateMany({
-      where: { categoryId: { in: ids } },
-      data: { categoryId: null },
-    });
+    await disconnectVideosFromCategoryIds(tx, ids);
 
     const affectedProjects = await tx.project.findMany({
       where: { categories: { some: { id: { in: ids } } } },
@@ -333,23 +363,22 @@ async function removeOrphanLikosCategories(/** @type {Set<string>} */ expectedId
     return;
   }
 
-  await prisma.video.updateMany({
-    where: { categoryId: { in: orphanIds } },
-    data: { categoryId: null },
-  });
+  await prisma.$transaction(async (tx) => {
+    await disconnectVideosFromCategoryIds(tx, orphanIds);
 
-  const orphanProjects = await prisma.project.findMany({
+    const orphanProjects = await tx.project.findMany({
     where: { categories: { some: { id: { in: orphanIds } } } },
     select: { id: true },
   });
-  for (const { id } of orphanProjects) {
-    await prisma.project.update({
-      where: { id },
-      data: { categories: { set: [{ id: FALLBACK_PROJECT_CATEGORY_ID }] } },
-    });
-  }
+    for (const { id } of orphanProjects) {
+      await tx.project.update({
+        where: { id },
+        data: { categories: { set: [{ id: FALLBACK_PROJECT_CATEGORY_ID }] } },
+      });
+    }
 
-  await prisma.category.deleteMany({ where: { id: { in: orphanIds } } });
+    await tx.category.deleteMany({ where: { id: { in: orphanIds } } });
+  });
   // eslint-disable-next-line no-console -- CLI-скрипт
   console.info(`Удалены устаревшие likos-категории (${orphanIds.length}): ${orphanIds.join(", ")}`);
 }

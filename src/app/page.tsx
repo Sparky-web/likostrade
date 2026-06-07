@@ -14,9 +14,12 @@ import { Videos } from "./_lib/components/Videos";
 import heroImage from "./_lib/lib/headline.jpg";
 
 export default async function Home() {
-  const rootCategories = await api.categories.get({
-    where: { parentCategories: { none: {} }, isHidden: false },
-  });
+  const [rootCategories, previewVideos] = await Promise.all([
+    api.categories.get({
+      where: { parentCategories: { none: {} }, isHidden: false },
+    }),
+    api.videos.getPreview(),
+  ]);
 
   return (
     <HydrateClient>
@@ -34,7 +37,7 @@ export default async function Home() {
         <AboutUs />
         <HomeCompletedProjects />
         <ClientsPartnersSection />
-        <Videos />
+        <Videos videos={previewVideos} />
         <Licenses />
         <RequestForm />
       </VStack>

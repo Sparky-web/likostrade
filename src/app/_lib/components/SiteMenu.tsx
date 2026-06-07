@@ -474,7 +474,7 @@ export function SiteMenu() {
 
   const renderNavWithServices = (variant: "mobile" | "desktop") =>
     SITE_NAV_ITEMS.map((item, index) => {
-      const isActive = pathname === item.href;
+      const isActive = item.highlightWhenActive !== false && pathname === item.href;
       const insertServicesAfterAbout = index === 0;
 
       return (

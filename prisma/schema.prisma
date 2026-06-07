@@ -125,8 +125,7 @@ model Video {
   description String?
   url         String
 
-  categoryId String?
-  category   Category? @relation(fields: [categoryId], references: [id])
+  categories Category[]
 }
 
 /// Singleton: одна строка с id = "default".

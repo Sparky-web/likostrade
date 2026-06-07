@@ -3,7 +3,7 @@
 import { typo } from "lib";
 import { useState } from "react";
 
-import { Button, DataTable, Heading, Skeleton, useDataTable, useToggle, VStack } from "~/components";
+import { Button, DataTable, DataTableToolbar, Heading, Skeleton, useDataTable, useToggle, VStack } from "~/components";
 import { api } from "~/trpc/react";
 
 import { VideoDetailsSidePanel } from "./_lib/components/VideoDetailsSidePanel";
@@ -32,7 +32,9 @@ export default function VideosPage() {
     <VStack gap="section" className="max-w-full overflow-x-auto">
       <Heading variant="h2">{typo("Видео")}</Heading>
 
-      <DataTable table={table} />
+      <DataTable table={table}>
+        <DataTableToolbar table={table} />
+      </DataTable>
 
       {selectedId ? (
         <VideoDetailsSidePanel

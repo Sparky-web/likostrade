@@ -23,9 +23,10 @@ interface PageProps {
 export default async function CategoryPage({ params }: PageProps) {
   const { categoryId } = await params;
 
-  const [category, completedProjects] = await Promise.all([
+  const [category, completedProjects, previewVideos] = await Promise.all([
     api.categories.getById({ id: categoryId }),
     api.projects.getPreviewByCategory({ categoryId }),
+    api.videos.getPreviewByCategory({ categoryId }),
   ]);
 
   if (!category || category.isHidden) notFound();
@@ -54,12 +55,9 @@ export default async function CategoryPage({ params }: PageProps) {
             <div className="rich-html-content mt-8 text-lg" dangerouslySetInnerHTML={{ __html: category.htmlDescription }} />
           </Container>
         ) : null}
-        <CompletedProjects
-          projects={completedProjects}
-          viewAllHref={getCompletedProjectsViewAllHref(categoryId)}
-        />
+        <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
         <ClientsPartnersSection />
-        <Videos />
+        <Videos videos={previewVideos} />
         <Licenses />
         <RequestForm />
       </VStack>

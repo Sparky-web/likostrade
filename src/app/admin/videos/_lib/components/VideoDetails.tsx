@@ -9,6 +9,8 @@ type VideoDetailsProps = {
 
 const EMPTY = "—";
 
+const joinTitles = (items: { title: string }[]) => (items.length ? items.map((item) => item.title).join(", ") : EMPTY);
+
 export const VideoDetails = ({ data }: VideoDetailsProps) => {
   return (
     <VStack gap="lg">
@@ -37,8 +39,8 @@ export const VideoDetails = ({ data }: VideoDetailsProps) => {
       </FieldContent>
 
       <FieldContent>
-        <FieldLabel>{typo("Категория")}</FieldLabel>
-        <FieldDescription>{data.category?.title ?? EMPTY}</FieldDescription>
+        <FieldLabel>{typo("Категории")}</FieldLabel>
+        <FieldDescription>{joinTitles(data.categories)}</FieldDescription>
       </FieldContent>
     </VStack>
   );

@@ -12,4 +12,5 @@ export {
   getCompletedProjectsViewAllHref,
   takeLatestProjects,
 } from "./lib/completedProjects";
+export { VIDEO_PREVIEW_LIMIT, type VideoListItem } from "./lib/videos";
 export { default as metalHeadlineImage } from "./lib/headline.jpg";

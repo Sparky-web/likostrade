@@ -2,32 +2,35 @@ import { typo } from "lib";
 
 import { AdaptiveGrid, Container, Heading, VideoCard, VStack } from "~/components";
 
-export const Videos = () => {
+import { type VideoListItem } from "../lib/videos";
+
+interface VideosProps {
+  videos: VideoListItem[];
+}
+
+const formatVideoIndex = (index: number) => String(index + 1).padStart(2, "0");
+
+export function Videos({ videos }: VideosProps) {
+  if (videos.length === 0) {
+    return null;
+  }
+
   return (
     <Container>
       <VStack gap="section">
         <Heading variant="h2">{typo(`Видео`)}</Heading>
         <AdaptiveGrid cols={{ base: 1, md: 2, lg: 3 }} gap="lg">
-          <VideoCard
-            title={typo(`Привет`)}
-            index="01"
-            videoUrl="https://vkvideo.ru/video_ext.php?oid=-18403220&id=456239768&hash=e71b2695e6fe30f0&hd=3"
-            description={typo(`Тест строки с переносами и отступами и столе лежит`)}
-          />
-          <VideoCard
-            title="Video 2"
-            index="02"
-            videoUrl="https://vkvideo.ru/video_ext.php?oid=-18403220&id=456239768&hash=e71b2695e6fe30f0&hd=3"
-            description="Description 1"
-          />
-          <VideoCard
-            title="Video 1"
-            index="03"
-            videoUrl="https://vkvideo.ru/video_ext.php?oid=-18403220&id=456239768&hash=e71b2695e6fe30f0&hd=3"
-            description="Description 1"
-          />
+          {videos.map((video, index) => (
+            <VideoCard
+              key={video.id}
+              title={typo(video.title)}
+              index={formatVideoIndex(index)}
+              videoUrl={video.url}
+              description={video.description ? typo(video.description) : undefined}
+            />
+          ))}
         </AdaptiveGrid>
       </VStack>
     </Container>
   );
-};
+}

@@ -6,6 +6,7 @@ import { baseTableRouter } from "./routers/baseTableRouter";
 import { fileUploaderRouter } from "./routers/fileUploader";
 import { projectsRouter } from "./routers/projects";
 import { siteSettingsRouter } from "./routers/siteSettings";
+import { videosRouter } from "./routers/videos";
 /**
  * This is the primary router for your server.
  *
@@ -64,26 +65,7 @@ export const appRouter = createTRPCRouter({
     },
   }),
   projects: projectsRouter,
-  videos: createTableRouter({
-    dbTable: "Video",
-    procedures: {
-      get: publicProcedure,
-      getById: publicProcedure,
-      create: protectedProcedure,
-      update: protectedProcedure,
-      delete: protectedProcedure,
-    },
-    findManyArgs: {
-      include: {
-        category: true,
-      },
-    },
-    findUniqueArgs: {
-      include: {
-        category: true,
-      },
-    },
-  }),
+  videos: videosRouter,
   fileUploaderRouter,
   siteSettings: siteSettingsRouter,
   baseTableRouter: baseTableRouter,

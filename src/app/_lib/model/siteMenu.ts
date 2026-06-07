@@ -4,6 +4,8 @@ import { typo } from "lib";
 export type SiteNavItem = {
   href: string;
   label: string;
+  /** Подсветка активного пункта в меню; по умолчанию включена. */
+  highlightWhenActive?: boolean;
 };
 
 export const SITE_ADDRESS = typo(`Свердловская область, г. Екатеринбург, ул. Мартовская д. 8`);
@@ -19,8 +21,6 @@ export const SITE_EMAIL = "inbox@lykos.ru";
 export const SITE_SERVICES_NAV_LABEL = typo(`Наши услуги`);
 
 export const SITE_NAV_ITEMS: SiteNavItem[] = [
-  { href: "/about", label: typo(`О компании`) },
+  { href: "/", label: typo(`О компании`), highlightWhenActive: false },
   { href: "/projects", label: typo(`Наши работы`) },
-  { href: "/equipment", label: typo(`Оборудование`) },
-  { href: "/reviews", label: typo(`Отзывы`) },
 ];

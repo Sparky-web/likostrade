@@ -3,11 +3,10 @@
 import { typo } from "lib";
 import { useMemo } from "react";
 
-import { useCategoryOptions } from "~/app/admin/_lib";
 import {
+  CategoryTreeComboboxField,
   CrudTableFormButton,
   CrudTableSidePanelDetailsButtons,
-  SelectField,
   SidePanel,
   Skeleton,
   TextareaField,
@@ -44,8 +43,6 @@ export const VideoDetailsSidePanel = (props: VideoDetailsSidePanelProps) => {
     onDeleted: props.onClose,
   });
 
-  const categoryOptions = useCategoryOptions();
-
   const handleCloseEdit = () => {
     void refetch();
     closeEdit();
@@ -78,21 +75,21 @@ export const VideoDetailsSidePanel = (props: VideoDetailsSidePanelProps) => {
         />
 
         <form.Field
-          name="categoryId"
+          name="categories"
           children={(field) => (
-            <SelectField
+            <CategoryTreeComboboxField
               fieldApi={field}
               field={{
-                label: typo("Категория"),
-                placeholder: typo("Выберите категорию"),
-                inputProps: { options: categoryOptions },
+                label: typo("Категории"),
+                placeholder: typo("Выберите категории"),
+                inputProps: { includeHidden: true },
               }}
             />
           )}
         />
       </VStack>
     );
-  }, [form, categoryOptions]);
+  }, [form]);
 
   const formButton = (
     <CrudTableFormButton form={form} label={isCreation ? typo("Создать") : typo("Сохранить")} />

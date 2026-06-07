@@ -41,7 +41,7 @@ export const useVideoForm = ({ selectedId, isCreation, onCreated, onUpdated, onD
       title: data.title,
       description: data.description ?? "",
       url: data.url,
-      categoryId: data.categoryId ?? "",
+      categories: data.categories.map((category) => category.id),
     };
   }, [data]);
 
@@ -52,7 +52,7 @@ export const useVideoForm = ({ selectedId, isCreation, onCreated, onUpdated, onD
           title: "",
           description: "",
           url: "",
-          categoryId: "",
+          categories: [] satisfies string[],
         },
 
     onSubmit: async ({ value: values }) => {

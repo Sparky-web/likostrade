@@ -4,6 +4,7 @@ import { createCallerFactory, createTRPCRouter, protectedProcedure, publicProced
 
 import { baseTableRouter } from "./routers/baseTableRouter";
 import { fileUploaderRouter } from "./routers/fileUploader";
+import { leadsRouter } from "./routers/leads";
 import { projectsRouter } from "./routers/projects";
 import { siteSettingsRouter } from "./routers/siteSettings";
 import { videosRouter } from "./routers/videos";
@@ -54,6 +55,7 @@ export const appRouter = createTRPCRouter({
         categories: true,
         projectMainImages: true,
         projectAdditionalImages: true,
+        leadAttachments: true,
       },
     },
     findUniqueArgs: {
@@ -61,11 +63,13 @@ export const appRouter = createTRPCRouter({
         categories: true,
         projectMainImages: true,
         projectAdditionalImages: true,
+        leadAttachments: true,
       },
     },
   }),
   projects: projectsRouter,
   videos: videosRouter,
+  leads: leadsRouter,
   fileUploaderRouter,
   siteSettings: siteSettingsRouter,
   baseTableRouter: baseTableRouter,

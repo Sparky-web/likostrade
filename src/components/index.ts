@@ -11,6 +11,7 @@ export * from "./blaze/HStack";
 export * from "./blaze/Link";
 export * from "./blaze/LkLayout";
 export * from "./blaze/LkMenu";
+export * from "./blaze/MaxIcon";
 export * from "./blaze/PopConfirm";
 export * from "./blaze/SidePanel";
 export * from "./blaze/SignInCard";

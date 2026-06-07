@@ -13,6 +13,9 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     UPLOAD_DIR_PUBLIC: z.string().default("./public/uploads"),
+    TELEGRAM_BOT_TOKEN: z.string().min(1),
+    TELEGRAM_CHAT_ID: z.string().min(1),
+    TELEGRAM_PROXY_URL: z.string().url(),
   },
 
   /**
@@ -35,6 +38,9 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     UPLOAD_DIR_PUBLIC: process.env.UPLOAD_DIR_PUBLIC,
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
+    TELEGRAM_PROXY_URL: process.env.TELEGRAM_PROXY_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

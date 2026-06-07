@@ -1,6 +1,6 @@
 import { formatPhoneNumber, typo } from "lib";
 
-import { Button, Heading, HStack, Link, TelegramIcon, Text, VStack, WhatsAppIcon } from "~/components";
+import { Button, Heading, HStack, Link, MaxIcon, TelegramIcon, Text, VStack, WhatsAppIcon } from "~/components";
 import { websiteConstants } from "~/consts";
 
 export const ContactsShort = () => {
@@ -27,6 +27,11 @@ export const ContactsShort = () => {
         <Link href={websiteConstants.TELEGRAM_URL} target="_blank">
           <Button variant="secondary" size="icon-lg">
             <TelegramIcon />
+          </Button>
+        </Link>
+        <Link href={websiteConstants.MAX_URL} target="_blank">
+          <Button variant="secondary" size="icon-lg">
+            <MaxIcon className="size-7" />
           </Button>
         </Link>
       </HStack>

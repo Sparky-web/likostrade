@@ -2,7 +2,7 @@ import { typo } from "lib";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Button, Container, Headline, VStack } from "~/components";
+import { Container, Headline, VStack } from "~/components";
 import { api, HydrateClient } from "~/trpc/server";
 
 import {
@@ -14,6 +14,7 @@ import {
   Licenses,
   metalHeadlineImage,
   RequestForm,
+  RequestFormScrollButton,
   Videos,
 } from "../../_lib";
 
@@ -60,11 +61,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       <Headline
         title={title}
         description={category.shortDescription ? typo(category.shortDescription) : undefined}
-        button={
-          <Button size="lg" className="rounded-md">
-            {typo(`Оформить заявку`)}
-          </Button>
-        }
+        button={<RequestFormScrollButton />}
         image={metalHeadlineImage}
         uploadSrc={uploadSrc}
       />
@@ -79,7 +76,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         <ClientsPartnersSection />
         <Videos videos={previewVideos} />
         <Licenses />
-        <RequestForm />
+        <RequestForm categoryId={categoryId} />
       </VStack>
       <Contacts />
     </HydrateClient>

@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import type { PrismaClient } from "generated/prisma";
-import { typo } from "lib";
 
 /** Для превью: подкатегории — вся ветка, лист — только эта категория. */
 export async function getCategoriesForPreview(db: PrismaClient, categoryId: string) {
@@ -17,7 +16,7 @@ export async function getCategoriesForPreview(db: PrismaClient, categoryId: stri
   if (!category || category.isHidden) {
     throw new TRPCError({
       code: "NOT_FOUND",
-      message: typo(`Категория не найдена`),
+      message: "Категория не найдена",
     });
   }
 

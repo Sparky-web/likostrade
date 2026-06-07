@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import type { PrismaClient } from "generated/prisma";
-import { typo, zodRussian } from "lib";
+import { zodRussian } from "lib";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
@@ -61,7 +61,7 @@ export const siteSettingsRouter = createTRPCRouter({
       if (existingProjects.length !== uniqueProjectIds.length) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: typo(`Указаны несуществующие работы`),
+          message: "Указаны несуществующие работы",
         });
       }
     }

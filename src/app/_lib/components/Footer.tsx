@@ -1,6 +1,7 @@
 import { typo } from "lib";
 
 import { AdaptiveGrid, Container, Heading, Link, Logo, Text, VStack } from "~/components";
+import { websiteConstants } from "~/consts";
 import { api } from "~/trpc/server";
 
 import { ContactsShort } from "./ContactsShort";
@@ -15,8 +16,7 @@ export async function Footer() {
       <AdaptiveGrid cols={{ base: 1, md: 2, lg: 4 }} gap="3xl">
         <VStack gap="2xl">
           <Logo size="sm" />
-          <Text>{typo(`ООО “Ликос” ИНН : 250303391777 Юридический адрес: г. Владивосток`)}</Text>
-          <Link href="#">{typo(`Политика конфиденциальности`)}</Link>
+          <Text>{typo(`${websiteConstants.COMPANY_NAME} ИНН: ${websiteConstants.INN}`)}</Text>
           <ContactsShort />
         </VStack>
 

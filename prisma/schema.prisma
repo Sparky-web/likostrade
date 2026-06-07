@@ -72,6 +72,7 @@ model File {
   categories              Category[]
   projectMainImages       Project[] @relation("ProjectMainImage")
   projectAdditionalImages Project[] @relation("ProjectAdditionalImages")
+  leadAttachments         Lead[]    @relation("LeadAttachments")
 }
 
 model Category {
@@ -92,6 +93,7 @@ model Category {
   subcategories    Category[] @relation("CategoryHierarchy")
   parentCategories Category[] @relation("CategoryHierarchy")
   videos           Video[]
+  leads            Lead[]
 }
 
 model Project {
@@ -117,6 +119,24 @@ model Project {
   additionalImages File[] @relation("ProjectAdditionalImages")
 
   categories Category[]
+  leads      Lead[]
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  title     String
+  email     String
+  message   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+
+  files File[] @relation("LeadAttachments")
 }
 
 model Video {

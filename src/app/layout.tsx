@@ -10,6 +10,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import { Footer } from "./_lib/components/Footer";
 import { SiteMenu } from "./_lib/components/SiteMenu";
+import { YANDEX_METRIKA_COUNTER_ID, YANDEX_METRIKA_INIT_SCRIPT } from "./_lib/lib/yandexMetrika";
 import { SiteSettingsProvider } from "./_lib/model/SiteSettingsProvider";
 
 export const metadata: Metadata = {
@@ -47,7 +48,20 @@ const geistMono = Geist_Mono({
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru" className={`${golos.variable} ${unbounded.variable} ${geistMono.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: YANDEX_METRIKA_INIT_SCRIPT }} />
+      </head>
       <body className="dark">
+        <noscript>
+          <div>
+            {/* eslint-disable-next-line @next/next/no-img-element -- пиксель Метрики для браузеров без JS */}
+            <img
+              src={`https://mc.yandex.ru/watch/${YANDEX_METRIKA_COUNTER_ID}`}
+              style={{ position: "absolute", left: "-9999px" }}
+              alt=""
+            />
+          </div>
+        </noscript>
         <TRPCReactProvider>
           <SiteSettingsProvider>
             <NuqsAdapter>

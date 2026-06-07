@@ -5,6 +5,7 @@ export { CompletedProjects } from "./components/CompletedProjects";
 export { Contacts } from "./components/Contacts";
 export { Licenses } from "./components/Licenses";
 export { RequestForm } from "./components/RequestForm";
+export { RequestFormScrollButton } from "./components/RequestFormScrollButton";
 export { Videos } from "./components/Videos";
 export {
   COMPLETED_PROJECTS_PREVIEW_LIMIT,
@@ -12,5 +13,5 @@ export {
   getCompletedProjectsViewAllHref,
   takeLatestProjects,
 } from "./lib/completedProjects";
-export { VIDEO_PREVIEW_LIMIT, type VideoListItem } from "./lib/videos";
 export { default as metalHeadlineImage } from "./lib/headline.jpg";
+export { VIDEO_PREVIEW_LIMIT, type VideoListItem } from "./lib/videos";

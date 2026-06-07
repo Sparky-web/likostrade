@@ -17,11 +17,12 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
       menu={{
         title: typo("Админ-панель"),
         items: [
+          { title: typo("Заявки"), href: "/admin/leads" },
           { title: typo("Категории"), href: "/admin/categories" },
-          { title: typo("Файлы"), href: "/admin/files" },
           { title: typo("Проекты"), href: "/admin/projects" },
           { title: typo("Видео"), href: "/admin/videos" },
           { title: typo("Настройки"), href: "/admin/settings" },
+          { title: typo("Файлы"), href: "/admin/files" },
         ],
       }}
     >

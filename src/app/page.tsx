@@ -1,7 +1,7 @@
 import { typo } from "lib";
 import type { Metadata } from "next";
 
-import { Button, Headline, VStack } from "~/components";
+import { Headline, VStack } from "~/components";
 import { websiteConstants } from "~/consts";
 import { api, HydrateClient } from "~/trpc/server";
 
@@ -12,6 +12,7 @@ import { Contacts } from "./_lib/components/Contacts";
 import { HomeCompletedProjects } from "./_lib/components/HomeCompletedProjects";
 import { Licenses } from "./_lib/components/Licenses";
 import { RequestForm } from "./_lib/components/RequestForm";
+import { RequestFormScrollButton } from "./_lib/components/RequestFormScrollButton";
 import { Videos } from "./_lib/components/Videos";
 import heroImage from "./_lib/lib/headline.jpg";
 
@@ -32,11 +33,7 @@ export default async function Home() {
     <HydrateClient>
       <Headline
         title={typo("Поставщик металлоконструкций для вашего проекта")}
-        button={
-          <Button size="lg" className="rounded-md">
-            {typo(`Оформить заявку`)}
-          </Button>
-        }
+        button={<RequestFormScrollButton />}
         image={heroImage}
       />
       <VStack gap="section">

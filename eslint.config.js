@@ -87,6 +87,13 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: ["src/server/**/*.{ts,tsx}"],
+    rules: {
+      "require-typo/require-typo-for-cyrillic": "off",
+      "require-typo/typo-import-from-lib": "off",
+    },
+  },
   // RichEditor (TipTap / ProseMirror): обёрточная типизация даёт тысячи ложных no-unsafe-*; @ts-nocheck в нескольких extension-файлах сохранён намеренно
   {
     files: ["src/components/blaze/RichEditor/**/*.{ts,tsx}"],

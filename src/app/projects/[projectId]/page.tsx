@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Container } from "~/components";
 import { api, HydrateClient } from "~/trpc/server";
 
-import { Contacts } from "../../_lib";
+import { Contacts, RequestForm } from "../../_lib";
 import { ProjectDetails } from "./_lib/components/ProjectDetails";
 
 interface PageProps {
@@ -36,6 +36,7 @@ export default async function ProjectPage({ params }: PageProps) {
       <Container className="py-12">
         <ProjectDetails project={project} />
       </Container>
+      <RequestForm projectId={projectId} />
       <Contacts />
     </HydrateClient>
   );

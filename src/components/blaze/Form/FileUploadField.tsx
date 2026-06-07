@@ -1,7 +1,7 @@
 "use client";
 
 import type { AnyFieldApi } from "@tanstack/react-form";
-import { typo } from "lib";
+import { isWithinMaxUploadFileSize, MAX_UPLOAD_FILE_SIZE_MB, typo } from "lib";
 import { Loader2, Paperclip, Upload, X } from "lucide-react";
 import Link from "next/link";
 import type React from "react";
@@ -51,7 +51,6 @@ function FileUploader(props: DragDropFilesProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [loadingFiles, setLoadingFiles] = useState<Record<string, boolean>>({});
 
-  // Получаем функцию загрузки из API
   const { mutateAsync: upload } = api.fileUploaderRouter.upload.useMutation();
 
   const getCurrentFilesCount = useCallback(() => {
@@ -125,6 +124,11 @@ function FileUploader(props: DragDropFilesProps) {
         return;
       }
 
+      if (!isWithinMaxUploadFileSize(file.size)) {
+        toast.error(typo(`Максимальный размер файла — ${MAX_UPLOAD_FILE_SIZE_MB} МБ`));
+        return;
+      }
+
       // Устанавливаем состояние загрузки
       setLoadingFiles((prev) => ({ ...prev, [tempId]: true }));
 
@@ -163,6 +167,7 @@ function FileUploader(props: DragDropFilesProps) {
         }
       } catch (error) {
         console.error("Error uploading file:", error);
+        toast.error(typo(`Не удалось загрузить файл`));
       } finally {
         // Убираем состояние загрузки
         setLoadingFiles((prev) => {

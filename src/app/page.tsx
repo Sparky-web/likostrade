@@ -3,6 +3,7 @@ import { typo } from "lib";
 import { Button, Headline, VStack } from "~/components";
 import { api, HydrateClient } from "~/trpc/server";
 
+import { AboutUs } from "./_lib/components/AboutUs";
 import { CategoryTilesSection } from "./_lib/components/CategoryTilesSection";
 import { ClientsPartnersSection } from "./_lib/components/ClientsPartnersSection";
 import { Contacts } from "./_lib/components/Contacts";
@@ -30,6 +31,7 @@ export default async function Home() {
       />
       <VStack gap="section">
         <CategoryTilesSection categories={rootCategories} />
+        <AboutUs />
         <HomeCompletedProjects />
         <ClientsPartnersSection />
         <Videos />

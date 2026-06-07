@@ -32,7 +32,7 @@ export const websiteConstants = {
   MAP_EMBED_URL:
     "https://yandex.ru/map-widget/v1/?ll=60.520718%2C56.774995&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjA2NzI2NxKbAdCg0L7RgdGB0LjRjywg0KHQstC10YDQtNC70L7QstGB0LrQsNGPINC-0LHQu9Cw0YHRgtGMLCDQldC60LDRgtC10YDQuNC90LHRg9GA0LMsINC20LjQu9C-0Lkg0YDQsNC50L7QvSDQldC70LjQt9Cw0LLQtdGCLCDQnNCw0YDRgtC-0LLRgdC60LDRjyDRg9C70LjRhtCwLCA4IgoN03ZyQhUABmNC&z=12.33",
   WHATSAPP_URL: "https://wa.me/79923313405",
-  TELEGRAM_URL: "https://t.me/79923313405",
+  TELEGRAM_URL: "https://t.me/+79923313405",
   /** Персональная ссылка на профиль в MAX (Настройки → QR-код → Поделиться). Прямой ссылки по номеру, как wa.me, нет. */
   MAX_URL: "https://max.ru/u/f9LHodD0cOJeiucOqlFj2f5x_nxeCXRdL9A07VgBhLVUOmguoBc9v_K7WuA",
 } as const;

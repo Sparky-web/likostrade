@@ -1,4 +1,5 @@
 import { typo } from "lib";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { Button, Container, Headline, VStack } from "~/components";
@@ -18,10 +19,26 @@ import {
 
 interface PageProps {
   params: Promise<{ categoryId: string }>;
+  searchParams: Promise<{ isExp?: string }>;
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { categoryId } = await params;
+  const category = await api.categories.getById({ id: categoryId });
+
+  if (!category || category.isHidden) {
+    return {};
+  }
+
+  return {
+    title: category.title,
+    description: category.shortDescription ? category.shortDescription : undefined,
+  };
+}
+
+export default async function CategoryPage({ params, searchParams }: PageProps) {
+  const { categoryId } = await params;
+  const { isExp } = await searchParams;
 
   const [category, completedProjects, previewVideos] = await Promise.all([
     api.categories.getById({ id: categoryId }),
@@ -35,10 +52,13 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const uploadSrc: `/uploads/${string}` | undefined = category.imageId ? `/uploads/${category.imageId}` : undefined;
 
+  const headlineTitle = category.landingTitle ?? category.title;
+  const title = typo(isExp === "1" ? `${headlineTitle} в Екатеринбурге` : headlineTitle);
+
   return (
     <HydrateClient>
       <Headline
-        title={category.landingTitle ? typo(category.landingTitle) : typo(category.title)}
+        title={title}
         description={category.shortDescription ? typo(category.shortDescription) : undefined}
         button={
           <Button size="lg" className="rounded-md">

@@ -1,11 +1,18 @@
 import { typo } from "lib";
+import type { Metadata } from "next";
 
 import { Container, Heading, VStack } from "~/components";
+import { websiteConstants } from "~/consts";
 import { api, HydrateClient } from "~/trpc/server";
 
 import { Contacts } from "../_lib";
 import { ProjectsCatalog } from "./_lib/components/ProjectsCatalog";
 import { sortProjectsByDateCompleted } from "./_lib/lib/sortProjectsByDate";
+
+export const metadata: Metadata = {
+  title: websiteConstants.PROJECTS_METADATA_TITLE,
+  description: websiteConstants.PROJECTS_METADATA_DESCRIPTION,
+};
 
 export default async function ProjectsPage() {
   const [projects, categories] = await Promise.all([

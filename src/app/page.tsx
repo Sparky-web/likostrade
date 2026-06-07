@@ -1,6 +1,8 @@
 import { typo } from "lib";
+import type { Metadata } from "next";
 
 import { Button, Headline, VStack } from "~/components";
+import { websiteConstants } from "~/consts";
 import { api, HydrateClient } from "~/trpc/server";
 
 import { AboutUs } from "./_lib/components/AboutUs";
@@ -12,6 +14,11 @@ import { Licenses } from "./_lib/components/Licenses";
 import { RequestForm } from "./_lib/components/RequestForm";
 import { Videos } from "./_lib/components/Videos";
 import heroImage from "./_lib/lib/headline.jpg";
+
+export const metadata: Metadata = {
+  title: websiteConstants.METADATA_TITLE,
+  description: websiteConstants.METADATA_DESCRIPTION,
+};
 
 export default async function Home() {
   const [rootCategories, previewVideos] = await Promise.all([

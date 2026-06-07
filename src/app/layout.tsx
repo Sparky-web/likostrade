@@ -15,7 +15,13 @@ import { SiteSettingsProvider } from "./_lib/model/SiteSettingsProvider";
 export const metadata: Metadata = {
   title: websiteConstants.METADATA_TITLE,
   description: websiteConstants.METADATA_DESCRIPTION,
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: {
+    icon: [
+      { url: "/favicon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+    ],
+    shortcut: "/favicon-light.svg",
+  },
 };
 
 const golos = Golos_Text({

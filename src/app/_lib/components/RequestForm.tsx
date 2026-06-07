@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { typo } from "lib";
+import { formatPhoneNumber, typo } from "lib";
 import { zodRussian } from "lib/src/zodRussian";
 import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
@@ -24,7 +24,9 @@ import {
   Text,
   VStack,
 } from "~/components";
+import { websiteConstants } from "~/consts";
 
+import { getContactAvailability } from "../lib/contactAvailability";
 import requestFormImage from "../lib/requestForm.jpg";
 
 type ContactRowProps = {
@@ -32,9 +34,10 @@ type ContactRowProps = {
   href?: string;
   primary: string;
   secondary: string;
+  isOnline?: boolean;
 };
 
-const ContactRow = ({ icon, href, primary, secondary }: ContactRowProps) => {
+const ContactRow = ({ icon, href, primary, secondary, isOnline = false }: ContactRowProps) => {
   return (
     <HStack gap="md" align="start">
       <VStack className="bg-secondary size-12 rounded-lg" align="center" justify="center">
@@ -42,7 +45,15 @@ const ContactRow = ({ icon, href, primary, secondary }: ContactRowProps) => {
       </VStack>
       <VStack className="gap-1">
         {href ? <Link href={href}>{primary}</Link> : <Text>{primary}</Text>}
-        <Text variant="small">{secondary}</Text>
+        <HStack gap="xs" align="center">
+          {isOnline ? (
+            <span className="relative flex size-2 shrink-0">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-green-500" />
+            </span>
+          ) : undefined}
+          <Text variant="small">{secondary}</Text>
+        </HStack>
       </VStack>
     </HStack>
   );
@@ -71,6 +82,8 @@ const fields: FormField[] = [
 ];
 
 export const RequestForm = () => {
+  const contactAvailability = getContactAvailability();
+
   const form = useForm({
     defaultValues: {
       name: "",
@@ -116,26 +129,27 @@ export const RequestForm = () => {
               <VStack gap="lg">
                 <ContactRow
                   icon={<Phone className="size-5" aria-hidden />}
-                  href="tel:+79126871952"
-                  primary={typo(`+7 912 687 19-52`)}
-                  secondary={typo(`ответим завтра`)}
+                  href={`tel:+${websiteConstants.PHONE_DIGITS}`}
+                  primary={typo(formatPhoneNumber(websiteConstants.PHONE_DIGITS))}
+                  secondary={typo(contactAvailability.phoneSecondary)}
+                  isOnline={contactAvailability.isPhoneOnline}
                 />
                 <ContactRow
                   icon={<Mail className="size-5" aria-hidden />}
-                  href="mailto:babinovvlad@gmail.com"
-                  primary={typo(`babinovvlad@gmail.com`)}
-                  secondary={typo(`ответим в течение 24 часов`)}
+                  href={`mailto:${websiteConstants.EMAIL}`}
+                  primary={websiteConstants.EMAIL}
+                  secondary={typo(contactAvailability.emailSecondary)}
                 />
                 <ContactRow
                   icon={<MapPin className="size-5" aria-hidden />}
-                  primary={typo(`г. Екатеринбург. ул. Мартовская, дом 8`)}
+                  primary={websiteConstants.ADDRESS}
                   secondary={typo(`главный производственный цех`)}
                 />
               </VStack>
             </VStack>
             <Text variant="large">
               {typo(
-                `Мы готовы выполнить лазерную резку по вашим требованиям, гарантируя высокое качество и профессиональный подход в каждом заказе.`,
+                `Мы готовы выполнить работу по вашим требованиям, гарантируя высокое качество и профессиональный подход в каждом заказе.`,
               )}
             </Text>
           </VStack>

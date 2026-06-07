@@ -1,9 +1,11 @@
+"use client";
 import type { StaticImageData } from "next/image";
 import Image from "next/image";
 import Link from "next/link";
 
 import { Heading } from "../blaze/Heading";
 import { VStack } from "../blaze/VStack";
+import { useAdaptive } from "../hooks/useAdaptive";
 
 interface GalleryBlockProps {
   href: string;
@@ -15,6 +17,7 @@ interface GalleryBlockProps {
 }
 
 export const GalleryBlock = ({ image, title, href, uploadSrc }: GalleryBlockProps) => {
+  const { isMobile } = useAdaptive();
   const src = uploadSrc ?? image;
   return (
     <Link href={href} className="block">
@@ -25,7 +28,9 @@ export const GalleryBlock = ({ image, title, href, uploadSrc }: GalleryBlockProp
           aria-hidden
         />
         <VStack className="relative">
-          <Heading variant="h2">{title}</Heading>
+          <Heading variant="h2" breakWords={isMobile}>
+            {title}
+          </Heading>
         </VStack>
       </VStack>
     </Link>

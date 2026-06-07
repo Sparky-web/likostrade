@@ -54,7 +54,7 @@ type ContactRowProps = {
 const ContactRow = ({ icon, href, primary, secondary, isOnline = false }: ContactRowProps) => {
   return (
     <HStack gap="md" align="start">
-      <VStack className="bg-secondary size-12 rounded-lg" align="center" justify="center">
+      <VStack className="bg-secondary size-12 min-w-12 rounded-lg" align="center" justify="center">
         {icon}
       </VStack>
       <VStack className="gap-1">

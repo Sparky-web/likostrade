@@ -1,5 +1,5 @@
 import { zodRussian } from "lib";
-import { createTableRouter, sendTelegramMessage } from "lib/server";
+import { sendTelegramMessage } from "lib/server";
 
 import { env } from "~/env";
 
@@ -32,28 +32,23 @@ const createLeadInput = zodRussian.object({
   files: zodRussian.array(zodRussian.string()).optional(),
 });
 
-const leadsTableRouter = createTableRouter({
-  dbTable: "Lead",
-  procedures: {
-    get: protectedProcedure,
-    getById: protectedProcedure,
-    create: publicProcedure,
-    update: protectedProcedure,
-    delete: protectedProcedure,
-  },
-  orderBy: { createdAt: "desc" },
-  findManyArgs: {
-    include: leadListInclude,
-  },
-  findUniqueArgs: {
-    include: leadListInclude,
-  },
-  relationFields: ["files"] as const,
-});
-
 export const leadsRouter = createTRPCRouter({
-  get: leadsTableRouter.get,
-  getById: leadsTableRouter.getById,
+  get: protectedProcedure.query(({ ctx }) =>
+    ctx.db.lead.findMany({
+      orderBy: { createdAt: "desc" },
+      include: leadListInclude,
+    }),
+  ),
+
+  getById: protectedProcedure
+    .input(zodRussian.object({ id: zodRussian.string() }))
+    .query(({ ctx, input }) =>
+      ctx.db.lead.findUnique({
+        where: { id: input.id },
+        include: leadListInclude,
+      }),
+    ),
+
   create: publicProcedure.input(createLeadInput).mutation(async ({ ctx, input }) => {
     const lead = await ctx.db.lead.create({
       data: {

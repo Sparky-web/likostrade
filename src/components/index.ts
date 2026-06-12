@@ -34,8 +34,6 @@ export * from "./custom/VideoCard";
 // ui
 export { useAdaptive } from "./hooks/useAdaptive";
 export { useDataTable } from "./hooks/useDataTable";
-export { useMountEffect } from "./hooks/useMountEffect";
-export { useSetUser } from "./hooks/useSetUser";
 export { useToggle } from "./hooks/useToggle";
 export { useUser } from "./hooks/useUser";
 export * from "./ui/accordion";
@@ -91,12 +89,7 @@ export * from "./ui/textarea";
 export * from "./ui/toggle";
 export * from "./ui/toggle-group";
 export * from "./ui/tooltip";
-export {
-  ADAPTIVE_BREAKPOINT_MIN_WIDTH_PX,
-  AdaptiveContext,
-  AdaptiveProvider,
-  type AdaptiveValue,
-} from "./utils/AdaptiveContext";
+export { AdaptiveProvider } from "./utils/AdaptiveContext";
 export { cn } from "./utils/cn";
 export { UserProvider } from "./utils/UserContext";
 

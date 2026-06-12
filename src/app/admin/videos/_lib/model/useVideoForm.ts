@@ -65,12 +65,10 @@ export const useVideoForm = ({ selectedId, isCreation, onCreated, onUpdated, onD
 
           onCreated();
         } else if (selectedId) {
+          // id (слаг) при обновлении не меняется — сервер принимает только поля формы
           await update({
             id: selectedId,
-            data: {
-              id: translit(values.title),
-              ...values,
-            },
+            data: values,
           });
           onUpdated();
           void refetch();

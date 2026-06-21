@@ -29,6 +29,7 @@ import {
 import type { CategoryTreeNode } from "~/components/custom/CategoryTreeCombobox/lib/buildCategoryTree";
 
 import { SITE_ADDRESS, SITE_EMAIL, SITE_MAP_URL, SITE_NAV_ITEMS, SITE_PHONE, SITE_SERVICES_NAV_LABEL } from "../model/siteMenu";
+import { EmailCopy } from "./EmailCopy";
 
 const MOBILE_HEADER_H_PX = 80;
 const DROPDOWN_HOVER_CLOSE_MS = 120;
@@ -234,7 +235,7 @@ function SitePhoneAndEmail({ variant, onNavigate, className }: SitePhoneAndEmail
         <Link href={`tel:${SITE_PHONE}`} className="text-primary-foreground font-semibold underline underline-offset-4">
           <Text variant="large">{formatPhoneNumber(SITE_PHONE)}</Text>
         </Link>
-        <Link href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</Link>
+        <EmailCopy email={SITE_EMAIL} />
       </>
     );
   }
@@ -252,11 +253,7 @@ function SitePhoneAndEmail({ variant, onNavigate, className }: SitePhoneAndEmail
     );
   }
 
-  return (
-    <Link href={`mailto:${SITE_EMAIL}`} className={cn("text-center text-sm", className)} onClick={onNavigate}>
-      {SITE_EMAIL}
-    </Link>
-  );
+  return <EmailCopy email={SITE_EMAIL} className={cn("justify-center", className)} emailClassName="text-sm" />;
 }
 
 type SiteNavDesktopLinkProps = {

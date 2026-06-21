@@ -1,7 +1,9 @@
 import { formatPhoneNumber, typo } from "lib";
 
-import { Button, Heading, HStack, Link, MaxIcon, TelegramIcon, Text, VStack, WhatsAppIcon } from "~/components";
+import { Button, Heading, HStack, Link, MaxIcon, TelegramIcon, VStack, WhatsAppIcon } from "~/components";
 import { websiteConstants } from "~/consts";
+
+import { EmailCopy } from "./EmailCopy";
 
 export const ContactsShort = () => {
   return (
@@ -13,9 +15,10 @@ export const ContactsShort = () => {
           </Heading>
         </Link>
 
-        <Link href={`mailto:${websiteConstants.EMAIL}`} variant="underline">
-          <Text>{websiteConstants.EMAIL}</Text>
-        </Link>
+        <EmailCopy
+          email={websiteConstants.EMAIL}
+          emailClassName="text-(length:--paragraph-regular-font-size) leading-(--paragraph-regular-line-height) tracking-(--paragraph-regular-letter-spacing)"
+        />
       </VStack>
 
       <HStack gap="xs" className="dark">

@@ -1,5 +1,6 @@
 import { typo } from "lib";
 
+import { EmailCopy } from "~/app/_lib/components/EmailCopy";
 import { FieldContent, FieldDescription, FieldLabel, Link, VStack } from "~/components";
 import type { RouterOutputs } from "~/trpc/react";
 
@@ -32,9 +33,7 @@ export const LeadDetails = ({ data }: LeadDetailsProps) => {
       <FieldContent>
         <FieldLabel>{typo("Email")}</FieldLabel>
         <FieldDescription>
-          <Link href={`mailto:${data.email}`} variant="underline">
-            {data.email}
-          </Link>
+          <EmailCopy email={data.email} trackGoals={false} />
         </FieldDescription>
       </FieldContent>
 

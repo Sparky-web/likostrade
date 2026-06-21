@@ -37,6 +37,7 @@ import { getContactAvailability } from "../lib/contactAvailability";
 import requestFormImage from "../lib/requestForm.jpg";
 import { REQUEST_FORM_SECTION_ID } from "../lib/requestFormSectionId";
 import { reachYandexMetrikaGoal, YANDEX_METRIKA_GOALS } from "../lib/yandexMetrika";
+import { EmailCopy } from "./EmailCopy";
 
 type RequestFormProps = {
   categoryId?: string;
@@ -47,18 +48,20 @@ type ContactRowProps = {
   icon: ReactNode;
   href?: string;
   primary: string;
+  /** Кастомное содержимое вместо ссылки/текста (например, email с кнопкой копирования). */
+  primaryNode?: ReactNode;
   secondary: string;
   isOnline?: boolean;
 };
 
-const ContactRow = ({ icon, href, primary, secondary, isOnline = false }: ContactRowProps) => {
+const ContactRow = ({ icon, href, primary, primaryNode, secondary, isOnline = false }: ContactRowProps) => {
   return (
     <HStack gap="md" align="start">
       <VStack className="bg-secondary size-12 min-w-12 rounded-lg" align="center" justify="center">
         {icon}
       </VStack>
       <VStack className="gap-1">
-        {href ? <Link href={href}>{primary}</Link> : <Text>{primary}</Text>}
+        {primaryNode ?? (href ? <Link href={href}>{primary}</Link> : <Text>{primary}</Text>)}
         <HStack gap="xs" align="center">
           {isOnline ? (
             <span className="relative flex size-2 shrink-0">
@@ -197,8 +200,8 @@ export const RequestForm = ({ categoryId, projectId }: RequestFormProps) => {
                   />
                   <ContactRow
                     icon={<Mail className="size-5" aria-hidden />}
-                    href={`mailto:${websiteConstants.EMAIL}`}
                     primary={websiteConstants.EMAIL}
+                    primaryNode={<EmailCopy email={websiteConstants.EMAIL} />}
                     secondary={typo(contactAvailability.emailSecondary)}
                   />
                   <ContactRow

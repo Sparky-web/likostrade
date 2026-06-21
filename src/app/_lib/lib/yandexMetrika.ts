@@ -21,6 +21,8 @@ export const YANDEX_METRIKA_INIT_SCRIPT = `
 
 export const YANDEX_METRIKA_GOALS = {
   requestSent: "requestSent",
+  /** Клик по кнопке копирования email. */
+  emailCopy: "emailCopy",
 } as const;
 
 export function reachYandexMetrikaGoal(goal: (typeof YANDEX_METRIKA_GOALS)[keyof typeof YANDEX_METRIKA_GOALS]) {

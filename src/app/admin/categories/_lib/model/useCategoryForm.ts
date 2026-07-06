@@ -5,6 +5,8 @@ import { translit, typo } from "lib";
 import { useCallback, useMemo } from "react";
 import { toast } from "sonner";
 
+import type { CategorySection } from "~/sections/schema";
+import { parseSections } from "~/sections/schema";
 import { api } from "~/trpc/react";
 
 import { useCategoryById } from "../api/useCategoryById";
@@ -48,9 +50,13 @@ export const useCategoryForm = ({
       title: data.title,
       landingTitle: data.landingTitle ?? "",
       shortDescription: data.shortDescription ?? "",
-      htmlDescription: data.htmlDescription ?? "",
       imageId: data.imageId,
       isHidden: data.isHidden,
+      headerMode: data.headerMode,
+      childrenMode: data.childrenMode,
+      catalogTitle: data.catalogTitle ?? "",
+      sortOrder: data.sortOrder,
+      sections: parseSections(data.sections),
       subcategories: data.subcategories.map((sub) => sub.id),
     };
   }, [data]);
@@ -62,9 +68,13 @@ export const useCategoryForm = ({
           title: "",
           landingTitle: "",
           shortDescription: "",
-          htmlDescription: "",
           imageId: null satisfies null | string,
           isHidden: false,
+          headerMode: "HERO" as const,
+          childrenMode: "TILES" as const,
+          catalogTitle: "",
+          sortOrder: 0,
+          sections: [] satisfies CategorySection[] as CategorySection[],
           subcategories: [] satisfies string[] as string[],
         },
 

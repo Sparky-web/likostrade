@@ -1,7 +1,8 @@
 import { typo } from "lib";
 import Image from "next/image";
 
-import { Card, CardContent, FieldContent, FieldDescription, FieldLabel, VStack } from "~/components";
+import { FieldContent, FieldDescription, FieldLabel, VStack } from "~/components";
+import { parseSections, SECTION_TYPE_LABELS } from "~/sections/schema";
 import type { RouterOutputs } from "~/trpc/react";
 
 type CategoryDetailsProps = {
@@ -13,6 +14,8 @@ const EMPTY = "—";
 const joinTitles = (items: { title: string }[]) => (items.length ? items.map((item) => item.title).join(", ") : EMPTY);
 
 export const CategoryDetails = ({ data }: CategoryDetailsProps) => {
+  const sections = parseSections(data.sections);
+
   return (
     <VStack gap="lg">
       <FieldContent>
@@ -41,17 +44,10 @@ export const CategoryDetails = ({ data }: CategoryDetailsProps) => {
       </FieldContent>
 
       <FieldContent>
-        <FieldLabel>{typo("Описание (HTML)")}</FieldLabel>
-        {data.htmlDescription ? (
-          <Card size="sm">
-            <CardContent>
-              {/* Простой HTML из редактора или посева JSON */}
-              <div className="text-sm" dangerouslySetInnerHTML={{ __html: data.htmlDescription }} />
-            </CardContent>
-          </Card>
-        ) : (
-          <FieldDescription>{EMPTY}</FieldDescription>
-        )}
+        <FieldLabel>{typo("Секции")}</FieldLabel>
+        <FieldDescription>
+          {sections.length > 0 ? sections.map((section) => SECTION_TYPE_LABELS[section.type]).join(", ") : EMPTY}
+        </FieldDescription>
       </FieldContent>
 
       <FieldContent>

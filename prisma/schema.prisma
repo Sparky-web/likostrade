@@ -75,16 +75,44 @@ model File {
   leadAttachments         Lead[]    @relation("LeadAttachments")
 }
 
+/// Режим шапки публичной страницы категории.
+enum CategoryHeaderMode {
+  /// Крупный баннер с фоном (как исторически у всех категорий).
+  HERO
+  /// Компактная шапка: хлебные крошки + заголовок + короткое описание.
+  COMPACT
+}
+
+/// Как выводятся подкатегории на странице и участвуют ли они в сайдбаре.
+enum CategoryChildrenMode {
+  /// Сетка плиток с фото (как исторически).
+  TILES
+  /// Дерево в левом сайдбаре, контент справа (каталог как на evraz.pro).
+  SIDEBAR
+  /// Карточки товаров в потоке контента; такие дети не попадают в сайдбар.
+  CARDS
+}
+
 model Category {
   id               String  @id
   title            String
   /// Подзаголовок на лендинге категории — под основным названием в шапке.
   landingTitle     String?
   shortDescription String?
-  /// Простой HTML для вывода через dangerouslySetInnerHTML (не Markdown).
-  htmlDescription String?
   /// Скрыта с сайта (карточки и лендинг); в админке остаётся видимой.
   isHidden         Boolean @default(false)
+
+  headerMode   CategoryHeaderMode   @default(HERO)
+  childrenMode CategoryChildrenMode @default(TILES)
+  /// Заголовок каталожной зоны при HERO + SIDEBAR; null → «Каталог».
+  catalogTitle String?
+  /// Порядок среди детей одного родителя: меньше — раньше; при равенстве — по title.
+  sortOrder    Int                  @default(0)
+  /// Секции контента страницы; jsonb-массив, схема — src/sections/schema.ts.
+  sections     Json                 @default("[]")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   imageId  String?
   image    File?     @relation(fields: [imageId], references: [id])

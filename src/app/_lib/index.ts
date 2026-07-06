@@ -8,3 +8,4 @@ export { RequestFormScrollButton } from "./components/RequestFormScrollButton";
 export { Videos } from "./components/Videos";
 export { getCompletedProjectsViewAllHref } from "./lib/completedProjects";
 export { default as metalHeadlineImage } from "./lib/headline.jpg";
+export { SectionsRenderer } from "./sections/SectionsRenderer";

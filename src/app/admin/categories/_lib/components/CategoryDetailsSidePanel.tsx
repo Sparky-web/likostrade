@@ -8,7 +8,6 @@ import {
   CrudTableFormButton,
   CrudTableSidePanelDetailsButtons,
   FileUploadField,
-  RichTextareaField,
   SelectMultipleField,
   SidePanel,
   Skeleton,
@@ -89,18 +88,6 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
               fieldApi={field}
               field={{
                 label: typo(`Короткое описание`),
-              }}
-            />
-          )}
-        />
-
-        <form.Field
-          name="htmlDescription"
-          children={(field) => (
-            <RichTextareaField
-              fieldApi={field}
-              field={{
-                label: typo(`Описание (HTML)`),
               }}
             />
           )}

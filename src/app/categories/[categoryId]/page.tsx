@@ -15,6 +15,7 @@ import {
   metalHeadlineImage,
   RequestForm,
   RequestFormScrollButton,
+  SectionsRenderer,
   Videos,
 } from "../../_lib";
 
@@ -67,9 +68,9 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       />
       <VStack gap="section">
         <CategoryTilesSection categories={visibleSubcategories} />
-        {category.htmlDescription ? (
+        {Array.isArray(category.sections) && category.sections.length > 0 ? (
           <Container>
-            <div className="rich-html-content mt-8 text-lg" dangerouslySetInnerHTML={{ __html: category.htmlDescription }} />
+            <SectionsRenderer sections={category.sections} />
           </Container>
         ) : null}
         <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />

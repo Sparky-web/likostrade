@@ -21,10 +21,10 @@ export type SectionsRendererProps = {
   context?: SpecialBlockContext;
 };
 
-function renderSection(section: CategorySection, context: SpecialBlockContext | undefined) {
+function renderSection(section: CategorySection, context: SpecialBlockContext | undefined, isLead: boolean) {
   switch (section.type) {
     case "text":
-      return <SectionText section={section} />;
+      return <SectionText section={section} lead={isLead} />;
     case "table":
       return <SectionTable section={section} />;
     case "files":
@@ -49,8 +49,10 @@ export const SectionsRenderer = ({ sections, context }: SectionsRendererProps) =
 
   return (
     <VStack gap="section">
-      {parsed.map((section) => (
-        <Fragment key={section.id}>{renderSection(section, context)}</Fragment>
+      {parsed.map((section, index) => (
+        <Fragment key={section.id}>
+          {renderSection(section, context, index === 0 && section.type === "text" && !section.title)}
+        </Fragment>
       ))}
     </VStack>
   );

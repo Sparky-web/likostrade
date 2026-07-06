@@ -363,7 +363,8 @@
   }
 
   .rich-html-content :where(p) {
-    @apply break-words;
+    /* глобальный p задаёт фиксированный размер — здесь размером управляет контейнер (text-lg, лид text-2xl) */
+    @apply break-words text-[length:inherit];
   }
 
   .rich-html-content> :where(ul, ol, blockquote, pre):not(:last-child) {

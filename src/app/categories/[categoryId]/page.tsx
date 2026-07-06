@@ -79,7 +79,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   // Спец-блок «Список подкатегорий» в секциях управляет местом вывода сам — автоматику не дублируем
   const hasSubcategoryListSection = hasSpecialSection(category.sections, "subcategoryList");
   const tiles =
-    category.childrenMode === "TILES" && !hasSubcategoryListSection ? (
+    category.childrenMode === "TILES" && visibleSubcategories.length > 0 && !hasSubcategoryListSection ? (
       <CategoryTilesSection categories={visibleSubcategories} />
     ) : null;
   const sections = hasSections ? (
@@ -91,7 +91,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   // SIDEBAR-узлы показывают детей и в дереве, и крупными карточками в контенте (как категория на evraz.pro);
   // LIST — компактные строки (исполнения, серии)
   const cards =
-    category.childrenMode !== "TILES" && !hasSubcategoryListSection ? (
+    category.childrenMode !== "TILES" && visibleSubcategories.length > 0 && !hasSubcategoryListSection ? (
       <SubcategoryCards
         categories={visibleSubcategories}
         variant={category.childrenMode === "LIST" ? "list" : "cards"}
@@ -116,11 +116,16 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           uploadSrc={uploadSrc}
         />
       )}
-      {/* После компактной шапки с разделителем контенту нужен собственный отступ; у минимальной он мал — заголовок принадлежит контенту */}
+      {/* Отступ от шапки: у минимальной мал (заголовок принадлежит контенту), у compact всегда,
+          у hero — только когда первым идёт контент (плитки прилегают к баннеру, как исторически) */}
       <VStack
         gap="section"
         className={
-          category.headerMode === "COMPACT" ? "pt-10 md:pt-12" : category.headerMode === "MINIMAL" ? "pt-6" : undefined
+          category.headerMode === "MINIMAL"
+            ? "pt-6"
+            : category.headerMode === "COMPACT" || !tiles
+              ? "pt-10 md:pt-12"
+              : undefined
         }
       >
         {sidebarContext ? (
@@ -133,8 +138,8 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
                 <CategorySidebar context={sidebarContext} />
                 <VStack gap="section" className="min-w-0">
                   {tiles}
-                  {sections}
                   {cards}
+                  {sections}
                 </VStack>
               </div>
             </VStack>

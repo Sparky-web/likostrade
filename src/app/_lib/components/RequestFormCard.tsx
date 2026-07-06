@@ -25,6 +25,7 @@ import {
   Heading,
   VStack,
 } from "~/components";
+import type { CuttingCalcItem } from "~/cutting/calc";
 import { api } from "~/trpc/react";
 
 import { reachYandexMetrikaGoal, YANDEX_METRIKA_GOALS } from "../lib/yandexMetrika";
@@ -63,6 +64,8 @@ const attachmentsFormField: FormField = {
 export type RequestFormCardProps = {
   categoryId?: string;
   projectId?: string;
+  /** Позиции калькулятора резки — прикладываются к заявке. */
+  calcItems?: CuttingCalcItem[];
   /** Тёмная карточка для светлого фона (как в блоке формы с фоновым фото). */
   inverted?: boolean;
   /** Вызывается после успешной отправки (например, чтобы закрыть модалку). */
@@ -70,7 +73,7 @@ export type RequestFormCardProps = {
 };
 
 /** Карточка формы заявки с диалогом успеха — используется в блоке формы и в модалке «Запрос цены». */
-export const RequestFormCard = ({ categoryId, projectId, inverted = false, onSuccess }: RequestFormCardProps) => {
+export const RequestFormCard = ({ categoryId, projectId, calcItems, inverted = false, onSuccess }: RequestFormCardProps) => {
   const isProjectRequest = projectId !== undefined;
   const formFields = isProjectRequest ? baseFormFields : [...baseFormFields, attachmentsFormField];
   const formTitle = isProjectRequest ? typo("Заказать такой же или похожий") : typo("Оставить заявку");
@@ -93,6 +96,7 @@ export const RequestFormCard = ({ categoryId, projectId, inverted = false, onSuc
           categoryId: categoryId ?? null,
           projectId: projectId ?? null,
           files: value.files.length > 0 ? value.files : undefined,
+          calcItems: calcItems && calcItems.length > 0 ? calcItems : undefined,
         });
 
         reachYandexMetrikaGoal(YANDEX_METRIKA_GOALS.requestSent);

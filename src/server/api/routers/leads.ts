@@ -1,6 +1,8 @@
+import type { Prisma } from "generated/prisma";
 import { zodRussian } from "lib";
 import { sendTelegramMessage } from "lib/server";
 
+import { cuttingCalcItemsSchema, formatCalcItemsText } from "~/cutting/calc";
 import { env } from "~/env";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
@@ -30,6 +32,8 @@ const createLeadInput = zodRussian.object({
   categoryId: zodRussian.string().nullable().optional(),
   projectId: zodRussian.string().nullable().optional(),
   files: zodRussian.array(zodRussian.string()).optional(),
+  /** Позиции калькулятора резки — заявка из спец-блока калькулятора. */
+  calcItems: cuttingCalcItemsSchema.optional(),
 });
 
 export const leadsRouter = createTRPCRouter({
@@ -50,6 +54,7 @@ export const leadsRouter = createTRPCRouter({
     ),
 
   create: publicProcedure.input(createLeadInput).mutation(async ({ ctx, input }) => {
+    const calcItems = input.calcItems ?? [];
     const lead = await ctx.db.lead.create({
       data: {
         title: input.title,
@@ -57,6 +62,7 @@ export const leadsRouter = createTRPCRouter({
         message: input.message,
         categoryId: input.categoryId ?? null,
         projectId: input.projectId ?? null,
+        calcItems: calcItems as Prisma.InputJsonValue,
         ...(input.files && input.files.length > 0
           ? {
               files: {
@@ -84,6 +90,10 @@ export const leadsRouter = createTRPCRouter({
 
     if (lead.files.length > 0) {
       telegramLines.push(`Вложения: ${lead.files.length}`);
+    }
+
+    if (calcItems.length > 0) {
+      telegramLines.push("", formatCalcItemsText(calcItems));
     }
 
     telegramLines.push("", `Открыть в админке: ${getSiteBaseUrl()}/admin/leads?id=${lead.id}`);

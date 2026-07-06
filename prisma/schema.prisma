@@ -81,16 +81,20 @@ enum CategoryHeaderMode {
   HERO
   /// Компактная шапка: хлебные крошки + заголовок + короткое описание.
   COMPACT
+  /// Минимальная шапка: хлебные крошки + небольшой заголовок, без подзаголовка (страницы позиций каталога).
+  MINIMAL
 }
 
 /// Как выводятся подкатегории на странице и участвуют ли они в сайдбаре.
 enum CategoryChildrenMode {
   /// Сетка плиток с фото (как исторически).
   TILES
-  /// Дерево в левом сайдбаре, контент справа (каталог как на evraz.pro).
+  /// Дерево в левом сайдбаре + крупные карточки в контенте (каталог как на evraz.pro).
   SIDEBAR
-  /// Карточки товаров в потоке контента; такие дети не попадают в сайдбар.
+  /// Крупные карточки товаров в потоке контента; такие дети не попадают в сайдбар.
   CARDS
+  /// Компактный строчный список (фото сбоку); такие дети не попадают в сайдбар.
+  LIST
 }
 
 model Category {
@@ -155,6 +159,8 @@ model Lead {
   title     String
   email     String
   message   String?
+  /// Позиции калькулятора резки (jsonb-массив, схема — src/cutting/calc.ts); [] — обычная заявка.
+  calcItems Json     @default("[]")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -182,4 +188,20 @@ model SiteSettings {
 
   /// Id работ, закреплённых на главной, в порядке отображения.
   homepagePinnedProjectIds String[] @default([])
+
+  /// Цена металла для калькулятора резки, руб/т.
+  metalPricePerTon Float @default(120000)
+  /// Компенсация за обрезь в калькуляторе резки, руб/кг.
+  scrapPricePerKg  Float @default(12)
+}
+
+/// Строка прайса плазменной резки; строка для расчёта подбирается как ближайшая толщина сверху.
+model CuttingPriceRow {
+  id            String @id @default(cuid())
+  /// Толщина металла, мм.
+  thickness     Float  @unique
+  /// Цена реза, руб/пог. м.
+  pricePerMeter Float
+  /// Цена врезки (пробивки отверстия), руб/шт.
+  piercePrice   Float
 }

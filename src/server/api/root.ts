@@ -1,6 +1,7 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 import { categoriesRouter } from "./routers/categories";
+import { cuttingRouter } from "./routers/cutting";
 import { filesRouter } from "./routers/files";
 import { fileUploaderRouter } from "./routers/fileUploader";
 import { leadsRouter } from "./routers/leads";
@@ -15,6 +16,7 @@ import { videosRouter } from "./routers/videos";
  */
 export const appRouter = createTRPCRouter({
   categories: categoriesRouter,
+  cutting: cuttingRouter,
   files: filesRouter,
   projects: projectsRouter,
   videos: videosRouter,

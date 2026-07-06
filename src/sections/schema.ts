@@ -12,6 +12,8 @@ import { typo, zodRussian } from "lib";
 export const SPECIAL_BLOCKS = {
   requestQuote: typo("Запрос цены"),
   subcategoryList: typo("Список подкатегорий"),
+  cuttingCalculator: typo("Калькулятор резки"),
+  cuttingPriceTable: typo("Таблица цен резки"),
 } as const;
 
 export type SpecialBlockKey = keyof typeof SPECIAL_BLOCKS;

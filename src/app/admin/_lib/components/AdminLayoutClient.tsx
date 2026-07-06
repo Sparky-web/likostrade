@@ -21,6 +21,7 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
           { title: typo("Категории"), href: "/admin/categories" },
           { title: typo("Проекты"), href: "/admin/projects" },
           { title: typo("Видео"), href: "/admin/videos" },
+          { title: typo("Цены резки"), href: "/admin/cutting" },
           { title: typo("Настройки"), href: "/admin/settings" },
           { title: typo("Файлы"), href: "/admin/files" },
         ],

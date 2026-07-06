@@ -1,4 +1,5 @@
 import { typo } from "lib";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 import { cn, HStack, Link, VStack } from "~/components";
 import type { RouterOutputs } from "~/trpc/react";
@@ -11,8 +12,20 @@ type CategorySidebarProps = {
   context: SidebarContext<CategoryItem>;
 };
 
-const SidebarNodeLink = ({ node, activeId, depth }: { node: SidebarNode<CategoryItem>; activeId: string; depth: number }) => {
-  const isActive = node.category.id === activeId;
+type NodeLinkProps = {
+  node: SidebarNode<CategoryItem>;
+  context: SidebarContext<CategoryItem>;
+  depth: number;
+};
+
+/**
+ * Пункт дерева. Ветки разворачиваются только вдоль пути к активной категории
+ * (аккордеон как на evraz.pro): клик по пункту открывает его страницу и ветку.
+ */
+const SidebarNodeLink = ({ node, context, depth }: NodeLinkProps) => {
+  const isActive = node.category.id === context.activeId;
+  const isExpanded = node.children.length > 0 && context.activePathIds.has(node.category.id);
+
   return (
     <VStack gap="3xs">
       <Link
@@ -23,14 +36,22 @@ const SidebarNodeLink = ({ node, activeId, depth }: { node: SidebarNode<Category
         )}
       >
         <HStack gap="sm" align="center" justify="between">
-          <span>{typo(node.category.title)}</span>
-          {node.cardsCount > 0 ? <span className="text-muted-foreground text-xs">{node.cardsCount}</span> : null}
+          <span className="min-w-0">{typo(node.category.title)}</span>
+          {node.children.length > 0 ? (
+            isExpanded ? (
+              <ChevronDown className="text-muted-foreground size-4 shrink-0" aria-hidden />
+            ) : (
+              <ChevronRight className="text-muted-foreground size-4 shrink-0" aria-hidden />
+            )
+          ) : node.cardsCount > 0 ? (
+            <span className="text-muted-foreground text-xs">{node.cardsCount}</span>
+          ) : null}
         </HStack>
       </Link>
-      {node.children.length > 0 ? (
-        <VStack gap="3xs" className={cn(depth === 0 ? "border-border ml-3 border-l pl-2" : "ml-3 pl-2")}>
+      {isExpanded ? (
+        <VStack gap="3xs" className={cn("ml-3 pl-2", depth === 0 && "border-border border-l")}>
           {node.children.map((child) => (
-            <SidebarNodeLink key={child.category.id} node={child} activeId={activeId} depth={depth + 1} />
+            <SidebarNodeLink key={child.category.id} node={child} context={context} depth={depth + 1} />
           ))}
         </VStack>
       ) : null}
@@ -38,13 +59,13 @@ const SidebarNodeLink = ({ node, activeId, depth }: { node: SidebarNode<Category
   );
 };
 
-/** Дерево каталога в левой колонке; активный пункт подсвечен, у CARDS-узлов — счётчик позиций. */
+/** Дерево каталога в левой колонке; активный пункт подсвечен, ветка активного пути развёрнута. */
 export const CategorySidebar = ({ context }: CategorySidebarProps) => (
   <aside className="md:sticky md:top-24">
     <nav aria-label={typo("Каталог")}>
       <VStack gap="3xs" className="rounded-xl border p-2">
         {context.tree.map((node) => (
-          <SidebarNodeLink key={node.category.id} node={node} activeId={context.activeId} depth={0} />
+          <SidebarNodeLink key={node.category.id} node={node} context={context} depth={0} />
         ))}
       </VStack>
     </nav>

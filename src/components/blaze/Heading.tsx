@@ -23,13 +23,17 @@ const headingAlignClasses = {
 
 type HeadingAlign = keyof typeof headingAlignClasses;
 
+type HeadingTag = "h1" | "h2" | "h3" | "h4" | "p";
+
 type HeadingTagProps = PropsWithChildren<{
   className?: string;
   asParagraph?: boolean;
+  /** Переопределение HTML-тега (например, h1 с размером h2 на страницах позиций каталога). */
+  renderAs?: HeadingTag;
 }>;
 
-function TypographyH1({ children, className, asParagraph }: HeadingTagProps) {
-  const Tag = asParagraph ? "p" : "h1";
+function TypographyH1({ children, className, asParagraph, renderAs }: HeadingTagProps) {
+  const Tag = renderAs ?? (asParagraph ? "p" : "h1");
   return (
     <Tag
       className={cn(
@@ -43,8 +47,8 @@ function TypographyH1({ children, className, asParagraph }: HeadingTagProps) {
   );
 }
 
-function TypographyH2({ children, className, asParagraph }: HeadingTagProps) {
-  const Tag = asParagraph ? "p" : "h2";
+function TypographyH2({ children, className, asParagraph, renderAs }: HeadingTagProps) {
+  const Tag = renderAs ?? (asParagraph ? "p" : "h2");
   return (
     <Tag
       className={cn(
@@ -58,8 +62,8 @@ function TypographyH2({ children, className, asParagraph }: HeadingTagProps) {
   );
 }
 
-function TypographyH3({ children, className, asParagraph }: HeadingTagProps) {
-  const Tag = asParagraph ? "p" : "h3";
+function TypographyH3({ children, className, asParagraph, renderAs }: HeadingTagProps) {
+  const Tag = renderAs ?? (asParagraph ? "p" : "h3");
   return (
     <Tag
       className={cn(
@@ -73,8 +77,8 @@ function TypographyH3({ children, className, asParagraph }: HeadingTagProps) {
   );
 }
 
-function TypographyH4({ children, className, asParagraph }: HeadingTagProps) {
-  const Tag = asParagraph ? "p" : "h4";
+function TypographyH4({ children, className, asParagraph, renderAs }: HeadingTagProps) {
+  const Tag = renderAs ?? (asParagraph ? "p" : "h4");
   return (
     <Tag
       className={cn(
@@ -99,6 +103,8 @@ type HeadingVariant = (typeof HeadingVariant)[keyof typeof HeadingVariant];
 
 interface HeadingProps extends PropsWithChildren {
   variant: HeadingVariant;
+  /** Переопределение HTML-тега при сохранении размеров варианта. */
+  renderAs?: HeadingTag;
   /** Выравнивание текста (`text-*`). */
   align?: HeadingAlign;
   /** Цвет текста. Без значения классы цвета не добавляются. */
@@ -117,6 +123,7 @@ export const Heading = ({
   align,
   color,
   asParagraph,
+  renderAs,
   maxLines,
   breakWords: breakWordsProp,
 }: HeadingProps) => {
@@ -124,7 +131,7 @@ export const Heading = ({
   const colorClass = color ? textColorClasses[color] : undefined;
   const maxLinesClass = maxLines !== undefined ? maxLinesClasses[maxLines] : undefined;
   const breakWordsClass = breakWordsProp ? breakWordsTypographyClasses : undefined;
-  const propsToPass = { children, asParagraph, className: cn(alignClass, colorClass, maxLinesClass, breakWordsClass) };
+  const propsToPass = { children, asParagraph, renderAs, className: cn(alignClass, colorClass, maxLinesClass, breakWordsClass) };
 
   switch (variant) {
     case "h1":

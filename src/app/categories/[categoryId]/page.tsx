@@ -76,24 +76,36 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     })),
   ];
 
-  // Спец-блок «Список подкатегорий» в секциях управляет местом вывода сам — автоматические плитки не дублируем
-  const showTiles = category.childrenMode === "TILES" && !hasSpecialSection(category.sections, "subcategoryList");
-  const tiles = showTiles ? <CategoryTilesSection categories={visibleSubcategories} /> : null;
+  // Спец-блок «Список подкатегорий» в секциях управляет местом вывода сам — автоматику не дублируем
+  const hasSubcategoryListSection = hasSpecialSection(category.sections, "subcategoryList");
+  const tiles =
+    category.childrenMode === "TILES" && !hasSubcategoryListSection ? (
+      <CategoryTilesSection categories={visibleSubcategories} />
+    ) : null;
   const sections = hasSections ? (
     <SectionsRenderer
       sections={category.sections}
-      context={{ categoryId: category.id, subcategories: visibleSubcategories }}
+      context={{ categoryId: category.id, subcategories: visibleSubcategories, childrenMode: category.childrenMode }}
     />
   ) : null;
-  const cards = category.childrenMode === "CARDS" ? <SubcategoryCards categories={visibleSubcategories} /> : null;
+  // SIDEBAR-узлы показывают детей и в дереве, и крупными карточками в контенте (как категория на evraz.pro);
+  // LIST — компактные строки (исполнения, серии)
+  const cards =
+    category.childrenMode !== "TILES" && !hasSubcategoryListSection ? (
+      <SubcategoryCards
+        categories={visibleSubcategories}
+        variant={category.childrenMode === "LIST" ? "list" : "cards"}
+      />
+    ) : null;
 
   return (
     <HydrateClient>
-      {category.headerMode === "COMPACT" ? (
+      {category.headerMode === "COMPACT" || category.headerMode === "MINIMAL" ? (
         <CategoryCompactHeader
           title={title}
           description={category.shortDescription ? typo(category.shortDescription) : undefined}
           breadcrumbs={breadcrumbs}
+          variant={category.headerMode === "MINIMAL" ? "minimal" : "compact"}
         />
       ) : (
         <Headline
@@ -104,7 +116,13 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           uploadSrc={uploadSrc}
         />
       )}
-      <VStack gap="section">
+      {/* После компактной шапки с разделителем контенту нужен собственный отступ; у минимальной он мал — заголовок принадлежит контенту */}
+      <VStack
+        gap="section"
+        className={
+          category.headerMode === "COMPACT" ? "pt-10 md:pt-12" : category.headerMode === "MINIMAL" ? "pt-6" : undefined
+        }
+      >
         {sidebarContext ? (
           <Container>
             <VStack gap="xl">

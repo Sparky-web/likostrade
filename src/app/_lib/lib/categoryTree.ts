@@ -42,7 +42,7 @@ export function getCategoryPath<T extends CategoryTreeSource>(all: T[], category
 export type SidebarNode<T extends CategoryTreeSource> = {
   category: T;
   children: SidebarNode<T>[];
-  /** Число видимых «позиций» (детей CARDS-узла) — счётчик в сайдбаре. */
+  /** Число видимых детей узла — счётчик в сайдбаре для свёрнутых/листовых узлов. */
   cardsCount: number;
 };
 
@@ -52,6 +52,8 @@ export type SidebarContext<T extends CategoryTreeSource> = {
   tree: SidebarNode<T>[];
   /** Кто подсвечен: сама категория, а для страниц-«позиций» — их родитель в дереве. */
   activeId: string;
+  /** Путь от root до активного узла — вдоль него дерево развёрнуто (аккордеон как на evraz.pro). */
+  activePathIds: Set<string>;
 };
 
 /**
@@ -80,7 +82,9 @@ export function getSidebarContext<T extends CategoryTreeSource>(
       break;
     }
     const parent = path[i - 1];
-    if (!parent || (parent.childrenMode !== "SIDEBAR" && parent.childrenMode !== "CARDS")) return null;
+    const parentKeepsContext =
+      parent?.childrenMode === "SIDEBAR" || parent?.childrenMode === "CARDS" || parent?.childrenMode === "LIST";
+    if (!parentKeepsContext) return null;
   }
   if (!anchor) return null;
 
@@ -108,6 +112,12 @@ export function getSidebarContext<T extends CategoryTreeSource>(
     }
   }
 
+  const rootIndex = path.findIndex((node) => node.id === root.id);
+  const activeIndex = path.findIndex((node) => node.id === activeId);
+  const activePathIds = new Set(
+    rootIndex >= 0 && activeIndex >= rootIndex ? path.slice(rootIndex, activeIndex + 1).map((node) => node.id) : [root.id],
+  );
+
   const visibleChildren = (node: T): T[] =>
     node.subcategories
       .map((sub) => byId.get(sub.id))
@@ -124,9 +134,9 @@ export function getSidebarContext<T extends CategoryTreeSource>(
       return {
         category: child,
         children,
-        cardsCount: child.childrenMode === "CARDS" ? visibleChildren(child).length : 0,
+        cardsCount: visibleChildren(child).length,
       };
     });
 
-  return { root, tree: buildNodes(root, new Set([root.id])), activeId };
+  return { root, tree: buildNodes(root, new Set([root.id])), activeId, activePathIds };
 }

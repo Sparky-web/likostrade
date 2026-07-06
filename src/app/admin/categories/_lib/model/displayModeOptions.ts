@@ -6,6 +6,7 @@ import type { SelectFieldOption } from "~/components";
 export const HEADER_MODE_OPTIONS: SelectFieldOption[] = [
   { value: "HERO", label: typo("Hero-баннер"), description: typo("Крупный баннер с фото, как раньше") },
   { value: "COMPACT", label: typo("Компактная"), description: typo("Хлебные крошки + заголовок + описание") },
+  { value: "MINIMAL", label: typo("Минимальная"), description: typo("Крошки + небольшой заголовок, без подзаголовка") },
 ];
 
 /** Опции селекта режима вывода подкатегорий. */
@@ -15,6 +16,11 @@ export const CHILDREN_MODE_OPTIONS: SelectFieldOption[] = [
   {
     value: "CARDS",
     label: typo("Карточки товаров"),
-    description: typo("Карточки в потоке контента; в сайдбар не попадают"),
+    description: typo("Крупные карточки в контенте; в сайдбар не попадают"),
+  },
+  {
+    value: "LIST",
+    label: typo("Строчный список"),
+    description: typo("Компактные строки с фото сбоку; в сайдбар не попадают"),
   },
 ];

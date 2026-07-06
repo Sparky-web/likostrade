@@ -1,7 +1,10 @@
+export { CategoryCompactHeader } from "./components/CategoryCompactHeader";
+export { CategorySidebar } from "./components/CategorySidebar";
 export { CategoryTilesSection } from "./components/CategoryTilesSection";
 export { ClientsPartnersSection } from "./components/ClientsPartnersSection";
 export { CompletedProjects } from "./components/CompletedProjects";
 export { Contacts } from "./components/Contacts";
+export { getCategoryPath, getSidebarContext } from "./lib/categoryTree";
 export { Licenses } from "./components/Licenses";
 export { RequestForm } from "./components/RequestForm";
 export { RequestFormScrollButton } from "./components/RequestFormScrollButton";
@@ -9,3 +12,4 @@ export { Videos } from "./components/Videos";
 export { getCompletedProjectsViewAllHref } from "./lib/completedProjects";
 export { default as metalHeadlineImage } from "./lib/headline.jpg";
 export { SectionsRenderer } from "./sections/SectionsRenderer";
+export { SubcategoryCards } from "./components/SubcategoryCards";

@@ -5,6 +5,8 @@ import Image from "next/image";
 import { AdaptiveGrid, Heading, Link, Text } from "~/components";
 import type { RouterOutputs } from "~/trpc/react";
 
+import { byCatalogOrder } from "../lib/categoryTree";
+
 export type SubcategoryCardItem = Pick<
   RouterOutputs["categories"]["get"][number],
   "id" | "title" | "shortDescription" | "imageId" | "sortOrder"
@@ -18,7 +20,9 @@ type SubcategoryCardsProps = {
   variant?: SubcategoryCardsVariant;
 };
 
-const PositionImage = ({ category, sizes, iconClassName }: { category: SubcategoryCardItem; sizes: string; iconClassName: string }) =>
+type PositionImageProps = { category: SubcategoryCardItem; sizes: string; iconClassName: string };
+
+const PositionImage = ({ category, sizes, iconClassName }: PositionImageProps) =>
   category.imageId ? (
     <Image
       src={`/uploads/${category.imageId}`}
@@ -79,9 +83,7 @@ const PositionRow = ({ category }: { category: SubcategoryCardItem }) => (
 export const SubcategoryCards = ({ categories, variant = "cards" }: SubcategoryCardsProps) => {
   if (categories.length === 0) return null;
 
-  const sorted = [...categories].sort(
-    (a, b) => a.sortOrder - b.sortOrder || a.title.localeCompare(b.title, "ru"),
-  );
+  const sorted = [...categories].sort(byCatalogOrder);
 
   if (variant === "list") {
     return (

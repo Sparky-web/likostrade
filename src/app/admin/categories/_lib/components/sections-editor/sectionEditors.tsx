@@ -20,8 +20,8 @@ import {
   TextField,
   VStack,
 } from "~/components";
-import type { CardsSection, FilesSection, GallerySection } from "~/sections/schema";
-import { CARD_ICON_KEYS, SPECIAL_BLOCKS, VIDEO_EMBED_HOSTS, videoUrlSchema } from "~/sections/schema";
+import type { CardsSection } from "~/sections/schema";
+import { CARD_ICON_KEYS, SPECIAL_BLOCKS, stripUploadPrefix, VIDEO_EMBED_HOSTS, videoUrlSchema } from "~/sections/schema";
 
 import { CARD_ICON_LABELS } from "./cardIconLabels";
 
@@ -70,14 +70,29 @@ export const SpecialSectionEditor = ({ form, namePrefix }: SectionEditorProps) =
   </form.Field>
 );
 
-type GallerySectionItem = GallerySection["items"][number];
+type FileItem = { fileId: string; [key: string]: unknown };
 
-export const GallerySectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
+/**
+ * Общий редактор секций с файлами (files/gallery): загрузчик + подпись на каждый элемент.
+ * FileUploader оперирует string[] — адаптер сохраняет прочие поля элемента по fileId.
+ */
+const FileItemsSectionEditor = ({
+  form,
+  namePrefix,
+  accept,
+  itemTextField,
+  itemTextLabel,
+  itemTextPlaceholder,
+}: SectionEditorProps & {
+  accept?: string;
+  itemTextField: "label" | "alt";
+  itemTextLabel: string;
+  itemTextPlaceholder: string;
+}) => (
   <form.Field name={`${namePrefix}.items`}>
     {(field: AnyFieldApi) => {
-      const items = (field.state.value ?? []) as GallerySectionItem[];
+      const items = (field.state.value ?? []) as FileItem[];
 
-      // FileUploader оперирует string[] — адаптер сохраняет alt по fileId при изменении состава
       const setFiles: Dispatch<SetStateAction<string[]>> = (action) => {
         const currentIds = items.map((item) => item.fileId);
         const nextIds = typeof action === "function" ? action(currentIds) : action;
@@ -86,15 +101,15 @@ export const GallerySectionEditor = ({ form, namePrefix }: SectionEditorProps) =
 
       return (
         <VStack gap="md">
-          <FileUploader isMultiple accept="image/*" files={items.map((item) => item.fileId)} setFiles={setFiles} />
+          <FileUploader isMultiple accept={accept} files={items.map((item) => item.fileId)} setFiles={setFiles} />
           {items.map((item, index) => (
-            <form.Field key={item.fileId} name={`${namePrefix}.items[${index}].alt`}>
-              {(altField: AnyFieldApi) => (
+            <form.Field key={item.fileId} name={`${namePrefix}.items[${index}].${itemTextField}`}>
+              {(textField: AnyFieldApi) => (
                 <TextField
-                  fieldApi={altField}
+                  fieldApi={textField}
                   field={{
-                    label: typo(`Описание фото: ${item.fileId.replace(/^\d+-/, "")}`),
-                    placeholder: typo("Альтернативный текст"),
+                    label: typo(`${itemTextLabel}: ${stripUploadPrefix(item.fileId)}`),
+                    placeholder: itemTextPlaceholder,
                   }}
                 />
               )}
@@ -106,40 +121,23 @@ export const GallerySectionEditor = ({ form, namePrefix }: SectionEditorProps) =
   </form.Field>
 );
 
-type FilesSectionItem = FilesSection["items"][number];
+export const GallerySectionEditor = (props: SectionEditorProps) => (
+  <FileItemsSectionEditor
+    {...props}
+    accept="image/*"
+    itemTextField="alt"
+    itemTextLabel={typo("Описание фото")}
+    itemTextPlaceholder={typo("Альтернативный текст")}
+  />
+);
 
-export const FilesSectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
-  <form.Field name={`${namePrefix}.items`}>
-    {(field: AnyFieldApi) => {
-      const items = (field.state.value ?? []) as FilesSectionItem[];
-
-      // FileUploader оперирует string[] — адаптер сохраняет подписи по fileId при изменении состава
-      const setFiles: Dispatch<SetStateAction<string[]>> = (action) => {
-        const currentIds = items.map((item) => item.fileId);
-        const nextIds = typeof action === "function" ? action(currentIds) : action;
-        field.handleChange(nextIds.map((fileId) => items.find((item) => item.fileId === fileId) ?? { fileId }));
-      };
-
-      return (
-        <VStack gap="md">
-          <FileUploader isMultiple files={items.map((item) => item.fileId)} setFiles={setFiles} />
-          {items.map((item, index) => (
-            <form.Field key={item.fileId} name={`${namePrefix}.items[${index}].label`}>
-              {(labelField: AnyFieldApi) => (
-                <TextField
-                  fieldApi={labelField}
-                  field={{
-                    label: typo(`Подпись: ${item.fileId.replace(/^\d+-/, "")}`),
-                    placeholder: typo("Имя файла по умолчанию"),
-                  }}
-                />
-              )}
-            </form.Field>
-          ))}
-        </VStack>
-      );
-    }}
-  </form.Field>
+export const FilesSectionEditor = (props: SectionEditorProps) => (
+  <FileItemsSectionEditor
+    {...props}
+    itemTextField="label"
+    itemTextLabel={typo("Подпись")}
+    itemTextPlaceholder={typo("Имя файла по умолчанию")}
+  />
 );
 
 const cardIconOptions: SelectFieldOption[] = [
@@ -199,7 +197,9 @@ export const CardsSectionEditor = ({ form, namePrefix }: SectionEditorProps) => 
 );
 
 /** Ячейка таблицы: узкое поле без label. */
-const CellInput = ({ form, name, placeholder }: { form: SectionEditorProps["form"]; name: string; placeholder?: string }) => (
+type CellInputProps = { form: SectionEditorProps["form"]; name: string; placeholder?: string };
+
+const CellInput = ({ form, name, placeholder }: CellInputProps) => (
   <form.Field name={name}>
     {(field: AnyFieldApi) => (
       <Input

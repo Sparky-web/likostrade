@@ -22,7 +22,15 @@ async function saveUploadedFile(input: { file: string; filename: string }) {
     await fs.mkdir(uploadDir, { recursive: true });
   }
 
-  const prefixedFilename = `${Date.now()}-${input.filename}`;
+  // Имя из публичного инпута: только базовое имя, без разделителей пути и управляющих символов
+  const safeName = path
+    .basename(input.filename)
+    .replace(/[\/\\\u0000-\u001f]/g, "")
+    .slice(0, 200);
+  if (safeName === "" || safeName === "." || safeName === "..") {
+    throw new TRPCError({ code: "BAD_REQUEST", message: "Недопустимое имя файла" });
+  }
+  const prefixedFilename = `${Date.now()}-${safeName}`;
   const filePath = path.join(uploadDir, prefixedFilename);
 
   const byteLength = getBase64PayloadByteLength(input.file);

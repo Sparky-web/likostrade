@@ -57,9 +57,9 @@ export type CuttingCalcInput = {
 export const cuttingCalcItemSchema = zodRussian.object({
   id: zodRussian.string().min(1),
   shape: zodRussian.enum(cuttingShapeKeys),
-  shapeLabel: zodRussian.string(),
+  shapeLabel: zodRussian.string().max(200),
   /** Человекочитаемые размеры («120 мм (диаметр) × 6 мм»). */
-  sizes: zodRussian.string(),
+  sizes: zodRussian.string().max(300),
   amount: zodRussian.number().int().positive(),
   thicknessMm: zodRussian.number().positive(),
   metalPricePerTon: zodRussian.number().nonnegative(),
@@ -70,7 +70,8 @@ export const cuttingCalcItemSchema = zodRussian.object({
   totalPrice: zodRussian.number(),
 });
 
-export const cuttingCalcItemsSchema = zodRussian.array(cuttingCalcItemSchema);
+/** Позиции заявки: публичный вход — размер жёстко ограничен. */
+export const cuttingCalcItemsSchema = zodRussian.array(cuttingCalcItemSchema).max(50);
 
 export type CuttingCalcItem = (typeof cuttingCalcItemSchema)["_output"];
 
@@ -123,7 +124,7 @@ export function calculateCutting(
     metalCost = weightKg * metalPricePerKg;
     cuttingCost = (p + innerHoleP + boltsP) * pricePerMeter + (1 + boltAmount + (hasInnerHole ? 1 : 0)) * piercePrice;
     const scrapCredit = (boltsS + innerHoleS) * thickness * DENSITY_KG_M3 * scrapPricePerKg;
-    totalPerUnit = metalCost + cuttingCost - scrapCredit;
+    totalPerUnit = Math.max(0, metalCost + cuttingCost - scrapCredit);
     sizes = typo(`${input.xMm} × ${input.yMm} × ${input.thicknessMm} мм`);
   } else if (input.shape === "circle") {
     const s = Math.PI * (x / 2) ** 2;
@@ -136,7 +137,7 @@ export function calculateCutting(
     cuttingCost = Math.round(
       (p + innerHoleP + boltsP) * pricePerMeter + (1 + boltAmount + (hasInnerHole ? 1 : 0)) * piercePrice,
     );
-    totalPerUnit = Math.round(metalCost + cuttingCost - scrapCredit);
+    totalPerUnit = Math.max(0, Math.round(metalCost + cuttingCost - scrapCredit));
     sizes = typo(`${input.xMm} мм (диаметр) × ${input.thicknessMm} мм`);
   } else if (input.shape === "triangle") {
     const p = x + y + Math.sqrt(x ** 2 + y ** 2);
@@ -168,7 +169,31 @@ export function calculateCutting(
   };
 }
 
-const formatRub = (value: number) => `${new Intl.NumberFormat("ru-RU").format(value)} ₽`;
+export const formatRub = (value: number) => `${new Intl.NumberFormat("ru-RU").format(value)} ₽`;
+
+/** Число из пользовательского ввода (запятая как разделитель); нечисло → 0. */
+export function parseDecimal(value: unknown): number {
+  const parsed =
+    typeof value === "number" ? value : typeof value === "string" ? Number(value.replace(",", ".")) : NaN;
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+/** Положительное число из ввода; всё остальное → 0. */
+export function parsePositiveDecimal(value: unknown): number {
+  const parsed = parseDecimal(value);
+  return parsed > 0 ? parsed : 0;
+}
+
+/** Толерантное чтение Lead.calcItems из БД (jsonb): битые позиции пропускаются. */
+export function parseCalcItems(value: unknown): CuttingCalcItem[] {
+  if (!Array.isArray(value)) return [];
+  const items: CuttingCalcItem[] = [];
+  for (const item of value) {
+    const result = cuttingCalcItemSchema.safeParse(item);
+    if (result.success) items.push(result.data);
+  }
+  return items;
+}
 
 /** Итог по списку позиций, ₽. */
 export function calcItemsTotal(items: CuttingCalcItem[]): number {

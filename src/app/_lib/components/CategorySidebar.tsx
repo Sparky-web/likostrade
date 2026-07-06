@@ -6,7 +6,7 @@ import type { RouterOutputs } from "~/trpc/react";
 
 import type { SidebarContext, SidebarNode } from "../lib/categoryTree";
 
-type CategoryItem = RouterOutputs["categories"]["get"][number];
+type CategoryItem = RouterOutputs["categories"]["getTree"][number];
 
 type CategorySidebarProps = {
   context: SidebarContext<CategoryItem>;

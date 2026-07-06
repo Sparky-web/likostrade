@@ -17,9 +17,6 @@ import {
   CardHeader,
   CardTitle,
   cn,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Heading,
   HStack,
   Label,
@@ -31,9 +28,9 @@ import {
   VStack,
 } from "~/components";
 import type { CuttingCalcItem, CuttingPriceRowData, CuttingShape } from "~/cutting/calc";
-import { calcItemsTotal, calculateCutting, CUTTING_SHAPES } from "~/cutting/calc";
+import { calcItemsTotal, calculateCutting, CUTTING_SHAPES, formatRub, parsePositiveDecimal } from "~/cutting/calc";
 
-import { RequestFormCard } from "../components/RequestFormCard";
+import { RequestFormDialog } from "../components/RequestFormDialog";
 import calculateCircle from "../lib/cutting/calculate-circle.png";
 import calculateOther from "../lib/cutting/calculate-other.jpg";
 import calculateSquare from "../lib/cutting/calculate-square.png";
@@ -57,20 +54,12 @@ const SHAPE_IMAGES: Record<CuttingShape, StaticImageData> = {
 /** Типовая толщина заготовки для фигуры (как в исходнике: фланцы 10 мм, косынка 6 мм). */
 const SHAPE_DEFAULT_THICKNESS: Record<CuttingShape, number> = { square: 10, circle: 10, triangle: 6, other: 2 };
 
-const formatRub = (value: number) => `${new Intl.NumberFormat("ru-RU").format(value)} ₽`;
-
 /** Поля с размерами, релевантные каждой фигуре: подписи параметров X/Y. */
 const SHAPE_DIMENSIONS: Record<CuttingShape, { x?: string; y?: string }> = {
   square: { x: typo("Ширина, мм"), y: typo("Высота, мм") },
   circle: { x: typo("Диаметр, мм") },
   triangle: { x: typo("Катет 1, мм"), y: typo("Катет 2, мм") },
   other: {},
-};
-
-const toPositiveNumber = (value: unknown): number => {
-  const parsed =
-    typeof value === "number" ? value : typeof value === "string" ? Number(value.replace(",", ".")) : NaN;
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
 };
 
 export const CuttingCalculator = ({
@@ -104,21 +93,34 @@ export const CuttingCalculator = ({
     },
     onSubmit: ({ value }) => {
       const shape = value.shape;
-      const amount = Math.max(1, Math.round(toPositiveNumber(value.amount)));
-      const thicknessMm = toPositiveNumber(value.thicknessMm);
-      const metalPricePerTon = toPositiveNumber(value.metalPricePerTon);
+      const amount = Math.max(1, Math.round(parsePositiveDecimal(value.amount)));
+      const thicknessMm = parsePositiveDecimal(value.thicknessMm);
+      const metalPricePerTon = parsePositiveDecimal(value.metalPricePerTon);
 
       const problems: string[] = [];
       if (shape !== "other") {
-        if (toPositiveNumber(value.xMm) === 0) problems.push(SHAPE_DIMENSIONS[shape].x ?? "X");
-        if (SHAPE_DIMENSIONS[shape].y && toPositiveNumber(value.yMm) === 0) problems.push(SHAPE_DIMENSIONS[shape].y);
+        if (parsePositiveDecimal(value.xMm) === 0) problems.push(SHAPE_DIMENSIONS[shape].x ?? "X");
+        if (SHAPE_DIMENSIONS[shape].y && parsePositiveDecimal(value.yMm) === 0) problems.push(SHAPE_DIMENSIONS[shape].y);
         if (metalPricePerTon === 0) problems.push(typo("Цена металла"));
       } else {
-        if (toPositiveNumber(value.cutLengthM) === 0) problems.push(typo("Длина реза"));
+        if (parsePositiveDecimal(value.cutLengthM) === 0) problems.push(typo("Длина реза"));
       }
       if (problems.length > 0) {
         toast.error(typo(`Заполните поля: ${problems.join(", ")}`));
         return;
+      }
+
+      // Геометрия: отверстия должны помещаться в деталь
+      if (value.withHoles && (shape === "square" || shape === "circle")) {
+        const xMm = parsePositiveDecimal(value.xMm);
+        const yMm = shape === "square" ? parsePositiveDecimal(value.yMm) : xMm;
+        const limit = Math.min(xMm, yMm);
+        const bolt = parsePositiveDecimal(value.boltDiameterMm);
+        const inner = parsePositiveDecimal(value.innerHoleDiameterMm);
+        if (bolt >= limit || inner >= limit) {
+          toast.error(typo("Диаметр отверстий должен быть меньше размеров детали"));
+          return;
+        }
       }
 
       const item = calculateCutting(
@@ -127,13 +129,13 @@ export const CuttingCalculator = ({
           amount,
           thicknessMm,
           metalPricePerTon,
-          xMm: toPositiveNumber(value.xMm),
-          yMm: toPositiveNumber(value.yMm),
-          cutLengthM: toPositiveNumber(value.cutLengthM),
-          holesAmount: Math.round(toPositiveNumber(value.holesAmount)),
-          boltDiameterMm: value.withHoles ? toPositiveNumber(value.boltDiameterMm) : 0,
-          boltAmount: value.withHoles ? Math.round(toPositiveNumber(value.boltAmount)) : 0,
-          innerHoleDiameterMm: value.withHoles ? toPositiveNumber(value.innerHoleDiameterMm) : 0,
+          xMm: parsePositiveDecimal(value.xMm),
+          yMm: parsePositiveDecimal(value.yMm),
+          cutLengthM: parsePositiveDecimal(value.cutLengthM),
+          holesAmount: Math.round(parsePositiveDecimal(value.holesAmount)),
+          boltDiameterMm: value.withHoles ? parsePositiveDecimal(value.boltDiameterMm) : 0,
+          boltAmount: value.withHoles ? Math.round(parsePositiveDecimal(value.boltAmount)) : 0,
+          innerHoleDiameterMm: value.withHoles ? parsePositiveDecimal(value.innerHoleDiameterMm) : 0,
         },
         priceRows,
         scrapPricePerKg,
@@ -364,19 +366,16 @@ export const CuttingCalculator = ({
         </Card>
       ) : null}
 
-      <Dialog open={isRequestOpen} onOpenChange={setIsRequestOpen}>
-        <DialogContent className="max-h-[90dvh] w-full max-w-lg overflow-y-auto border-0 bg-transparent p-0 shadow-none">
-          <DialogTitle className="sr-only">{typo("Оставить заявку")}</DialogTitle>
-          <RequestFormCard
-            categoryId={categoryId}
-            calcItems={items}
-            onSuccess={() => {
-              setIsRequestOpen(false);
-              setItems([]);
-            }}
-          />
-        </DialogContent>
-      </Dialog>
+      <RequestFormDialog
+        open={isRequestOpen}
+        onOpenChange={setIsRequestOpen}
+        categoryId={categoryId}
+        calcItems={items}
+        onSuccess={() => {
+          setIsRequestOpen(false);
+          setItems([]);
+        }}
+      />
     </VStack>
   );
 };

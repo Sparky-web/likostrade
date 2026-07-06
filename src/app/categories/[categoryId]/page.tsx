@@ -1,9 +1,10 @@
 import { typo } from "lib";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 import { Container, Heading, Headline, VStack } from "~/components";
-import { hasSpecialSection } from "~/sections/schema";
+import { parseSections } from "~/sections/schema";
 import { api, HydrateClient } from "~/trpc/server";
 
 import {
@@ -25,6 +26,9 @@ import {
   Videos,
 } from "../../_lib";
 
+/** Дедупликация в рамках одного запроса: getById зовут и generateMetadata, и страница. */
+const getCategoryById = cache((id: string) => api.categories.getById({ id }));
+
 interface PageProps {
   params: Promise<{ categoryId: string }>;
   searchParams: Promise<{ isExp?: string }>;
@@ -32,7 +36,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { categoryId } = await params;
-  const category = await api.categories.getById({ id: categoryId });
+  const category = await getCategoryById(categoryId);
 
   if (!category || category.isHidden) {
     return {};
@@ -49,8 +53,8 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const { isExp } = await searchParams;
 
   const [category, allCategories, completedProjects, previewVideos] = await Promise.all([
-    api.categories.getById({ id: categoryId }),
-    api.categories.get(),
+    getCategoryById(categoryId),
+    api.categories.getTree(),
     api.projects.getPreviewByCategory({ categoryId }),
     api.videos.getPreviewByCategory({ categoryId }),
   ]);
@@ -59,8 +63,9 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
   const visibleCategories = allCategories.filter((item) => !item.isHidden);
   const visibleSubcategories = category.subcategories.filter((sub) => !sub.isHidden);
-  const sidebarContext = getSidebarContext(visibleCategories, category.id);
-  const hasSections = Array.isArray(category.sections) && category.sections.length > 0;
+  const sidebarContextRaw = getSidebarContext(visibleCategories, category.id);
+  const sidebarContext = sidebarContextRaw && sidebarContextRaw.tree.length > 0 ? sidebarContextRaw : null;
+  const parsedSections = parseSections(category.sections);
 
   const uploadSrc: `/uploads/${string}` | undefined = category.imageId ? `/uploads/${category.imageId}` : undefined;
 
@@ -77,17 +82,20 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   ];
 
   // Спец-блок «Список подкатегорий» в секциях управляет местом вывода сам — автоматику не дублируем
-  const hasSubcategoryListSection = hasSpecialSection(category.sections, "subcategoryList");
+  const hasSubcategoryListSection = parsedSections.some(
+    (section) => section.type === "special" && section.block === "subcategoryList",
+  );
   const tiles =
     category.childrenMode === "TILES" && visibleSubcategories.length > 0 && !hasSubcategoryListSection ? (
       <CategoryTilesSection categories={visibleSubcategories} />
     ) : null;
-  const sections = hasSections ? (
-    <SectionsRenderer
-      sections={category.sections}
-      context={{ categoryId: category.id, subcategories: visibleSubcategories, childrenMode: category.childrenMode }}
-    />
-  ) : null;
+  const sections =
+    parsedSections.length > 0 ? (
+      <SectionsRenderer
+        sections={parsedSections}
+        context={{ categoryId: category.id, subcategories: visibleSubcategories, childrenMode: category.childrenMode }}
+      />
+    ) : null;
   // SIDEBAR-узлы показывают детей и в дереве, и крупными карточками в контенте (как категория на evraz.pro);
   // LIST — компактные строки (исполнения, серии)
   const cards =

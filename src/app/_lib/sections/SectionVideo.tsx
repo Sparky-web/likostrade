@@ -10,6 +10,7 @@ export const SectionVideo = ({ section }: { section: VideoSection }) => (
     <iframe
       src={section.url}
       title={section.title ?? typo("Видео")}
+      loading="lazy"
       className="aspect-video w-full rounded-xl border-0"
       allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
       allowFullScreen

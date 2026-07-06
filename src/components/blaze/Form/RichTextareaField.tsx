@@ -2,15 +2,23 @@
 
 import type { AnyFieldApi } from "@tanstack/react-form";
 import type { Content } from "@tiptap/react";
+import dynamic from "next/dynamic";
 import { useId } from "react";
 
 import type { RichEditorProps } from "~/components/blaze/RichEditor/RichEditor";
-import RichEditor from "~/components/blaze/RichEditor/RichEditor";
+import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/components/utils/cn";
 
 import { FormFieldWrap } from "./FormFieldWrap";
 import type { FormFieldBaseForComponents } from "./types";
 import { ERROR_CLASS_NAMES } from "./utils";
+
+// TipTap с подсветкой кода тяжёлый и нужен только в админке — отдельный чанк по требованию,
+// иначе он попадает в First Load каждой публичной страницы через баррель полей формы
+const RichEditor = dynamic(() => import("~/components/blaze/RichEditor/RichEditor"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-40 w-full" />,
+});
 
 /** Пропсы RichEditor без привязки к форме (`value`/`onChange` задаёт поле). */
 export type RichTextareaFieldInputProps = Omit<RichEditorProps, "value" | "onChange">;

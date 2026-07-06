@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import type { Prisma } from "generated/prisma";
 import { zodRussian } from "lib";
 import { sendTelegramMessage } from "lib/server";
@@ -26,15 +27,39 @@ function getSiteBaseUrl(): string {
 }
 
 const createLeadInput = zodRussian.object({
-  title: zodRussian.string().min(1),
-  email: zodRussian.string().email(),
-  message: zodRussian.string().optional(),
-  categoryId: zodRussian.string().nullable().optional(),
-  projectId: zodRussian.string().nullable().optional(),
-  files: zodRussian.array(zodRussian.string()).optional(),
+  title: zodRussian.string().min(1).max(200),
+  email: zodRussian.string().email().max(320),
+  message: zodRussian.string().max(5000).optional(),
+  categoryId: zodRussian.string().max(200).nullable().optional(),
+  projectId: zodRussian.string().max(200).nullable().optional(),
+  files: zodRussian.array(zodRussian.string().max(300)).max(5).optional(),
   /** Позиции калькулятора резки — заявка из спец-блока калькулятора. */
   calcItems: cuttingCalcItemsSchema.optional(),
 });
+
+/**
+ * Простой рейт-лимит публичной формы по IP: скользящее окно в памяти процесса.
+ * Против ботов-спамеров достаточно; при рестарте сбрасывается — это ок.
+ */
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX_LEADS = 10;
+const leadTimestampsByIp = new Map<string, number[]>();
+
+function assertLeadRateLimit(ip: string) {
+  const now = Date.now();
+  const recent = (leadTimestampsByIp.get(ip) ?? []).filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT_MAX_LEADS) {
+    throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Слишком много заявок, попробуйте позже" });
+  }
+  recent.push(now);
+  leadTimestampsByIp.set(ip, recent);
+  // не копим чужие IP бесконечно
+  if (leadTimestampsByIp.size > 10_000) {
+    for (const [key, list] of leadTimestampsByIp) {
+      if (list.every((ts) => now - ts >= RATE_LIMIT_WINDOW_MS)) leadTimestampsByIp.delete(key);
+    }
+  }
+}
 
 export const leadsRouter = createTRPCRouter({
   get: protectedProcedure.query(({ ctx }) =>
@@ -54,6 +79,7 @@ export const leadsRouter = createTRPCRouter({
     ),
 
   create: publicProcedure.input(createLeadInput).mutation(async ({ ctx, input }) => {
+    assertLeadRateLimit(ctx.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local");
     const calcItems = input.calcItems ?? [];
     const lead = await ctx.db.lead.create({
       data: {

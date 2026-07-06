@@ -18,7 +18,8 @@ export type CategoryTreeSource = {
   subcategories: { id: string }[];
 };
 
-const bySortOrder = <T extends CategoryTreeSource>(a: T, b: T) =>
+/** Порядок каталога: sortOrder, затем алфавит — единый для плиток, карточек и дерева. */
+export const byCatalogOrder = <T extends { sortOrder: number; title: string }>(a: T, b: T) =>
   a.sortOrder - b.sortOrder || a.title.localeCompare(b.title, "ru");
 
 const indexById = <T extends CategoryTreeSource>(all: T[]) => new Map(all.map((category) => [category.id, category]));
@@ -122,7 +123,7 @@ export function getSidebarContext<T extends CategoryTreeSource>(
     node.subcategories
       .map((sub) => byId.get(sub.id))
       .filter((sub): sub is T => sub !== undefined && !sub.isHidden)
-      .sort(bySortOrder);
+      .sort(byCatalogOrder);
 
   const buildNodes = (node: T, visited: Set<string>): SidebarNode<T>[] =>
     visibleChildren(node).map((child) => {

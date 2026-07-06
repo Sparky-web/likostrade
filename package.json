@@ -2,6 +2,9 @@
   "name": "blaze-build",
   "version": "0.1.0",
   "private": true,
+  "sideEffects": [
+    "*.css"
+  ],
   "type": "module",
   "scripts": {
     "build": "next build",

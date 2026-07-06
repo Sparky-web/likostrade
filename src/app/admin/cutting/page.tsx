@@ -8,14 +8,16 @@ import { useMemo } from "react";
 import { toast } from "sonner";
 
 import { Button, CrudTableFormButton, Heading, HStack, NumberField, Skeleton, Text, VStack } from "~/components";
+import { parseDecimal } from "~/cutting/calc";
 import { api } from "~/trpc/react";
 
 type PriceRowValues = { thickness: string; pricePerMeter: string; piercePrice: string };
 
-const toNumber = (value: unknown): number => {
-  const parsed =
-    typeof value === "number" ? value : typeof value === "string" ? Number(value.replace(",", ".")) : NaN;
-  return Number.isFinite(parsed) ? parsed : 0;
+/** null/пустая строка (очищенное поле) — невалидны; 0 допустим только как явный ввод цены. */
+const parseCell = (value: unknown): number | null => {
+  if (value === null || value === undefined || (typeof value === "string" && value.trim() === "")) return null;
+  const parsed = parseDecimal(value);
+  return Number.isFinite(parsed) ? parsed : null;
 };
 
 /** Прайс плазменной резки: строки по толщинам + настройки калькулятора (металл, обрезь). */
@@ -43,26 +45,35 @@ export default function CuttingPricesPage() {
       rows: [] satisfies PriceRowValues[] as PriceRowValues[],
     },
     onSubmit: async ({ value }) => {
-      const rows = value.rows
-        .map((row) => ({
-          thickness: toNumber(row.thickness),
-          pricePerMeter: toNumber(row.pricePerMeter),
-          piercePrice: toNumber(row.piercePrice),
-        }))
-        .filter((row) => row.thickness > 0)
-        .sort((a, b) => a.thickness - b.thickness);
+      // Очищенные/невалидные ячейки — ошибка с номером строки, а не молчаливый 0
+      const rows: { thickness: number; pricePerMeter: number; piercePrice: number }[] = [];
+      for (const [index, row] of value.rows.entries()) {
+        const thickness = parseCell(row.thickness);
+        const pricePerMeter = parseCell(row.pricePerMeter);
+        const piercePrice = parseCell(row.piercePrice);
+        if (thickness === null || thickness <= 0 || pricePerMeter === null || piercePrice === null) {
+          toast.error(typo(`Строка ${index + 1}: заполните толщину (> 0) и обе цены`));
+          return;
+        }
+        rows.push({ thickness, pricePerMeter, piercePrice });
+      }
+      rows.sort((a, b) => a.thickness - b.thickness);
+
+      const metalPricePerTon = parseCell(value.metalPricePerTon);
+      const scrapPricePerKg = parseCell(value.scrapPricePerKg);
+      if (metalPricePerTon === null || metalPricePerTon <= 0 || scrapPricePerKg === null || scrapPricePerKg < 0) {
+        toast.error(typo("Заполните цену металла (> 0) и компенсацию за обрезь (>= 0)"));
+        return;
+      }
 
       try {
-        await save.mutateAsync({
-          rows,
-          metalPricePerTon: toNumber(value.metalPricePerTon),
-          scrapPricePerKg: toNumber(value.scrapPricePerKg),
-        });
+        await save.mutateAsync({ rows, metalPricePerTon, scrapPricePerKg });
         toast.success(typo("Прайс сохранён"));
         void refetch();
       } catch (error) {
-        console.error(error);
-        toast.error(typo("Не удалось сохранить прайс"));
+        // Показать конкретную причину (дубль толщины, пустой прайс) вместо generic-текста
+        const message = error instanceof Error ? error.message : null;
+        toast.error(message ?? typo("Не удалось сохранить прайс"));
       }
     },
   });

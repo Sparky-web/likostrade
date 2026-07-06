@@ -206,6 +206,11 @@ export function parseSections(value: unknown): CategorySection[] {
   return sections;
 }
 
+/** Имя загруженного файла без временно́го префикса загрузчика (`1712345-name.pdf` → `name.pdf`). */
+export function stripUploadPrefix(fileId: string): string {
+  return fileId.replace(/^\d+-/, "");
+}
+
 /** Пустая строка → undefined: редактор держит опциональные поля строками, схема ждёт отсутствие значения. */
 const dropEmpty = (value: string | undefined) => {
   const trimmed = value?.trim();
@@ -217,7 +222,9 @@ const dropEmpty = (value: string | undefined) => {
  * строки (title, label, icon, text). Обязательные поля не трогает — их проверит схема.
  */
 export function normalizeSectionsForSave(sections: CategorySection[]): CategorySection[] {
-  return sections.map((section) => {
+  return sections
+    .filter((section) => section.type !== "gallery" || section.items.length > 0) // пустую галерею не сохраняем
+    .map((section) => {
     const base = { ...section, title: dropEmpty(section.title) };
     switch (base.type) {
       case "files":
@@ -240,11 +247,6 @@ export function normalizeSectionsForSave(sections: CategorySection[]): CategoryS
         return base;
     }
   });
-}
-
-/** Есть ли среди секций спец-блок данного типа (например, чтобы не дублировать плитки подкатегорий). */
-export function hasSpecialSection(sections: unknown, block: SpecialBlockKey): boolean {
-  return parseSections(sections).some((section) => section.type === "special" && section.block === block);
 }
 
 /** Явные ссылки на файлы из секций (items[].fileId) — для проверки существования при записи. */

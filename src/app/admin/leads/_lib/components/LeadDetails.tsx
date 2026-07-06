@@ -1,7 +1,8 @@
 import { typo } from "lib";
 
 import { EmailCopy } from "~/app/_lib/components/EmailCopy";
-import { FieldContent, FieldDescription, FieldLabel, Link, VStack } from "~/components";
+import { FieldContent, FieldDescription, FieldLabel, HStack, Link, Text, VStack } from "~/components";
+import { calcItemsTotal, formatRub, parseCalcItems } from "~/cutting/calc";
 import type { RouterOutputs } from "~/trpc/react";
 
 type LeadDetailsProps = {
@@ -18,6 +19,8 @@ const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
 const isImageId = (id: string) => /\.(png|jpe?g|gif|webp|svg|avif)$/i.test(id);
 
 export const LeadDetails = ({ data }: LeadDetailsProps) => {
+  const calcItems = parseCalcItems(data.calcItems);
+
   return (
     <VStack gap="lg">
       <FieldContent>
@@ -51,6 +54,33 @@ export const LeadDetails = ({ data }: LeadDetailsProps) => {
         <FieldLabel>{typo("Сообщение")}</FieldLabel>
         <FieldDescription>{data.message || EMPTY}</FieldDescription>
       </FieldContent>
+
+      {calcItems.length > 0 ? (
+        <FieldContent>
+          <FieldLabel>{typo("Расчёт плазменной резки")}</FieldLabel>
+          <VStack gap="sm">
+            {calcItems.map((item) => (
+              <HStack key={item.id} gap="md" align="center" justify="between" className="rounded-lg border p-3">
+                <VStack className="min-w-0 gap-0.5">
+                  <span className="text-sm font-medium">
+                    {item.shapeLabel} — {item.sizes}
+                  </span>
+                  <Text variant="small" color="supplementary">
+                    {typo(
+                      `${item.amount} шт. × ${formatRub(item.pricePerUnit)}${item.weightKg !== null ? ` · ${item.weightKg} кг/шт` : ""} · резка ${formatRub(item.cuttingCostPerUnit)}/шт`,
+                    )}
+                  </Text>
+                </VStack>
+                <span className="shrink-0 text-sm font-semibold whitespace-nowrap">{formatRub(item.totalPrice)}</span>
+              </HStack>
+            ))}
+            <HStack justify="between" align="center">
+              <Text variant="small">{typo("Итого по расчёту")}</Text>
+              <span className="font-semibold">{formatRub(calcItemsTotal(calcItems))}</span>
+            </HStack>
+          </VStack>
+        </FieldContent>
+      ) : null}
 
       <FieldContent>
         <FieldLabel>{typo("Создана")}</FieldLabel>

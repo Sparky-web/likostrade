@@ -9,11 +9,9 @@ import { Download, FileText } from "lucide-react";
 import { HStack, Link, Text, VStack } from "~/components";
 import { env } from "~/env";
 import type { FilesSection } from "~/sections/schema";
+import { stripUploadPrefix } from "~/sections/schema";
 
 import { SectionHeading } from "./SectionHeading";
-
-/** Подпись по умолчанию — имя файла без временно́го префикса загрузчика. */
-const defaultLabel = (fileId: string) => fileId.replace(/^\d+-/, "");
 
 function formatFileSize(bytes: number): string {
   if (bytes >= 1024 * 1024) return typo(`${(bytes / (1024 * 1024)).toFixed(1)} МБ`);
@@ -42,7 +40,7 @@ export const SectionFiles = async ({ section }: { section: FilesSection }) => {
           <Link
             key={item.fileId}
             href={`/uploads/${item.fileId}`}
-            download={item.label ? undefined : defaultLabel(item.fileId)}
+            download={item.label ? undefined : stripUploadPrefix(item.fileId)}
             target="_blank"
             rel="noopener"
             prefetch={false}
@@ -53,7 +51,7 @@ export const SectionFiles = async ({ section }: { section: FilesSection }) => {
                 <FileText className="text-primary size-5" aria-hidden />
               </VStack>
               <VStack className="min-w-0 flex-1 gap-0.5">
-                <span className="truncate font-medium">{typo(item.label ?? defaultLabel(item.fileId))}</span>
+                <span className="truncate font-medium">{typo(item.label ?? stripUploadPrefix(item.fileId))}</span>
                 {sizes[index] ? <Text variant="small">{sizes[index]}</Text> : null}
               </VStack>
               <Download className="text-muted-foreground group-hover:text-foreground size-5 shrink-0 transition-colors" aria-hidden />

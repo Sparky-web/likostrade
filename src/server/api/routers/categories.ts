@@ -7,11 +7,11 @@ import { categorySectionsSchema, extractSectionFileIds } from "~/sections/schema
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
-/** Дети везде отдаются в порядке каталога: sortOrder, затем алфавит. */
-const subcategoriesOrderBy = [{ sortOrder: "asc" }, { title: "asc" }] satisfies Prisma.CategoryOrderByWithRelationInput[];
+/** Категории и подкатегории везде отдаются в порядке каталога: sortOrder, затем алфавит. */
+const catalogOrderBy = [{ sortOrder: "asc" }, { title: "asc" }] satisfies Prisma.CategoryOrderByWithRelationInput[];
 
 const categoryInclude = {
-  subcategories: { orderBy: subcategoriesOrderBy },
+  subcategories: { orderBy: catalogOrderBy },
   parentCategories: true,
   videos: true,
 } satisfies Prisma.CategoryInclude;
@@ -132,8 +132,24 @@ export const categoriesRouter = createTRPCRouter({
   get: publicProcedure.input(getCategoriesInput).query(({ ctx, input }) =>
     ctx.db.category.findMany({
       where: input?.where,
-      orderBy: subcategoriesOrderBy,
+      orderBy: catalogOrderBy,
       include: categoryInclude,
+    }),
+  ),
+
+  /** Лёгкий срез всех категорий для дерева/крошек/сайдбара — без sections и видео. */
+  getTree: publicProcedure.query(({ ctx }) =>
+    ctx.db.category.findMany({
+      orderBy: catalogOrderBy,
+      select: {
+        id: true,
+        title: true,
+        isHidden: true,
+        childrenMode: true,
+        sortOrder: true,
+        parentCategories: { select: { id: true } },
+        subcategories: { select: { id: true } },
+      },
     }),
   ),
 

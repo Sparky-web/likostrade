@@ -1,11 +1,12 @@
 import { typo } from "lib";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, Text, VStack } from "~/components";
-import { api } from "~/trpc/server";
+
+import { getCuttingPublic } from "./cuttingData";
 
 /** Актуальный прайс плазменной резки; данные тянет сам, настроек у блока нет. */
 export const CuttingPriceTableBlock = async () => {
-  const { rows, metalPricePerTon } = await api.cutting.getPublic();
+  const { rows, metalPricePerTon } = await getCuttingPublic();
   if (rows.length === 0) return null;
 
   return (

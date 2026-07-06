@@ -3,9 +3,9 @@
 import { typo } from "lib";
 import { useState } from "react";
 
-import { Button, Dialog, DialogContent, DialogTitle, Text } from "~/components";
+import { Button, Text } from "~/components";
 
-import { RequestFormCard } from "../components/RequestFormCard";
+import { RequestFormDialog } from "../components/RequestFormDialog";
 
 type RequestQuoteBlockProps = {
   categoryId: string;
@@ -26,12 +26,7 @@ export const RequestQuoteBlock = ({ categoryId }: RequestQuoteBlockProps) => {
         </Text>
       </div>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-h-[90dvh] w-full max-w-lg overflow-y-auto border-0 bg-transparent p-0 shadow-none">
-          <DialogTitle className="sr-only">{typo("Оставить заявку")}</DialogTitle>
-          <RequestFormCard categoryId={categoryId} onSuccess={() => setIsOpen(false)} />
-        </DialogContent>
-      </Dialog>
+      <RequestFormDialog open={isOpen} onOpenChange={setIsOpen} categoryId={categoryId} />
     </>
   );
 };

@@ -22,6 +22,7 @@ import { makeSection } from "./sectionDefaults";
 import {
   CardsSectionEditor,
   FilesSectionEditor,
+  GallerySectionEditor,
   type SectionEditorProps,
   SpecialSectionEditor,
   TableSectionEditor,
@@ -44,6 +45,8 @@ function renderEditor(section: CategorySection, editorProps: SectionEditorProps)
       return <FilesSectionEditor {...editorProps} />;
     case "video":
       return <VideoSectionEditor {...editorProps} />;
+    case "gallery":
+      return <GallerySectionEditor {...editorProps} />;
     case "cards":
       return <CardsSectionEditor {...editorProps} />;
     case "special":

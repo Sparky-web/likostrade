@@ -7,6 +7,7 @@ import { parseSections } from "~/sections/schema";
 
 import { SectionCards } from "./SectionCards";
 import { SectionFiles } from "./SectionFiles";
+import { SectionGallery } from "./SectionGallery";
 import type { SpecialBlockContext } from "./SectionSpecial";
 import { SectionSpecial } from "./SectionSpecial";
 import { SectionTable } from "./SectionTable";
@@ -30,6 +31,8 @@ function renderSection(section: CategorySection, context: SpecialBlockContext | 
       return <SectionFiles section={section} />;
     case "video":
       return <SectionVideo section={section} />;
+    case "gallery":
+      return <SectionGallery section={section} />;
     case "cards":
       return <SectionCards section={section} />;
     case "special":

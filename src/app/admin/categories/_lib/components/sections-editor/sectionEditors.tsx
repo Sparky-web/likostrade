@@ -20,7 +20,7 @@ import {
   TextField,
   VStack,
 } from "~/components";
-import type { CardsSection, FilesSection } from "~/sections/schema";
+import type { CardsSection, FilesSection, GallerySection } from "~/sections/schema";
 import { CARD_ICON_KEYS, SPECIAL_BLOCKS, VIDEO_EMBED_HOSTS, videoUrlSchema } from "~/sections/schema";
 
 import { CARD_ICON_LABELS } from "./cardIconLabels";
@@ -67,6 +67,42 @@ export const SpecialSectionEditor = ({ form, namePrefix }: SectionEditorProps) =
     {(field: AnyFieldApi) => (
       <SelectField fieldApi={field} field={{ label: typo("Блок"), inputProps: { options: specialBlockOptions } }} />
     )}
+  </form.Field>
+);
+
+type GallerySectionItem = GallerySection["items"][number];
+
+export const GallerySectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
+  <form.Field name={`${namePrefix}.items`}>
+    {(field: AnyFieldApi) => {
+      const items = (field.state.value ?? []) as GallerySectionItem[];
+
+      // FileUploader оперирует string[] — адаптер сохраняет alt по fileId при изменении состава
+      const setFiles: Dispatch<SetStateAction<string[]>> = (action) => {
+        const currentIds = items.map((item) => item.fileId);
+        const nextIds = typeof action === "function" ? action(currentIds) : action;
+        field.handleChange(nextIds.map((fileId) => items.find((item) => item.fileId === fileId) ?? { fileId }));
+      };
+
+      return (
+        <VStack gap="md">
+          <FileUploader isMultiple accept="image/*" files={items.map((item) => item.fileId)} setFiles={setFiles} />
+          {items.map((item, index) => (
+            <form.Field key={item.fileId} name={`${namePrefix}.items[${index}].alt`}>
+              {(altField: AnyFieldApi) => (
+                <TextField
+                  fieldApi={altField}
+                  field={{
+                    label: typo(`Описание фото: ${item.fileId.replace(/^\d+-/, "")}`),
+                    placeholder: typo("Альтернативный текст"),
+                  }}
+                />
+              )}
+            </form.Field>
+          ))}
+        </VStack>
+      );
+    }}
   </form.Field>
 );
 

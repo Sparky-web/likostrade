@@ -12,6 +12,8 @@ export function makeSection(type: CategorySection["type"]): CategorySection {
       return { id, type, items: [] };
     case "video":
       return { id, type, url: "" };
+    case "gallery":
+      return { id, type, items: [] as never };
     case "cards":
       return { id, type, items: [{ title: "" }] };
     case "special":

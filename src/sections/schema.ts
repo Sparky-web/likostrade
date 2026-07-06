@@ -119,6 +119,19 @@ const videoSectionSchema = zodRussian.object({
   url: videoUrlSchema,
 });
 
+const gallerySectionSchema = zodRussian.object({
+  ...sectionBase,
+  type: zodRussian.literal("gallery"),
+  items: zodRussian
+    .array(
+      zodRussian.object({
+        fileId: fileIdSchema,
+        alt: zodRussian.string().optional(),
+      }),
+    )
+    .min(1),
+});
+
 const cardsSectionSchema = zodRussian.object({
   ...sectionBase,
   type: zodRussian.literal("cards"),
@@ -144,6 +157,7 @@ export const categorySectionSchema = zodRussian.discriminatedUnion("type", [
   tableSectionSchema,
   filesSectionSchema,
   videoSectionSchema,
+  gallerySectionSchema,
   cardsSectionSchema,
   specialSectionSchema,
 ]);
@@ -158,10 +172,12 @@ export const SECTION_TYPE_LABELS = {
   table: typo("Таблица"),
   files: typo("Файлы"),
   video: typo("Видео"),
+  gallery: typo("Галерея"),
   cards: typo("Карточки"),
   special: typo("Спец-блок"),
 } as const satisfies Record<CategorySection["type"], string>;
 export type TextSection = Extract<CategorySection, { type: "text" }>;
+export type GallerySection = Extract<CategorySection, { type: "gallery" }>;
 export type TableSection = Extract<CategorySection, { type: "table" }>;
 export type FilesSection = Extract<CategorySection, { type: "files" }>;
 export type VideoSection = Extract<CategorySection, { type: "video" }>;
@@ -204,6 +220,8 @@ export function normalizeSectionsForSave(sections: CategorySection[]): CategoryS
     switch (base.type) {
       case "files":
         return { ...base, items: base.items.map((item) => ({ ...item, label: dropEmpty(item.label) })) };
+      case "gallery":
+        return { ...base, items: base.items.map((item) => ({ ...item, alt: dropEmpty(item.alt) })) };
       case "cards":
         return {
           ...base,
@@ -229,7 +247,9 @@ export function hasSpecialSection(sections: unknown, block: SpecialBlockKey): bo
 
 /** Явные ссылки на файлы из секций (items[].fileId) — для проверки существования при записи. */
 export function extractSectionFileIds(sections: CategorySection[]): string[] {
-  return sections.flatMap((section) => (section.type === "files" ? section.items.map((item) => item.fileId) : []));
+  return sections.flatMap((section) =>
+    section.type === "files" || section.type === "gallery" ? section.items.map((item) => item.fileId) : [],
+  );
 }
 
 /**

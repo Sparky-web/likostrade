@@ -13,7 +13,8 @@ import { api } from "~/trpc/react";
 type PriceRowValues = { thickness: string; pricePerMeter: string; piercePrice: string };
 
 const toNumber = (value: unknown): number => {
-  const parsed = typeof value === "number" ? value : Number(String(value ?? "").replace(",", "."));
+  const parsed =
+    typeof value === "number" ? value : typeof value === "string" ? Number(value.replace(",", ".")) : NaN;
   return Number.isFinite(parsed) ? parsed : 0;
 };
 

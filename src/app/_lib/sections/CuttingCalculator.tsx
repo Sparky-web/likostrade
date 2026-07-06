@@ -68,7 +68,8 @@ const SHAPE_DIMENSIONS: Record<CuttingShape, { x?: string; y?: string }> = {
 };
 
 const toPositiveNumber = (value: unknown): number => {
-  const parsed = typeof value === "number" ? value : Number(String(value ?? "").replace(",", "."));
+  const parsed =
+    typeof value === "number" ? value : typeof value === "string" ? Number(value.replace(",", ".")) : NaN;
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
 };
 

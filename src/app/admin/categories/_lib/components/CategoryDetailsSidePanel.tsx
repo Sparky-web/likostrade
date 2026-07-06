@@ -8,6 +8,8 @@ import {
   CrudTableFormButton,
   CrudTableSidePanelDetailsButtons,
   FileUploadField,
+  NumberField,
+  SelectField,
   SelectMultipleField,
   SidePanel,
   Skeleton,
@@ -18,8 +20,10 @@ import {
   VStack,
 } from "~/components";
 
+import { CHILDREN_MODE_OPTIONS, HEADER_MODE_OPTIONS } from "../model/displayModeOptions";
 import { useCategoryForm } from "../model/useCategoryForm";
 import { CategoryDetails } from "./CategoryDetails";
+import { SectionsEditorField } from "./sections-editor/SectionsEditorField";
 
 // Дискриминируемое объединение: либо просмотр существующей записи, либо создание новой
 export type CategoryDetailsSidePanelProps = {
@@ -94,6 +98,64 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
         />
 
         <form.Field
+          name="headerMode"
+          children={(field) => (
+            <SelectField
+              fieldApi={field}
+              field={{
+                label: typo(`Шапка страницы`),
+                inputProps: { options: HEADER_MODE_OPTIONS },
+              }}
+            />
+          )}
+        />
+
+        <form.Field
+          name="childrenMode"
+          children={(field) => (
+            <SelectField
+              fieldApi={field}
+              field={{
+                label: typo(`Подкатегории`),
+                inputProps: { options: CHILDREN_MODE_OPTIONS },
+              }}
+            />
+          )}
+        />
+
+        <form.Subscribe
+          selector={(state) => state.values.headerMode === "HERO" && state.values.childrenMode === "SIDEBAR"}
+          children={(isCatalogTitleRelevant) =>
+            isCatalogTitleRelevant ? (
+              <form.Field
+                name="catalogTitle"
+                children={(field) => (
+                  <TextField
+                    fieldApi={field}
+                    field={{
+                      label: typo(`Заголовок каталога`),
+                      placeholder: typo(`Каталог`),
+                    }}
+                  />
+                )}
+              />
+            ) : null
+          }
+        />
+
+        <form.Field
+          name="sortOrder"
+          children={(field) => (
+            <NumberField
+              fieldApi={field}
+              field={{
+                label: typo(`Порядок среди соседних категорий`),
+              }}
+            />
+          )}
+        />
+
+        <form.Field
           name="imageId"
           children={(field) => (
             <FileUploadField
@@ -108,6 +170,8 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
             />
           )}
         />
+
+        <SectionsEditorField form={form} />
 
         <form.Field
           name="subcategories"

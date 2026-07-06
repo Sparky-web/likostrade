@@ -40,12 +40,13 @@ type SingleFileProps = {
   accept?: string;
 };
 
-type DragDropFilesProps = (MultipleFilesProps | SingleFileProps) & {
+export type DragDropFilesProps = (MultipleFilesProps | SingleFileProps) & {
   /** Ошибка валидации поля формы — рамка в тон `destructive`. */
   hasError?: boolean;
 };
 
-function FileUploader(props: DragDropFilesProps) {
+/** Загрузчик без привязки к форме: `files`/`setFiles` управляет вызывающий (например, редактор секций). */
+export function FileUploader(props: DragDropFilesProps) {
   const { isMultiple, accept, hasError } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);

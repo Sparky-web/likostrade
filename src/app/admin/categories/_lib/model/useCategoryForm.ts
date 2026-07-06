@@ -6,7 +6,7 @@ import { useCallback, useMemo } from "react";
 import { toast } from "sonner";
 
 import type { CategorySection } from "~/sections/schema";
-import { parseSections } from "~/sections/schema";
+import { normalizeSectionsForSave, parseSections } from "~/sections/schema";
 import { api } from "~/trpc/react";
 
 import { useCategoryById } from "../api/useCategoryById";
@@ -79,11 +79,17 @@ export const useCategoryForm = ({
         },
 
     onSubmit: async ({ value: values }) => {
+      // Редактор держит опциональные поля секций пустыми строками — схема сервера ждёт их отсутствие
+      const payload = {
+        ...values,
+        sortOrder: Number(values.sortOrder) || 0,
+        sections: normalizeSectionsForSave(values.sections),
+      };
       try {
         if (isCreation) {
           await create({
             id: translit(values.title),
-            ...values,
+            ...payload,
           });
 
           onCreated();
@@ -91,7 +97,7 @@ export const useCategoryForm = ({
           // id (слаг) при обновлении не меняется — сервер принимает только поля формы
           await update({
             id: selectedId,
-            data: values,
+            data: payload,
           });
           onUpdated();
           void refetch();

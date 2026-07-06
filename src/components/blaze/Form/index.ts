@@ -1,9 +1,10 @@
 export { CategoryTreeComboboxField } from "./CategoryTreeComboboxField";
 export { DateField } from "./DateField";
-export { FileUploadField } from "./FileUploadField";
+export { FileUploader, FileUploadField } from "./FileUploadField";
 export { FormFields } from "./FormFields";
+export { NumberField } from "./NumberField";
 export { RichTextareaField } from "./RichTextareaField";
-export { type SelectFieldOption } from "./SelectField";
+export { SelectField, type SelectFieldOption } from "./SelectField";
 export { SelectMultipleField } from "./SelectMultipleField";
 export { SwitchField } from "./SwitchField";
 export { TextareaField } from "./TextareaField";

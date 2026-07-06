@@ -64,7 +64,7 @@ export const VIDEO_EMBED_HOSTS = [
   "www.youtube-nocookie.com",
 ] as const;
 
-const videoUrlSchema = zodRussian
+export const videoUrlSchema = zodRussian
   .string()
   .url()
   .refine(
@@ -186,6 +186,40 @@ export function parseSections(value: unknown): CategorySection[] {
     }
   }
   return sections;
+}
+
+/** Пустая строка → undefined: редактор держит опциональные поля строками, схема ждёт отсутствие значения. */
+const dropEmpty = (value: string | undefined) => {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+};
+
+/**
+ * Приводит состояние редактора к схеме перед отправкой: убирает пустые опциональные
+ * строки (title, label, icon, text). Обязательные поля не трогает — их проверит схема.
+ */
+export function normalizeSectionsForSave(sections: CategorySection[]): CategorySection[] {
+  return sections.map((section) => {
+    const base = { ...section, title: dropEmpty(section.title) };
+    switch (base.type) {
+      case "files":
+        return { ...base, items: base.items.map((item) => ({ ...item, label: dropEmpty(item.label) })) };
+      case "cards":
+        return {
+          ...base,
+          items: base.items.map((item) => ({
+            ...item,
+            // SelectField пишет "" при сбросе выбора — для схемы это «нет иконки»
+            icon: dropEmpty(item.icon) as CardIconKey | undefined,
+            text: dropEmpty(item.text),
+          })),
+        };
+      case "video":
+        return { ...base, url: base.url.trim() };
+      default:
+        return base;
+    }
+  });
 }
 
 /** Явные ссылки на файлы из секций (items[].fileId) — для проверки существования при записи. */

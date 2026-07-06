@@ -17,11 +17,15 @@ export const metadata: Metadata = {
   title: websiteConstants.METADATA_TITLE,
   description: websiteConstants.METADATA_DESCRIPTION,
   icons: {
+    // Порядок важен: ico первым — фолбэк для Safari и поисковиков, SVG подхватят Chrome/Firefox по теме
     icon: [
+      { url: "/favicon.ico", sizes: "32x32 16x16" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
       { url: "/favicon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
       { url: "/favicon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
     ],
-    shortcut: "/favicon-light.svg",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 

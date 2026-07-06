@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { Container, Heading, Headline, VStack } from "~/components";
+import { hasSpecialSection } from "~/sections/schema";
 import { api, HydrateClient } from "~/trpc/server";
 
 import {
@@ -75,8 +76,15 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     })),
   ];
 
-  const tiles = category.childrenMode === "TILES" ? <CategoryTilesSection categories={visibleSubcategories} /> : null;
-  const sections = hasSections ? <SectionsRenderer sections={category.sections} /> : null;
+  // Спец-блок «Список подкатегорий» в секциях управляет местом вывода сам — автоматические плитки не дублируем
+  const showTiles = category.childrenMode === "TILES" && !hasSpecialSection(category.sections, "subcategoryList");
+  const tiles = showTiles ? <CategoryTilesSection categories={visibleSubcategories} /> : null;
+  const sections = hasSections ? (
+    <SectionsRenderer
+      sections={category.sections}
+      context={{ categoryId: category.id, subcategories: visibleSubcategories }}
+    />
+  ) : null;
   const cards = category.childrenMode === "CARDS" ? <SubcategoryCards categories={visibleSubcategories} /> : null;
 
   return (

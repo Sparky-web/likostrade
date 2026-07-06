@@ -222,6 +222,11 @@ export function normalizeSectionsForSave(sections: CategorySection[]): CategoryS
   });
 }
 
+/** Есть ли среди секций спец-блок данного типа (например, чтобы не дублировать плитки подкатегорий). */
+export function hasSpecialSection(sections: unknown, block: SpecialBlockKey): boolean {
+  return parseSections(sections).some((section) => section.type === "special" && section.block === block);
+}
+
 /** Явные ссылки на файлы из секций (items[].fileId) — для проверки существования при записи. */
 export function extractSectionFileIds(sections: CategorySection[]): string[] {
   return sections.flatMap((section) => (section.type === "files" ? section.items.map((item) => item.fileId) : []));

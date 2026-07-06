@@ -3,13 +3,13 @@ import { typo } from "lib";
 import { AdaptiveGrid, ProductCard } from "~/components";
 import type { RouterOutputs } from "~/trpc/react";
 
-type CategoryItem = Pick<
+export type SubcategoryCardItem = Pick<
   RouterOutputs["categories"]["get"][number],
   "id" | "title" | "shortDescription" | "imageId" | "sortOrder"
 >;
 
 type SubcategoryCardsProps = {
-  categories: CategoryItem[];
+  categories: SubcategoryCardItem[];
 };
 
 /** Подкатегории-«позиции» карточками товара (childrenMode = CARDS и спец-блок «Список подкатегорий»). */

@@ -17,12 +17,13 @@ export const metadata: Metadata = {
   title: websiteConstants.METADATA_TITLE,
   description: websiteConstants.METADATA_DESCRIPTION,
   icons: {
-    // Порядок важен: ico первым — фолбэк для Safari и поисковиков, SVG подхватят Chrome/Firefox по теме
+    // Порядок важен: ico первым — фолбэк для Safari и поисковиков, SVG подхватят Chrome/Firefox по теме.
+    // Именование файлов — по теме, для которой иконка: favicon-dark.svg = белая монограмма ДЛЯ тёмной темы.
+    // icon-192.png здесь не указываем: у него сплошной тёмный фон (для manifest/Android), во вкладке он выглядит чёрным квадратом.
     icon: [
-      { url: "/favicon.ico", sizes: "32x32 16x16" },
-      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
-      { url: "/favicon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
-      { url: "/favicon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+      { url: "/favicon.ico", sizes: "48x48 32x32 16x16" },
+      { url: "/favicon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
     ],
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",

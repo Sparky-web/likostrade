@@ -82,7 +82,7 @@ function collectUploadReferences(value, into) {
   }
   if (value && typeof value === "object") {
     for (const [key, nested] of Object.entries(value)) {
-      if (key === "fileId" && typeof nested === "string") into.add(nested);
+      if ((key === "fileId" || key === "imageId") && typeof nested === "string") into.add(nested);
       else collectUploadReferences(nested, into);
     }
   }

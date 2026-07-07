@@ -93,6 +93,7 @@ export * from "./ui/tooltip";
 export { AdaptiveProvider } from "./utils/AdaptiveContext";
 export { cn } from "./utils/cn";
 export { UserProvider } from "./utils/UserContext";
+export { ZodLocaleInit } from "./utils/ZodLocaleInit";
 
 // blaze/Form
 export * from "./blaze/Form";

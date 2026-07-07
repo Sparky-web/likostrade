@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 import { Geist_Mono, Golos_Text, Unbounded } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-import { AdaptiveProvider, Toaster, TooltipProvider, UserProvider } from "~/components";
+import { AdaptiveProvider, Toaster, TooltipProvider, UserProvider, ZodLocaleInit } from "~/components";
 import { websiteConstants } from "~/consts";
 import { TRPCReactProvider } from "~/trpc/react";
 
@@ -75,7 +75,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <script dangerouslySetInnerHTML={{ __html: YANDEX_METRIKA_INIT_SCRIPT }} />
       </head>
-      <body className="dark">
+      <body>
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -103,6 +103,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             />
           </div>
         </noscript>
+        <ZodLocaleInit />
         <TRPCReactProvider>
           <SiteSettingsProvider>
             <NuqsAdapter>

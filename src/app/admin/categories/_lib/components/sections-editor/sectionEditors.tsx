@@ -196,6 +196,216 @@ export const CardsSectionEditor = ({ form, namePrefix }: SectionEditorProps) => 
   </form.Field>
 );
 
+const imagePositionOptions: SelectFieldOption[] = [
+  { value: "right", label: typo("Справа") },
+  { value: "left", label: typo("Слева") },
+];
+
+/** Текст + изображение: rich-текст, одиночная картинка, сторона на десктопе. */
+export const MediaTextSectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
+  <VStack gap="md">
+    <form.Field name={`${namePrefix}.html`}>
+      {(field: AnyFieldApi) => <RichTextareaField fieldApi={field} field={{ label: typo("Текст") }} />}
+    </form.Field>
+    <form.Field name={`${namePrefix}.imageId`}>
+      {(field: AnyFieldApi) => {
+        const imageId = (field.state.value as string | undefined) || undefined;
+        const setFile: Dispatch<SetStateAction<string | undefined>> = (action) => {
+          const next = typeof action === "function" ? action(imageId) : action;
+          field.handleChange(next ?? "");
+        };
+        return <FileUploader isMultiple={false} accept="image/*" file={imageId} setFile={setFile} />;
+      }}
+    </form.Field>
+    <form.Field name={`${namePrefix}.imagePosition`}>
+      {(field: AnyFieldApi) => (
+        <SelectField
+          fieldApi={field}
+          field={{ label: typo("Сторона изображения"), inputProps: { options: imagePositionOptions } }}
+        />
+      )}
+    </form.Field>
+  </VStack>
+);
+
+const stepTitleSchema = zodRussian.string().min(1);
+
+/** Этапы/процесс: нумерованный список шагов (заголовок + описание). */
+export const StepsSectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
+  <form.Field name={`${namePrefix}.items`} mode="array">
+    {(itemsField: AnyFieldApi) => {
+      const items = (itemsField.state.value ?? []) as { title: string; text?: string }[];
+      return (
+        <VStack gap="md">
+          {items.map((_, index) => (
+            <Card key={index} size="sm">
+              <CardContent>
+                <VStack gap="md">
+                  <HStack align="center" justify="between">
+                    <Text variant="small" color="supplementary">
+                      {typo(`Шаг ${index + 1}`)}
+                    </Text>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => itemsField.removeValue(index)}>
+                      <X className="size-4" />
+                    </Button>
+                  </HStack>
+                  <form.Field
+                    name={`${namePrefix}.items[${index}].title`}
+                    validators={{ onBlur: stepTitleSchema, onSubmit: stepTitleSchema }}
+                  >
+                    {(field: AnyFieldApi) => <TextField fieldApi={field} field={{ label: typo("Заголовок шага") }} />}
+                  </form.Field>
+                  <form.Field name={`${namePrefix}.items[${index}].text`}>
+                    {(field: AnyFieldApi) => <TextareaField fieldApi={field} field={{ label: typo("Описание") }} />}
+                  </form.Field>
+                </VStack>
+              </CardContent>
+            </Card>
+          ))}
+          <Button type="button" variant="outline" onClick={() => itemsField.pushValue({ title: "" })}>
+            <Plus className="size-4" />
+            {typo("Добавить шаг")}
+          </Button>
+        </VStack>
+      );
+    }}
+  </form.Field>
+);
+
+const statValueSchema = zodRussian.string().min(1);
+
+/** Показатели: крупное значение + подпись. */
+export const StatsSectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
+  <form.Field name={`${namePrefix}.items`} mode="array">
+    {(itemsField: AnyFieldApi) => {
+      const items = (itemsField.state.value ?? []) as { value: string; label?: string }[];
+      return (
+        <VStack gap="md">
+          {items.map((_, index) => (
+            <Card key={index} size="sm">
+              <CardContent>
+                <VStack gap="md">
+                  <HStack align="center" justify="between">
+                    <Text variant="small" color="supplementary">
+                      {typo(`Показатель ${index + 1}`)}
+                    </Text>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => itemsField.removeValue(index)}>
+                      <X className="size-4" />
+                    </Button>
+                  </HStack>
+                  <form.Field
+                    name={`${namePrefix}.items[${index}].value`}
+                    validators={{ onBlur: statValueSchema, onSubmit: statValueSchema }}
+                  >
+                    {(field: AnyFieldApi) => (
+                      <TextField fieldApi={field} field={{ label: typo("Значение"), placeholder: typo("> 100 тонн") }} />
+                    )}
+                  </form.Field>
+                  <form.Field name={`${namePrefix}.items[${index}].label`}>
+                    {(field: AnyFieldApi) => (
+                      <TextField
+                        fieldApi={field}
+                        field={{ label: typo("Подпись"), placeholder: typo("конструкций в месяц") }}
+                      />
+                    )}
+                  </form.Field>
+                </VStack>
+              </CardContent>
+            </Card>
+          ))}
+          <Button type="button" variant="outline" onClick={() => itemsField.pushValue({ value: "" })}>
+            <Plus className="size-4" />
+            {typo("Добавить показатель")}
+          </Button>
+        </VStack>
+      );
+    }}
+  </form.Field>
+);
+
+const calloutVariantOptions: SelectFieldOption[] = [
+  { value: "highlight", label: typo("Акцент (УТП/гарантия)") },
+  { value: "quote", label: typo("Отзыв (с автором)") },
+];
+
+const calloutTextSchema = zodRussian.string().min(1);
+
+/** Выделенная плашка: вариант, текст, автор (для отзыва). */
+export const CalloutSectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
+  <VStack gap="md">
+    <form.Field name={`${namePrefix}.variant`}>
+      {(field: AnyFieldApi) => (
+        <SelectField fieldApi={field} field={{ label: typo("Вариант"), inputProps: { options: calloutVariantOptions } }} />
+      )}
+    </form.Field>
+    <form.Field name={`${namePrefix}.text`} validators={{ onBlur: calloutTextSchema, onSubmit: calloutTextSchema }}>
+      {(field: AnyFieldApi) => <TextareaField fieldApi={field} field={{ label: typo("Текст") }} />}
+    </form.Field>
+    <form.Field name={`${namePrefix}.author`}>
+      {(field: AnyFieldApi) => (
+        <TextField
+          fieldApi={field}
+          field={{ label: typo("Автор (для отзыва)"), placeholder: typo("Имя, должность, компания") }}
+        />
+      )}
+    </form.Field>
+  </VStack>
+);
+
+const imageCardTitleSchema = zodRussian.string().min(1);
+
+/** Карточки с фото: изображение + заголовок + описание на каждую (типы продукции, чертежи). */
+export const ImageCardsSectionEditor = ({ form, namePrefix }: SectionEditorProps) => (
+  <form.Field name={`${namePrefix}.items`} mode="array">
+    {(itemsField: AnyFieldApi) => {
+      const items = (itemsField.state.value ?? []) as { imageId: string; title: string; text?: string }[];
+      return (
+        <VStack gap="md">
+          {items.map((_, index) => (
+            <Card key={index} size="sm">
+              <CardContent>
+                <VStack gap="md">
+                  <HStack align="center" justify="between">
+                    <Text variant="small" color="supplementary">
+                      {typo(`Карточка ${index + 1}`)}
+                    </Text>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => itemsField.removeValue(index)}>
+                      <X className="size-4" />
+                    </Button>
+                  </HStack>
+                  <form.Field name={`${namePrefix}.items[${index}].imageId`}>
+                    {(field: AnyFieldApi) => {
+                      const imageId = (field.state.value as string | undefined) || undefined;
+                      const setFile: Dispatch<SetStateAction<string | undefined>> = (action) => {
+                        const next = typeof action === "function" ? action(imageId) : action;
+                        field.handleChange(next ?? "");
+                      };
+                      return <FileUploader isMultiple={false} accept="image/*" file={imageId} setFile={setFile} />;
+                    }}
+                  </form.Field>
+                  <form.Field
+                    name={`${namePrefix}.items[${index}].title`}
+                    validators={{ onBlur: imageCardTitleSchema, onSubmit: imageCardTitleSchema }}
+                  >
+                    {(field: AnyFieldApi) => <TextField fieldApi={field} field={{ label: typo("Заголовок") }} />}
+                  </form.Field>
+                  <form.Field name={`${namePrefix}.items[${index}].text`}>
+                    {(field: AnyFieldApi) => <TextareaField fieldApi={field} field={{ label: typo("Текст") }} />}
+                  </form.Field>
+                </VStack>
+              </CardContent>
+            </Card>
+          ))}
+          <Button type="button" variant="outline" onClick={() => itemsField.pushValue({ imageId: "", title: "" })}>
+            <Plus className="size-4" />
+            {typo("Добавить карточку")}
+          </Button>
+        </VStack>
+      );
+    }}
+  </form.Field>
+);
+
 /** Ячейка таблицы: узкое поле без label. */
 type CellInputProps = { form: SectionEditorProps["form"]; name: string; placeholder?: string };
 

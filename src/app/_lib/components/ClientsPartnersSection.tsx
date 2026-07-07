@@ -29,14 +29,14 @@ export function ClientsPartnersSection() {
           <Text variant="large">{CLIENTS_PARTNERS_INTRO}</Text>
         </VStack>
 
-        <div className="bg-foreground/80 overflow-hidden rounded-3xl">
+        <div className="bg-border overflow-hidden rounded-3xl border">
           <div className="grid grid-cols-3 gap-px">
             {PARTNER_LOGOS.map((partner) => (
-              <div key={partner.alt} className="bg-foreground flex min-h-[140px] items-center justify-center p-4">
+              <div key={partner.alt} className="bg-background flex min-h-[140px] items-center justify-center p-4">
                 <PartnerLogoImage src={partner.src} alt={partner.alt} />
               </div>
             ))}
-            <div className="bg-foreground text-background flex min-h-[140px] flex-col items-center justify-center text-center">
+            <div className="bg-primary text-primary-foreground flex min-h-[140px] flex-col items-center justify-center text-center">
               <Heading variant="h3" align="center">
                 200+
               </Heading>

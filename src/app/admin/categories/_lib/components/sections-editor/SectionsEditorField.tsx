@@ -20,11 +20,16 @@ import { SECTION_TYPE_LABELS, SPECIAL_BLOCKS } from "~/sections/schema";
 import { SectionCardShell } from "./SectionCardShell";
 import { makeSection } from "./sectionDefaults";
 import {
+  CalloutSectionEditor,
   CardsSectionEditor,
   FilesSectionEditor,
   GallerySectionEditor,
+  ImageCardsSectionEditor,
+  MediaTextSectionEditor,
   type SectionEditorProps,
   SpecialSectionEditor,
+  StatsSectionEditor,
+  StepsSectionEditor,
   TableSectionEditor,
   TextSectionEditor,
   VideoSectionEditor,
@@ -49,6 +54,16 @@ function renderEditor(section: CategorySection, editorProps: SectionEditorProps)
       return <GallerySectionEditor {...editorProps} />;
     case "cards":
       return <CardsSectionEditor {...editorProps} />;
+    case "imageCards":
+      return <ImageCardsSectionEditor {...editorProps} />;
+    case "mediaText":
+      return <MediaTextSectionEditor {...editorProps} />;
+    case "steps":
+      return <StepsSectionEditor {...editorProps} />;
+    case "stats":
+      return <StatsSectionEditor {...editorProps} />;
+    case "callout":
+      return <CalloutSectionEditor {...editorProps} />;
     case "special":
       return <SpecialSectionEditor {...editorProps} />;
     default:

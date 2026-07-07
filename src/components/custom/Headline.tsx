@@ -20,24 +20,19 @@ interface HeadlineProps {
   uploadSrc?: `/uploads/${string}`;
 }
 
-const NAVBAR_HEIGHT = 222;
-
 export const Headline = ({ title, description, button, image, uploadSrc }: HeadlineProps) => {
   const { isMobile } = useAdaptive();
   const bgSrc = uploadSrc ?? image;
   const textAlign = isMobile ? "left" : "center";
 
   return (
-    <div className="relative">
+    // При наличии фото — тёмная «героическая» полоса: класс dark делает оверлей тёмным, а text-foreground
+    // задаёт светлый цвет текста (наследуется в Heading/Text). Шапка вне hero — остаётся светлой и читаемой.
+    <div className={`relative${bgSrc ? " dark text-foreground" : ""}`}>
       {bgSrc && (
-        <div
-          className="absolute w-full overflow-hidden"
-          style={
-            isMobile ? { top: "0", height: "100%" } : { top: `-${NAVBAR_HEIGHT}px`, height: `calc(100% + ${NAVBAR_HEIGHT}px)` }
-          }
-        >
+        <div className="absolute inset-0 overflow-hidden">
           <Image src={bgSrc} alt="" fill className="object-cover" priority sizes="100vw" />
-          <div className="bg-background/70 absolute h-full w-full"></div>
+          <div className="bg-gradient-to-t from-background/85 to-background/60 absolute h-full w-full"></div>
         </div>
       )}
       <Container className="relative py-20 md:py-16">

@@ -148,6 +148,67 @@ const cardsSectionSchema = zodRussian.object({
     .min(1),
 });
 
+/** Текст + изображение в две колонки; imagePosition — сторона картинки на десктопе (по умолчанию справа). */
+const mediaTextSectionSchema = zodRussian.object({
+  ...sectionBase,
+  type: zodRussian.literal("mediaText"),
+  html: zodRussian.string(),
+  imageId: fileIdSchema,
+  imagePosition: zodRussian.enum(["left", "right"]).optional(),
+});
+
+/** Нумерованные этапы/процесс: последовательность шагов с заголовком и описанием. */
+const stepsSectionSchema = zodRussian.object({
+  ...sectionBase,
+  type: zodRussian.literal("steps"),
+  items: zodRussian
+    .array(
+      zodRussian.object({
+        title: zodRussian.string().min(1),
+        text: zodRussian.string().optional(),
+      }),
+    )
+    .min(1),
+});
+
+/** Лента показателей: крупное значение + подпись (тоннаж, точность, сроки). */
+const statsSectionSchema = zodRussian.object({
+  ...sectionBase,
+  type: zodRussian.literal("stats"),
+  items: zodRussian
+    .array(
+      zodRussian.object({
+        value: zodRussian.string().min(1),
+        label: zodRussian.string().optional(),
+      }),
+    )
+    .min(1),
+});
+
+/** Карточки с фото: сетка «изображение + заголовок + описание» — для типов продукции (чертежи, фото изделий). */
+const imageCardsSectionSchema = zodRussian.object({
+  ...sectionBase,
+  type: zodRussian.literal("imageCards"),
+  items: zodRussian
+    .array(
+      zodRussian.object({
+        imageId: fileIdSchema,
+        title: zodRussian.string().min(1),
+        text: zodRussian.string().optional(),
+      }),
+    )
+    .min(1),
+});
+
+/** Выделенная плашка: highlight — ключевое УТП/гарантия, quote — отзыв с автором. */
+const calloutSectionSchema = zodRussian.object({
+  ...sectionBase,
+  type: zodRussian.literal("callout"),
+  variant: zodRussian.enum(["highlight", "quote"]).optional(),
+  text: zodRussian.string().min(1),
+  author: zodRussian.string().optional(),
+});
+
 const specialSectionSchema = zodRussian.object({
   ...sectionBase,
   type: zodRussian.literal("special"),
@@ -161,6 +222,11 @@ export const categorySectionSchema = zodRussian.discriminatedUnion("type", [
   videoSectionSchema,
   gallerySectionSchema,
   cardsSectionSchema,
+  imageCardsSectionSchema,
+  mediaTextSectionSchema,
+  stepsSectionSchema,
+  statsSectionSchema,
+  calloutSectionSchema,
   specialSectionSchema,
 ]);
 
@@ -171,19 +237,29 @@ export type CategorySection = (typeof categorySectionSchema)["_output"];
 /** Названия типов секций для админки. */
 export const SECTION_TYPE_LABELS = {
   text: typo("Текст"),
+  mediaText: typo("Текст + изображение"),
+  steps: typo("Этапы / процесс"),
+  stats: typo("Показатели"),
+  callout: typo("Выделенная плашка"),
   table: typo("Таблица"),
   files: typo("Файлы"),
   video: typo("Видео"),
   gallery: typo("Галерея"),
   cards: typo("Карточки"),
+  imageCards: typo("Карточки с фото"),
   special: typo("Спец-блок"),
 } as const satisfies Record<CategorySection["type"], string>;
 export type TextSection = Extract<CategorySection, { type: "text" }>;
+export type MediaTextSection = Extract<CategorySection, { type: "mediaText" }>;
+export type StepsSection = Extract<CategorySection, { type: "steps" }>;
+export type StatsSection = Extract<CategorySection, { type: "stats" }>;
+export type CalloutSection = Extract<CategorySection, { type: "callout" }>;
 export type GallerySection = Extract<CategorySection, { type: "gallery" }>;
 export type TableSection = Extract<CategorySection, { type: "table" }>;
 export type FilesSection = Extract<CategorySection, { type: "files" }>;
 export type VideoSection = Extract<CategorySection, { type: "video" }>;
 export type CardsSection = Extract<CategorySection, { type: "cards" }>;
+export type ImageCardsSection = Extract<CategorySection, { type: "imageCards" }>;
 export type SpecialSection = Extract<CategorySection, { type: "special" }>;
 
 /**
@@ -243,6 +319,16 @@ export function normalizeSectionsForSave(sections: CategorySection[]): CategoryS
         };
       case "video":
         return { ...base, url: base.url.trim() };
+      case "imageCards":
+        return { ...base, items: base.items.map((item) => ({ ...item, text: dropEmpty(item.text) })) };
+      case "steps":
+        return { ...base, items: base.items.map((item) => ({ ...item, text: dropEmpty(item.text) })) };
+      case "stats":
+        return { ...base, items: base.items.map((item) => ({ ...item, label: dropEmpty(item.label) })) };
+      case "callout":
+        return { ...base, author: dropEmpty(base.author) };
+      case "mediaText":
+        return { ...base, imagePosition: dropEmpty(base.imagePosition) as MediaTextSection["imagePosition"] };
       default:
         return base;
     }
@@ -251,9 +337,12 @@ export function normalizeSectionsForSave(sections: CategorySection[]): CategoryS
 
 /** Явные ссылки на файлы из секций (items[].fileId) — для проверки существования при записи. */
 export function extractSectionFileIds(sections: CategorySection[]): string[] {
-  return sections.flatMap((section) =>
-    section.type === "files" || section.type === "gallery" ? section.items.map((item) => item.fileId) : [],
-  );
+  return sections.flatMap((section) => {
+    if (section.type === "files" || section.type === "gallery") return section.items.map((item) => item.fileId);
+    if (section.type === "imageCards") return section.items.map((item) => item.imageId);
+    if (section.type === "mediaText") return [section.imageId];
+    return [];
+  });
 }
 
 /**
@@ -284,7 +373,7 @@ export function collectUploadReferences(value: unknown, into = new Set<string>()
   }
   if (value && typeof value === "object") {
     for (const [key, nested] of Object.entries(value)) {
-      if (key === "fileId" && typeof nested === "string") into.add(nested);
+      if ((key === "fileId" || key === "imageId") && typeof nested === "string") into.add(nested);
       else collectUploadReferences(nested, into);
     }
   }

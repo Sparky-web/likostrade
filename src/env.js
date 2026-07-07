@@ -16,6 +16,8 @@ export const env = createEnv({
     TELEGRAM_BOT_TOKEN: z.string().min(1),
     TELEGRAM_CHAT_ID: z.string().min(1),
     TELEGRAM_PROXY_URL: z.string().url(),
+    /** "test" на тестовом контейнере — заявки в Telegram помечаются как тестовые. */
+    APP_ENV: z.string().optional(),
   },
 
   /**
@@ -41,6 +43,7 @@ export const env = createEnv({
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
     TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
     TELEGRAM_PROXY_URL: process.env.TELEGRAM_PROXY_URL,
+    APP_ENV: process.env.APP_ENV,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

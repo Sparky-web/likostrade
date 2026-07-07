@@ -4,11 +4,16 @@ import { Fragment } from "react";
 import { VStack } from "~/components";
 import type { CategorySection } from "~/sections/schema";
 
+import { SectionCallout } from "./SectionCallout";
 import { SectionCards } from "./SectionCards";
 import { SectionFiles } from "./SectionFiles";
 import { SectionGallery } from "./SectionGallery";
+import { SectionImageCards } from "./SectionImageCards";
+import { SectionMediaText } from "./SectionMediaText";
 import type { SpecialBlockContext } from "./SectionSpecial";
 import { SectionSpecial } from "./SectionSpecial";
+import { SectionStats } from "./SectionStats";
+import { SectionSteps } from "./SectionSteps";
 import { SectionTable } from "./SectionTable";
 import { SectionText } from "./SectionText";
 import { SectionVideo } from "./SectionVideo";
@@ -34,6 +39,16 @@ function renderSection(section: CategorySection, context: SpecialBlockContext | 
       return <SectionGallery section={section} />;
     case "cards":
       return <SectionCards section={section} />;
+    case "imageCards":
+      return <SectionImageCards section={section} />;
+    case "mediaText":
+      return <SectionMediaText section={section} />;
+    case "steps":
+      return <SectionSteps section={section} />;
+    case "stats":
+      return <SectionStats section={section} />;
+    case "callout":
+      return <SectionCallout section={section} />;
     case "special":
       return context ? <SectionSpecial section={section} context={context} /> : null;
     default:

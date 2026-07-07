@@ -1,0 +1,17 @@
+# Один сервис на окружение (test/prod) — различаются только .env (порт, БД, медиа, домен).
+# Образ собирается на сервере; наружу отдаёт nginx хоста (публикуем только на 127.0.0.1).
+# Postgres на хосте — контейнер ходит через host.docker.internal. Загрузки — том с хоста.
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    environment:
+      PORT: "3000"
+    ports:
+      - "127.0.0.1:${APP_PORT:-3000}:3000"
+    volumes:
+      - "${MEDIA_DIR:?set MEDIA_DIR in .env}:/app/public/uploads"

@@ -101,7 +101,9 @@ export const leadsRouter = createTRPCRouter({
       include: leadListInclude,
     });
 
-    const telegramLines = ["Новая заявка", "", `Имя: ${lead.title}`, `Контакт: ${lead.email}`];
+    // На тестовом контейнере (APP_ENV=test) помечаем заявку, чтобы не путать с боевой в общем чате.
+    const leadHeading = env.APP_ENV === "test" ? "❗ ТЕСТ-ЗАЯВКА ❗" : "Новая заявка";
+    const telegramLines = [leadHeading, "", `Имя: ${lead.title}`, `Контакт: ${lead.email}`];
 
     if (lead.message) {
       telegramLines.push(`Сообщение: ${lead.message}`);

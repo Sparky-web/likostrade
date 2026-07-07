@@ -8,7 +8,6 @@ export { Contacts } from "./components/Contacts";
 export { JsonLd } from "./components/JsonLd";
 export { Licenses } from "./components/Licenses";
 export { RequestForm } from "./components/RequestForm";
-export { RequestFormScrollButton } from "./components/RequestFormScrollButton";
 export { SubcategoryCards } from "./components/SubcategoryCards";
 export { Videos } from "./components/Videos";
 export { getCategoryPath, getSidebarContext } from "./lib/categoryTree";

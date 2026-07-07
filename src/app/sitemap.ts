@@ -3,6 +3,9 @@ import type { MetadataRoute } from "next";
 import { env } from "~/env";
 import { db } from "~/server/db";
 
+// Генерируется по запросу, а не на сборке: в Docker-сборке БД недоступна (запрос категорий/проектов упал бы).
+export const dynamic = "force-dynamic";
+
 /** Публичный origin сайта для абсолютных URL в sitemap. */
 function getBaseUrl(): string {
   if (env.AUTH_URL) {

@@ -232,7 +232,7 @@ function SitePhoneAndEmail({ variant, onNavigate, className }: SitePhoneAndEmail
   if (variant === "header") {
     return (
       <>
-        <Link href={`tel:${SITE_PHONE}`} className="text-primary-foreground font-semibold underline underline-offset-4">
+        <Link href={`tel:${SITE_PHONE}`} className="text-foreground font-semibold underline underline-offset-4">
           <Text variant="large">{formatPhoneNumber(SITE_PHONE)}</Text>
         </Link>
         <EmailCopy email={SITE_EMAIL} />
@@ -512,11 +512,12 @@ export function SiteMenu() {
               <Link href="/" className="inline-flex shrink-0" onClick={closeMobileMenu} aria-label={typo(`На главную`)}>
                 <Logo size="xs" />
               </Link>
-              <HStack justify="end" align="center">
-                <Link href={`tel:${SITE_PHONE}`} onClick={closeMobileMenu}>
-                  <Button variant="ghost" size="lg">
+              <HStack justify="end" align="center" className="shrink-0">
+                {/* Иконка-звонок: полный номер (с длинным «+7 (992) …») распирал шапку за 390px.
+                    Номер доступен в выезжающем меню и футере. */}
+                <Link href={`tel:${SITE_PHONE}`} onClick={closeMobileMenu} aria-label={typo(`Позвонить`)}>
+                  <Button variant="ghost" size="icon">
                     <Phone />
-                    {formatPhoneNumber(SITE_PHONE)}
                   </Button>
                 </Link>
                 <Button

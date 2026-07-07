@@ -10,7 +10,10 @@ import {
   textColorClasses,
 } from "~/components/utils/consts";
 
-const headingBase = "m-0 font-headings font-semibold text-balance";
+// overflow-wrap:anywhere ломает сверхдлинные слова (широкий шрифт Unbounded + русские составные слова
+// вроде «металлоконструкций») только когда они не влезают — на десктопе не срабатывает. Работает на SSR,
+// в отличие от JS-хука isMobile, поэтому заголовки не распирают документ по горизонтали на мобильном.
+const headingBase = "m-0 font-headings font-semibold text-balance [overflow-wrap:anywhere]";
 
 const headingAlignClasses = {
   left: "text-left",

@@ -48,7 +48,7 @@ jobs:
       - name: Build & up
         run: |
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-            "cd ${{ secrets.DEPLOY_PATH_TEST }} && docker compose build && docker compose up -d \
+            "cd ${{ secrets.DEPLOY_PATH_TEST }} && nice -n 19 ionice -c 3 docker compose build && docker compose up -d \
              && docker image prune -f && docker builder prune -f --filter until=168h"
 
   deploy-prod:
@@ -70,5 +70,5 @@ jobs:
       - name: Build & up
         run: |
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-            "cd ${{ secrets.DEPLOY_PATH_PROD }} && docker compose build && docker compose up -d \
+            "cd ${{ secrets.DEPLOY_PATH_PROD }} && nice -n 19 ionice -c 3 docker compose build && docker compose up -d \
              && docker image prune -f && docker builder prune -f --filter until=168h"

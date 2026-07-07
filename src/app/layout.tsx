@@ -75,7 +75,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <script dangerouslySetInnerHTML={{ __html: YANDEX_METRIKA_INIT_SCRIPT }} />
       </head>
-      <body>
+      <body className="dark">
         <JsonLd
           data={{
             "@context": "https://schema.org",

@@ -232,7 +232,7 @@ function SitePhoneAndEmail({ variant, onNavigate, className }: SitePhoneAndEmail
   if (variant === "header") {
     return (
       <>
-        <Link href={`tel:${SITE_PHONE}`} className="text-foreground font-semibold underline underline-offset-4">
+        <Link href={`tel:${SITE_PHONE}`} className="text-primary-foreground font-semibold underline underline-offset-4">
           <Text variant="large">{formatPhoneNumber(SITE_PHONE)}</Text>
         </Link>
         <EmailCopy email={SITE_EMAIL} />

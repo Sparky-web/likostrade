@@ -115,6 +115,15 @@ model Category {
   /// Секции контента страницы; jsonb-массив, схема — src/sections/schema.ts.
   sections     Json                 @default("[]")
 
+  /// Блок «Клиенты и партнёры» внизу страницы.
+  showClientsPartners Boolean @default(true)
+  /// Блок «Лицензии».
+  showLicenses        Boolean @default(true)
+  /// Блок «Контакты» в подвале страницы.
+  showContacts        Boolean @default(true)
+  /// Форма «Оставить заявку».
+  showRequestForm     Boolean @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

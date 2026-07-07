@@ -32,6 +32,10 @@ const categoryFieldsInput = zodRussian.object({
   sortOrder: zodRussian.number().int(),
   sections: categorySectionsSchema,
   subcategories: zodRussian.array(zodRussian.string()),
+  showClientsPartners: zodRussian.boolean(),
+  showLicenses: zodRussian.boolean(),
+  showContacts: zodRussian.boolean(),
+  showRequestForm: zodRussian.boolean(),
 });
 
 // id (слаг из translit) задаётся только при создании; в update пришедший с клиента id отбрасывается схемой

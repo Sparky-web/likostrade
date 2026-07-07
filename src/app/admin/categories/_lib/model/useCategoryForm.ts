@@ -58,6 +58,10 @@ export const useCategoryForm = ({
       sortOrder: data.sortOrder,
       sections: parseSections(data.sections),
       subcategories: data.subcategories.map((sub) => sub.id),
+      showClientsPartners: data.showClientsPartners ?? true,
+      showLicenses: data.showLicenses ?? true,
+      showContacts: data.showContacts ?? true,
+      showRequestForm: data.showRequestForm ?? true,
     };
   }, [data]);
 
@@ -76,6 +80,10 @@ export const useCategoryForm = ({
           sortOrder: 0,
           sections: [] satisfies CategorySection[] as CategorySection[],
           subcategories: [] satisfies string[] as string[],
+          showClientsPartners: true,
+          showLicenses: true,
+          showContacts: true,
+          showRequestForm: true,
         },
 
     onSubmit: async ({ value: values }) => {

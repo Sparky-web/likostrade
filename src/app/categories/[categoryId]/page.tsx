@@ -160,12 +160,12 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
           </>
         )}
         <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
-        <ClientsPartnersSection />
+        {category.showClientsPartners ? <ClientsPartnersSection /> : null}
         <Videos videos={previewVideos} />
-        <Licenses />
-        <RequestForm categoryId={categoryId} />
+        {category.showLicenses ? <Licenses /> : null}
+        {category.showRequestForm ? <RequestForm categoryId={categoryId} /> : null}
       </VStack>
-      <Contacts />
+      {category.showContacts ? <Contacts /> : null}
     </HydrateClient>
   );
 }

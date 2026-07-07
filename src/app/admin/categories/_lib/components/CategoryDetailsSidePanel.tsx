@@ -8,6 +8,7 @@ import {
   CrudTableFormButton,
   CrudTableSidePanelDetailsButtons,
   FileUploadField,
+  Label,
   NumberField,
   SelectField,
   SelectMultipleField,
@@ -200,6 +201,58 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
             />
           )}
         />
+
+        <VStack gap="sm">
+          <Label>{typo(`Блоки страницы`)}</Label>
+
+          <form.Field
+            name="showClientsPartners"
+            children={(field) => (
+              <SwitchField
+                fieldApi={field}
+                field={{
+                  label: typo(`Клиенты и партнёры`),
+                }}
+              />
+            )}
+          />
+
+          <form.Field
+            name="showLicenses"
+            children={(field) => (
+              <SwitchField
+                fieldApi={field}
+                field={{
+                  label: typo(`Лицензии`),
+                }}
+              />
+            )}
+          />
+
+          <form.Field
+            name="showContacts"
+            children={(field) => (
+              <SwitchField
+                fieldApi={field}
+                field={{
+                  label: typo(`Контакты`),
+                }}
+              />
+            )}
+          />
+
+          <form.Field
+            name="showRequestForm"
+            children={(field) => (
+              <SwitchField
+                fieldApi={field}
+                field={{
+                  label: typo(`Форма заявки`),
+                }}
+              />
+            )}
+          />
+        </VStack>
       </VStack>
     );
   }, [form, subcategoryOptions]);

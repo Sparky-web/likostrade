@@ -32,6 +32,7 @@ const categoryFieldsInput = zodRussian.object({
   sortOrder: zodRussian.number().int(),
   sections: categorySectionsSchema,
   subcategories: zodRussian.array(zodRussian.string()),
+  showCompletedProjects: zodRussian.boolean(),
   showClientsPartners: zodRussian.boolean(),
   showLicenses: zodRussian.boolean(),
   showContacts: zodRussian.boolean(),

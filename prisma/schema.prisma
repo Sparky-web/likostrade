@@ -115,6 +115,8 @@ model Category {
   /// Секции контента страницы; jsonb-массив, схема — src/sections/schema.ts.
   sections     Json                 @default("[]")
 
+  /// Блок «Наши завершённые проекты».
+  showCompletedProjects Boolean @default(true)
   /// Блок «Клиенты и партнёры» внизу страницы.
   showClientsPartners Boolean @default(true)
   /// Блок «Лицензии».

@@ -204,7 +204,9 @@ export default async function CategoryPage({ params }: PageProps) {
             <RequestQuoteBlock categoryId={category.id} />
           </Container>
         ) : null}
-        <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
+        {category.showCompletedProjects ? (
+          <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
+        ) : null}
         {category.showClientsPartners ? <ClientsPartnersSection /> : null}
         <Videos videos={previewVideos} />
         {category.showLicenses ? <Licenses /> : null}

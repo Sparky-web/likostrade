@@ -206,6 +206,18 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
           <Label>{typo(`Блоки страницы`)}</Label>
 
           <form.Field
+            name="showCompletedProjects"
+            children={(field) => (
+              <SwitchField
+                fieldApi={field}
+                field={{
+                  label: typo(`Завершённые проекты`),
+                }}
+              />
+            )}
+          />
+
+          <form.Field
             name="showClientsPartners"
             children={(field) => (
               <SwitchField

@@ -20,12 +20,13 @@ export const metadata: Metadata = {
     // Порядок важен: ico первым — фолбэк для Safari и поисковиков, SVG подхватят Chrome/Firefox по теме.
     // Именование файлов — по теме, для которой иконка: favicon-dark.svg = белая монограмма ДЛЯ тёмной темы.
     // icon-192.png здесь не указываем: у него сплошной тёмный фон (для manifest/Android), во вкладке он выглядит чёрным квадратом.
+    // ?v=2 сбрасывает кэш фавиконок у браузеров, успевших закэшировать старую иконку T3
     icon: [
-      { url: "/favicon.ico", sizes: "48x48 32x32 16x16" },
-      { url: "/favicon-light.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
-      { url: "/favicon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+      { url: "/favicon.ico?v=2", sizes: "48x48 32x32 16x16" },
+      { url: "/favicon-light.svg?v=2", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-dark.svg?v=2", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: "/favicon.ico?v=2",
     apple: "/apple-touch-icon.png",
   },
 };

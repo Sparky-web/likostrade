@@ -219,7 +219,7 @@ export const CuttingCalculator = ({
                 children={(shapeValue) => {
                   const shape = shapeValue;
                   return (
-                  <VStack gap="md">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {SHAPE_DIMENSIONS[shape].x ? (
                       <form.Field name="xMm">
                         {(field: AnyFieldApi) => (
@@ -272,41 +272,40 @@ export const CuttingCalculator = ({
 
                     {shape === "square" || shape === "circle" ? (
                       <>
-                        <form.Field name="withHoles">
-                          {(field: AnyFieldApi) => (
-                            <SwitchField fieldApi={field} field={{ label: typo("Отверстия под болты / внутреннее") }} />
-                          )}
-                        </form.Field>
+                        <div className="col-span-full">
+                          <form.Field name="withHoles">
+                            {(field: AnyFieldApi) => (
+                              <SwitchField fieldApi={field} field={{ label: typo("Отверстия под болты / внутреннее") }} />
+                            )}
+                          </form.Field>
+                        </div>
                         <form.Subscribe
                           selector={(state) => state.values.withHoles}
                           children={(withHoles) =>
                             Boolean(withHoles) ? (
-                              <VStack gap="md">
+                              <>
                                 <form.Field name="boltDiameterMm">
                                   {(field: AnyFieldApi) => (
-                                    <NumberField fieldApi={field} field={{ label: typo("Диаметр отверстий под болты, мм") }} />
+                                    <NumberField fieldApi={field} field={{ label: typo("Диаметр под болты, мм") }} />
                                   )}
                                 </form.Field>
                                 <form.Field name="boltAmount">
                                   {(field: AnyFieldApi) => (
-                                    <NumberField fieldApi={field} field={{ label: typo("Количество отверстий под болты, шт") }} />
+                                    <NumberField fieldApi={field} field={{ label: typo("Отверстий под болты, шт") }} />
                                   )}
                                 </form.Field>
                                 <form.Field name="innerHoleDiameterMm">
                                   {(field: AnyFieldApi) => (
-                                    <NumberField
-                                      fieldApi={field}
-                                      field={{ label: typo("Диаметр внутреннего отверстия, мм") }}
-                                    />
+                                    <NumberField fieldApi={field} field={{ label: typo("Внутреннее отверстие, мм") }} />
                                   )}
                                 </form.Field>
-                              </VStack>
+                              </>
                             ) : null
                           }
                         />
                       </>
                     ) : null}
-                  </VStack>
+                  </div>
                   );
                 }}
               />

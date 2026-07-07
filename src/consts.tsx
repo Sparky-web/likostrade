@@ -11,13 +11,18 @@ export const websiteConstants = {
   METADATA_TITLE: "Производство металлоконструкций в Екатеринбурге | ООО Ликос",
   METADATA_DESCRIPTION:
     "ООО «Ликос» - металлообработка, плазменная резка и производство электрощитового оборудования. Работаем с 2007 года, более 200 клиентов на Урале.",
-  PROJECTS_METADATA_TITLE: "Наши работы",
+  PROJECTS_METADATA_TITLE: "Выполненные проекты — металлоконструкции и электрощиты в Екатеринбурге",
   PROJECTS_METADATA_DESCRIPTION:
     "Каталог выполненных проектов ООО «Ликос»: металлоконструкции, электрощитовое оборудование и металлообработка в Екатеринбурге.",
   NOT_FOUND_METADATA_TITLE: "Страница не найдена",
   NOT_FOUND_METADATA_DESCRIPTION: "Запрашиваемая страница не существует или была удалена.",
   SIGN_IN_METADATA_TITLE: "Вход",
   ADMIN_METADATA_TITLE: "Админ-панель",
+  /** Бренд для шаблона title дочерних страниц («… | ООО «Ликос»»). */
+  BRAND_TITLE_SUFFIX: "%s | ООО «Ликос»",
+  /** Компоненты адреса для JSON-LD (PostalAddress). */
+  ADDRESS_LOCALITY: "Екатеринбург",
+  ADDRESS_STREET: "ул. Мартовская, 8",
   /* eslint-enable require-typo/require-typo-for-cyrillic */
   COMPANY_NAME: typo(`ООО «Ликос»`),
   INN: "6658263024",

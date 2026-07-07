@@ -28,7 +28,8 @@ function getSiteBaseUrl(): string {
 
 const createLeadInput = zodRussian.object({
   title: zodRussian.string().min(1).max(200),
-  email: zodRussian.string().email().max(320),
+  // Контакт заявки: телефон или email, без валидации формата (поле помечено «Email или телефон»).
+  email: zodRussian.string().min(1).max(320),
   message: zodRussian.string().max(5000).optional(),
   categoryId: zodRussian.string().max(200).nullable().optional(),
   projectId: zodRussian.string().max(200).nullable().optional(),
@@ -100,7 +101,7 @@ export const leadsRouter = createTRPCRouter({
       include: leadListInclude,
     });
 
-    const telegramLines = ["Новая заявка", "", `Имя: ${lead.title}`, `Email: ${lead.email}`];
+    const telegramLines = ["Новая заявка", "", `Имя: ${lead.title}`, `Контакт: ${lead.email}`];
 
     if (lead.message) {
       telegramLines.push(`Сообщение: ${lead.message}`);

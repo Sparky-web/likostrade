@@ -38,11 +38,13 @@ const baseFormFields: FormField[] = [
     validator: zodRussian.string().min(1),
   },
   {
+    // Колонка в БД называется email, но принимаем любой контакт: телефон или почту.
+    // Без валидации формата — не отсекаем лиды, готовые оставить только номер.
     name: "email",
-    label: typo(`Email`),
-    placeholder: typo(`example@example.com`),
+    label: typo(`Email или телефон`),
+    placeholder: typo(`Телефон или email для связи`),
     type: "text",
-    validator: zodRussian.string().email(),
+    validator: zodRussian.string().min(1),
   },
   {
     name: "message",

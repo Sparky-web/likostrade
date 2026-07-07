@@ -9,6 +9,7 @@ import { api, HydrateClient } from "~/trpc/server";
 
 import {
   CategoryCompactHeader,
+  CategoryCtaButton,
   CategorySidebar,
   CategoryTilesSection,
   ClientsPartnersSection,
@@ -17,10 +18,12 @@ import {
   getCategoryPath,
   getCompletedProjectsViewAllHref,
   getSidebarContext,
+  getSiteBaseUrl,
+  JsonLd,
   Licenses,
   metalHeadlineImage,
   RequestForm,
-  RequestFormScrollButton,
+  RequestQuoteBlock,
   SectionsRenderer,
   SubcategoryCards,
   Videos,
@@ -31,7 +34,6 @@ const getCategoryById = cache((id: string) => api.categories.getById({ id }));
 
 interface PageProps {
   params: Promise<{ categoryId: string }>;
-  searchParams: Promise<{ isExp?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -42,24 +44,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {};
   }
 
+  // Гео в title — ключевой коммерческий модификатор для локальной выдачи; бренд добавит шаблон из layout
+  const title = typo(`${category.title} в Екатеринбурге`);
+  const description = category.shortDescription ?? undefined;
+  const url = `/categories/${categoryId}`;
+  const image = category.imageId ? `/uploads/${category.imageId}` : undefined;
+
   return {
-    title: category.title,
-    description: category.shortDescription ? category.shortDescription : undefined,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: image ? [image] : undefined,
+    },
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: PageProps) {
+export default async function CategoryPage({ params }: PageProps) {
   const { categoryId } = await params;
-  const { isExp } = await searchParams;
 
-  const [category, allCategories, completedProjects, previewVideos] = await Promise.all([
-    getCategoryById(categoryId),
+  // Категорию проверяем ДО остальных запросов: getPreviewByCategory бросает NOT_FOUND для несуществующей
+  // категории — в общем Promise.all это дало бы 500 вместо честного 404.
+  const category = await getCategoryById(categoryId);
+  if (!category || category.isHidden) notFound();
+
+  const [allCategories, completedProjects, previewVideos] = await Promise.all([
     api.categories.getTree(),
     api.projects.getPreviewByCategory({ categoryId }),
     api.videos.getPreviewByCategory({ categoryId }),
   ]);
-
-  if (!category || category.isHidden) notFound();
 
   const visibleCategories = allCategories.filter((item) => !item.isHidden);
   const visibleSubcategories = category.subcategories.filter((sub) => !sub.isHidden);
@@ -70,7 +86,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const uploadSrc: `/uploads/${string}` | undefined = category.imageId ? `/uploads/${category.imageId}` : undefined;
 
   const headlineTitle = category.landingTitle ?? category.title;
-  const title = typo(isExp === "1" ? `${headlineTitle} в Екатеринбурге` : headlineTitle);
+  const title = typo(headlineTitle);
 
   const breadcrumbPath = getCategoryPath(visibleCategories, category.id);
   const breadcrumbs = [
@@ -80,6 +96,26 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       href: index < breadcrumbPath.length - 1 ? `/categories/${item.id}` : undefined,
     })),
   ];
+
+  // BreadcrumbList для поисковиков (видимые крошки есть в COMPACT/MINIMAL-шапке)
+  const baseUrl = getSiteBaseUrl();
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.title,
+      ...(crumb.href ? { item: `${baseUrl}${crumb.href}` } : {}),
+    })),
+  };
+
+  // Мёртвую hero-CTA больше нет: кнопка скроллит к инлайн-форме, а если та выключена — открывает модалку.
+  // Спец-секцию «Запрос цены» (если она уже добавлена в контент категории) не дублируем автоматической.
+  const hasRequestQuoteSection = parsedSections.some(
+    (section) => section.type === "special" && section.block === "requestQuote",
+  );
+  const ctaButton = <CategoryCtaButton categoryId={category.id} hasInlineForm={category.showRequestForm} />;
 
   // Спец-блок «Список подкатегорий» в секциях управляет местом вывода сам — автоматику не дублируем
   const hasSubcategoryListSection = parsedSections.some(
@@ -108,18 +144,20 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
 
   return (
     <HydrateClient>
+      <JsonLd data={breadcrumbJsonLd} />
       {category.headerMode === "COMPACT" || category.headerMode === "MINIMAL" ? (
         <CategoryCompactHeader
           title={title}
           description={category.shortDescription ? typo(category.shortDescription) : undefined}
           breadcrumbs={breadcrumbs}
           variant={category.headerMode === "MINIMAL" ? "minimal" : "compact"}
+          cta={ctaButton}
         />
       ) : (
         <Headline
           title={title}
           description={category.shortDescription ? typo(category.shortDescription) : undefined}
-          button={<RequestFormScrollButton />}
+          button={ctaButton}
           image={metalHeadlineImage}
           uploadSrc={uploadSrc}
         />
@@ -159,6 +197,13 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
             {cards ? <Container>{cards}</Container> : null}
           </>
         )}
+        {/* Повторная CTA сразу после контента — ближайшая точка конверсии до отвлекающих блоков ниже.
+            Не дублируем, если «Запрос цены» уже стоит отдельной секцией в контенте категории. */}
+        {!hasRequestQuoteSection ? (
+          <Container>
+            <RequestQuoteBlock categoryId={category.id} />
+          </Container>
+        ) : null}
         <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
         {category.showClientsPartners ? <ClientsPartnersSection /> : null}
         <Videos videos={previewVideos} />

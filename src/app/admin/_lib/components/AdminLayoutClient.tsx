@@ -3,10 +3,17 @@
 import { typo } from "lib";
 import { redirect } from "next/navigation";
 
-import { LkLayout, useUser } from "~/components";
+import { LkLayout, useUser, useUserLoading } from "~/components";
 
 export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   const user = useUser();
+  const isLoading = useUserLoading();
+
+  // Ждём загрузку сессии: сервер и первый клиентский рендер отдают null (одинаково — без гидромисматча),
+  // и только после getSession() решаем показывать админку или уводить на вход.
+  if (isLoading) {
+    return null;
+  }
 
   if (!user) {
     return redirect("/auth/signin");

@@ -34,7 +34,7 @@ export const LeadDetails = ({ data }: LeadDetailsProps) => {
       </FieldContent>
 
       <FieldContent>
-        <FieldLabel>{typo("Email")}</FieldLabel>
+        <FieldLabel>{typo("Контакт")}</FieldLabel>
         <FieldDescription>
           <EmailCopy email={data.email} trackGoals={false} />
         </FieldDescription>

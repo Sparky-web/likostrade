@@ -36,6 +36,7 @@ export { useAdaptive } from "./hooks/useAdaptive";
 export { useDataTable } from "./hooks/useDataTable";
 export { useToggle } from "./hooks/useToggle";
 export { useUser } from "./hooks/useUser";
+export { useUserLoading } from "./hooks/useUserLoading";
 export * from "./ui/accordion";
 export * from "./ui/alert";
 export * from "./ui/alert-dialog";

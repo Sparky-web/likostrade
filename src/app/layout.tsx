@@ -9,13 +9,31 @@ import { websiteConstants } from "~/consts";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import { Footer } from "./_lib/components/Footer";
+import { JsonLd } from "./_lib/components/JsonLd";
 import { SiteMenu } from "./_lib/components/SiteMenu";
+import { getSiteBaseUrl } from "./_lib/lib/siteUrl";
 import { YANDEX_METRIKA_COUNTER_ID, YANDEX_METRIKA_INIT_SCRIPT } from "./_lib/lib/yandexMetrika";
 import { SiteSettingsProvider } from "./_lib/model/SiteSettingsProvider";
 
+const baseUrl = getSiteBaseUrl();
+
 export const metadata: Metadata = {
-  title: websiteConstants.METADATA_TITLE,
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: websiteConstants.METADATA_TITLE,
+    // Дочерние страницы задают короткий title — бренд добавляется автоматически
+    template: websiteConstants.BRAND_TITLE_SUFFIX,
+  },
   description: websiteConstants.METADATA_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    siteName: websiteConstants.COMPANY_NAME,
+    url: "/",
+    title: websiteConstants.METADATA_TITLE,
+    description: websiteConstants.METADATA_DESCRIPTION,
+  },
   icons: {
     // Порядок важен: ico первым — фолбэк для Safari и поисковиков, SVG подхватят Chrome/Firefox по теме.
     // Именование файлов — по теме, для которой иконка: favicon-dark.svg = белая монограмма ДЛЯ тёмной темы.
@@ -58,6 +76,23 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script dangerouslySetInnerHTML={{ __html: YANDEX_METRIKA_INIT_SCRIPT }} />
       </head>
       <body className="dark">
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: websiteConstants.COMPANY_NAME,
+            url: baseUrl,
+            logo: `${baseUrl}/icon-512.png`,
+            telephone: `+${websiteConstants.PHONE_DIGITS}`,
+            email: websiteConstants.EMAIL,
+            address: {
+              "@type": "PostalAddress",
+              addressCountry: "RU",
+              addressLocality: websiteConstants.ADDRESS_LOCALITY,
+              streetAddress: websiteConstants.ADDRESS_STREET,
+            },
+          }}
+        />
         <noscript>
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element -- пиксель Метрики для браузеров без JS */}

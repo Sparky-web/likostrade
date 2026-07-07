@@ -1,5 +1,5 @@
 import { typo } from "lib";
-import { Fragment } from "react";
+import { Fragment, type ReactNode } from "react";
 
 import {
   Breadcrumb,
@@ -29,10 +29,12 @@ type CategoryCompactHeaderProps = {
    * минимальный отступ до контента (как карточка товара на evraz.pro).
    */
   variant?: "compact" | "minimal";
+  /** CTA-кнопка под заголовком (заявка/запрос цены) — чтобы призыв был над сгибом. */
+  cta?: ReactNode;
 };
 
-/** Компактная шапка категории: хлебные крошки + заголовок (+ описание в compact-варианте). */
-export const CategoryCompactHeader = ({ title, description, breadcrumbs, variant = "compact" }: CategoryCompactHeaderProps) => {
+/** Компактная шапка категории: хлебные крошки + заголовок (+ описание в compact-варианте) + CTA. */
+export const CategoryCompactHeader = ({ title, description, breadcrumbs, variant = "compact", cta }: CategoryCompactHeaderProps) => {
   const isMinimal = variant === "minimal";
 
   return (
@@ -71,6 +73,7 @@ export const CategoryCompactHeader = ({ title, description, breadcrumbs, variant
               </div>
             ) : null}
           </VStack>
+          {cta ? <div>{cta}</div> : null}
         </VStack>
       </Container>
     </div>

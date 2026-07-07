@@ -50,7 +50,7 @@ export const useLeadsColumns = () => {
         accessorFn: (row) => truncateMessage(row.message),
       },
       {
-        header: typo("Email"),
+        header: typo("Контакт"),
         accessorKey: "email",
       },
       {

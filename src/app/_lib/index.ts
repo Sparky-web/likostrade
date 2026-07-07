@@ -1,9 +1,11 @@
 export { CategoryCompactHeader } from "./components/CategoryCompactHeader";
+export { CategoryCtaButton } from "./components/CategoryCtaButton";
 export { CategorySidebar } from "./components/CategorySidebar";
 export { CategoryTilesSection } from "./components/CategoryTilesSection";
 export { ClientsPartnersSection } from "./components/ClientsPartnersSection";
 export { CompletedProjects } from "./components/CompletedProjects";
 export { Contacts } from "./components/Contacts";
+export { JsonLd } from "./components/JsonLd";
 export { Licenses } from "./components/Licenses";
 export { RequestForm } from "./components/RequestForm";
 export { RequestFormScrollButton } from "./components/RequestFormScrollButton";
@@ -12,4 +14,6 @@ export { Videos } from "./components/Videos";
 export { getCategoryPath, getSidebarContext } from "./lib/categoryTree";
 export { getCompletedProjectsViewAllHref } from "./lib/completedProjects";
 export { default as metalHeadlineImage } from "./lib/headline.jpg";
+export { getSiteBaseUrl } from "./lib/siteUrl";
+export { RequestQuoteBlock } from "./sections/RequestQuoteBlock";
 export { SectionsRenderer } from "./sections/SectionsRenderer";

@@ -5,13 +5,19 @@ import { Container, Heading, VStack } from "~/components";
 import { websiteConstants } from "~/consts";
 import { api, HydrateClient } from "~/trpc/server";
 
-import { Contacts } from "../_lib";
+import { Contacts, RequestForm } from "../_lib";
 import { ProjectsCatalog } from "./_lib/components/ProjectsCatalog";
 import { sortProjectsByDateCompleted } from "./_lib/lib/sortProjectsByDate";
 
 export const metadata: Metadata = {
   title: websiteConstants.PROJECTS_METADATA_TITLE,
   description: websiteConstants.PROJECTS_METADATA_DESCRIPTION,
+  alternates: { canonical: "/projects" },
+  openGraph: {
+    title: websiteConstants.PROJECTS_METADATA_TITLE,
+    description: websiteConstants.PROJECTS_METADATA_DESCRIPTION,
+    url: "/projects",
+  },
 };
 
 export default async function ProjectsPage() {
@@ -38,6 +44,8 @@ export default async function ProjectsPage() {
           <ProjectsCatalog projects={sortedProjects} allowedCategoryIds={allowedCategoryIds} />
         </VStack>
       </Container>
+      {/* Портфолио завершается формой заявки — раньше на странице не было ни одной точки конверсии */}
+      <RequestForm />
       <Contacts />
     </HydrateClient>
   );

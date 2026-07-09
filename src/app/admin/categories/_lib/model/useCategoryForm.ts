@@ -20,13 +20,9 @@ type UseCategoryFormParams = {
   onDeleted: () => void;
 };
 
-export const useCategoryForm = ({
-  selectedId,
-  isCreation,
-  onCreated,
-  onUpdated,
-  onDeleted,
-}: UseCategoryFormParams) => {
+//test
+
+export const useCategoryForm = ({ selectedId, isCreation, onCreated, onUpdated, onDeleted }: UseCategoryFormParams) => {
   const { data, isPending, refetch } = useCategoryById(selectedId);
 
   const { mutateAsync: update } = api.categories.update.useMutation();

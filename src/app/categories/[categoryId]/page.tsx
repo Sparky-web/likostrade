@@ -34,6 +34,7 @@ const getCategoryById = cache((id: string) => api.categories.getById({ id }));
 
 interface PageProps {
   params: Promise<{ categoryId: string }>;
+  searchParams: Promise<{ isExp?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -63,8 +64,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({ params, searchParams }: PageProps) {
   const { categoryId } = await params;
+  const { isExp } = await searchParams;
 
   // Категорию проверяем ДО остальных запросов: getPreviewByCategory бросает NOT_FOUND для несуществующей
   // категории — в общем Promise.all это дало бы 500 вместо честного 404.
@@ -86,7 +88,9 @@ export default async function CategoryPage({ params }: PageProps) {
   const uploadSrc: `/uploads/${string}` | undefined = category.imageId ? `/uploads/${category.imageId}` : undefined;
 
   const headlineTitle = category.landingTitle ?? category.title;
-  const title = typo(headlineTitle);
+  // Эксперимент для рекламы: ?isExp=1 дописывает гео к видимому заголовку
+  // (title-метадата всегда с гео — отдельное SEO-решение, флаг её не трогает)
+  const title = typo(isExp === "1" ? `${headlineTitle} в Екатеринбурге` : headlineTitle);
 
   const breadcrumbPath = getCategoryPath(visibleCategories, category.id);
   const breadcrumbs = [

@@ -22,20 +22,20 @@ export const websiteConstants = {
   BRAND_TITLE_SUFFIX: "%s | ООО «Ликос»",
   /** Компоненты адреса для JSON-LD (PostalAddress). */
   ADDRESS_LOCALITY: "Екатеринбург",
-  ADDRESS_STREET: "ул. Мартовская, 8",
+  ADDRESS_STREET: "ул. Животноводов, 26",
   /* eslint-enable require-typo/require-typo-for-cyrillic */
   COMPANY_NAME: typo(`ООО «Ликос»`),
   INN: "6658263024",
-  ADDRESS: typo("г. Екатеринбург, ул. Мартовская, дом 8"),
+  ADDRESS: typo("г. Екатеринбург, ул. Животноводов, дом 26"),
   WORK_HOURS: typoRaw(`понедельник - пятница с 09:00 до 18:00{br}суббота - с 09:00 до 16:00`, { br: <br /> }),
   PHONE_DIGITS: "79923313405",
   EMAIL: "likostrade@mail.ru",
   /** Ссылка на карту (поиск организации в Яндекс.Картах) */
   SITE_MAP_URL:
-    "https://yandex.ru/maps/?text=%D0%95%D0%BA%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%BD%D0%B1%D1%83%D1%80%D0%B3%2C%20%D1%83%D0%BB.%20%D0%9C%D0%B0%D1%80%D1%82%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F%2C%208",
+    "https://yandex.ru/maps/?ll=60.559974%2C56.714323&mode=search&text=%D0%95%D0%BA%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%BD%D0%B1%D1%83%D1%80%D0%B3%2C%20%D1%83%D0%BB.%20%D0%96%D0%B8%D0%B2%D0%BE%D1%82%D0%BD%D0%BE%D0%B2%D0%BE%D0%B4%D0%BE%D0%B2%2C%2026&z=16",
   /** Встраиваемая Яндекс.Карта (виджет) */
   MAP_EMBED_URL:
-    "https://yandex.ru/map-widget/v1/?ll=60.520718%2C56.774995&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjA2NzI2NxKbAdCg0L7RgdGB0LjRjywg0KHQstC10YDQtNC70L7QstGB0LrQsNGPINC-0LHQu9Cw0YHRgtGMLCDQldC60LDRgtC10YDQuNC90LHRg9GA0LMsINC20LjQu9C-0Lkg0YDQsNC50L7QvSDQldC70LjQt9Cw0LLQtdGCLCDQnNCw0YDRgtC-0LLRgdC60LDRjyDRg9C70LjRhtCwLCA4IgoN03ZyQhUABmNC&z=12.33",
+    "https://yandex.ru/map-widget/v1/?ll=60.559974%2C56.714323&mode=search&text=%D0%95%D0%BA%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%BD%D0%B1%D1%83%D1%80%D0%B3%2C%20%D1%83%D0%BB.%20%D0%96%D0%B8%D0%B2%D0%BE%D1%82%D0%BD%D0%BE%D0%B2%D0%BE%D0%B4%D0%BE%D0%B2%2C%2026&z=16",
   WHATSAPP_URL: "https://wa.me/79923313405",
   TELEGRAM_URL: "https://t.me/+79923313405",
   /** Персональная ссылка на профиль в MAX (Настройки → QR-код → Поделиться). Прямой ссылки по номеру, как wa.me, нет. */

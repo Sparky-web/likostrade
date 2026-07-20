@@ -3,6 +3,7 @@ import { Card, CardContent, Container, Heading, Text, useAdaptive, VStack } from
 import { websiteConstants } from "~/consts";
 
 import { ContactsShort } from "./ContactsShort";
+import { EntrancePhotoDialog } from "./EntrancePhotoDialog";
 
 export const Contacts = () => {
   const { isMobile } = useAdaptive();
@@ -16,6 +17,8 @@ export const Contacts = () => {
             <CardContent className="py-3 md:m-0 md:px-10">
               <VStack gap="xl">
                 <Heading variant="h3">{websiteConstants.ADDRESS}</Heading>
+
+                <EntrancePhotoDialog />
 
                 <Text variant="large">{websiteConstants.WORK_HOURS}</Text>
 
@@ -38,6 +41,8 @@ export const Contacts = () => {
           <CardContent className="px-10 py-3">
             <VStack gap="xl">
               <Heading variant="h2">{websiteConstants.ADDRESS}</Heading>
+
+              <EntrancePhotoDialog />
 
               <Text variant="large">{websiteConstants.WORK_HOURS}</Text>
 

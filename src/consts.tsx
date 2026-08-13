@@ -29,6 +29,7 @@ export const websiteConstants = {
   ADDRESS: typo("г. Екатеринбург, ул. Животноводов, дом 26"),
   WORK_HOURS: typoRaw(`понедельник - пятница с 09:00 до 18:00{br}суббота - с 09:00 до 16:00`, { br: <br /> }),
   PHONE_DIGITS: "79923313405",
+  CITY_PHONE_DIGITS: "73432675196",
   EMAIL: "likostrade@mail.ru",
   /** Ссылка на карту (поиск организации в Яндекс.Картах) */
   SITE_MAP_URL:

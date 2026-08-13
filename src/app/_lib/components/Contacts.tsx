@@ -22,7 +22,7 @@ export const Contacts = () => {
 
                 <Text variant="large">{websiteConstants.WORK_HOURS}</Text>
 
-                <ContactsShort />
+                <ContactsShort showCityPhone />
               </VStack>
             </CardContent>
           </Card>
@@ -46,7 +46,7 @@ export const Contacts = () => {
 
               <Text variant="large">{websiteConstants.WORK_HOURS}</Text>
 
-              <ContactsShort />
+              <ContactsShort showCityPhone />
             </VStack>
           </CardContent>
         </Card>

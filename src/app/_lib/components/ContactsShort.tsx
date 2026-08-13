@@ -5,15 +5,23 @@ import { websiteConstants } from "~/consts";
 
 import { EmailCopy } from "./EmailCopy";
 
-export const ContactsShort = () => {
+type ContactsShortProps = {
+  showCityPhone?: boolean;
+};
+
+export const ContactsShort = ({ showCityPhone = false }: ContactsShortProps) => {
   return (
     <VStack gap="lg">
       <VStack gap="sm">
         <Link href={`tel:+${websiteConstants.PHONE_DIGITS}`}>
-          <Heading variant="h3">
-            {typo(formatPhoneNumber(websiteConstants.PHONE_DIGITS))}
-          </Heading>
+          <Heading variant="h3">{typo(formatPhoneNumber(websiteConstants.PHONE_DIGITS))}</Heading>
         </Link>
+
+        {showCityPhone ? (
+          <Link href={`tel:+${websiteConstants.CITY_PHONE_DIGITS}`}>
+            <Heading variant="h3">{typo(formatPhoneNumber(websiteConstants.CITY_PHONE_DIGITS))}</Heading>
+          </Link>
+        ) : null}
 
         <EmailCopy
           email={websiteConstants.EMAIL}

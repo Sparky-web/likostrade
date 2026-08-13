@@ -1,12 +1,11 @@
+export { AboutUs } from "./components/AboutUs";
 export { CategoryCompactHeader } from "./components/CategoryCompactHeader";
 export { CategoryCtaButton } from "./components/CategoryCtaButton";
 export { CategorySidebar } from "./components/CategorySidebar";
 export { CategoryTilesSection } from "./components/CategoryTilesSection";
-export { ClientsPartnersSection } from "./components/ClientsPartnersSection";
 export { CompletedProjects } from "./components/CompletedProjects";
 export { Contacts } from "./components/Contacts";
 export { JsonLd } from "./components/JsonLd";
-export { Licenses } from "./components/Licenses";
 export { RequestForm } from "./components/RequestForm";
 export { SubcategoryCards } from "./components/SubcategoryCards";
 export { Videos } from "./components/Videos";

@@ -79,6 +79,22 @@ const PositionRow = ({ category }: { category: SubcategoryCardItem }) => (
   </Link>
 );
 
+/** Текстовая строка для товарных позиций без фотографий. */
+const PositionTextRow = ({ category }: { category: SubcategoryCardItem }) => (
+  <Link href={`/categories/${category.id}`} className="group block w-full no-underline">
+    <div className="hover:bg-secondary/50 flex flex-col gap-1.5 px-4 py-5 transition-colors md:px-6">
+      <Heading variant="h4" maxLines={3}>
+        {typo(category.title)}
+      </Heading>
+      {category.shortDescription ? (
+        <Text variant="small" color="supplementary" maxLines={3}>
+          {typo(category.shortDescription)}
+        </Text>
+      ) : null}
+    </div>
+  </Link>
+);
+
 /** Подкатегории-«позиции» карточками или строками (childrenMode CARDS/LIST/SIDEBAR, спец-блок «Список подкатегорий»). */
 export const SubcategoryCards = ({ categories, variant = "cards" }: SubcategoryCardsProps) => {
   if (categories.length === 0) return null;
@@ -86,6 +102,18 @@ export const SubcategoryCards = ({ categories, variant = "cards" }: SubcategoryC
   const sorted = [...categories].sort(byCatalogOrder);
 
   if (variant === "list") {
+    const hasImages = sorted.some((category) => category.imageId);
+
+    if (!hasImages) {
+      return (
+        <div className="divide-border divide-y overflow-hidden rounded-xl border">
+          {sorted.map((category) => (
+            <PositionTextRow key={category.id} category={category} />
+          ))}
+        </div>
+      );
+    }
+
     return (
       <AdaptiveGrid cols={{ base: 1, md: 2 }} gap="xl">
         {sorted.map((category) => (

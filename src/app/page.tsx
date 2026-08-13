@@ -10,7 +10,6 @@ import { CategoryTilesSection } from "./_lib/components/CategoryTilesSection";
 import { ClientsPartnersSection } from "./_lib/components/ClientsPartnersSection";
 import { Contacts } from "./_lib/components/Contacts";
 import { HomeCompletedProjects } from "./_lib/components/HomeCompletedProjects";
-import { Licenses } from "./_lib/components/Licenses";
 import { RequestForm } from "./_lib/components/RequestForm";
 import { RequestFormScrollButton } from "./_lib/components/RequestFormScrollButton";
 import { Videos } from "./_lib/components/Videos";
@@ -42,7 +41,6 @@ export default async function Home() {
         <HomeCompletedProjects />
         <ClientsPartnersSection />
         <Videos videos={previewVideos} />
-        <Licenses />
         <RequestForm />
       </VStack>
       <Contacts />

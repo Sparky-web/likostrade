@@ -223,19 +223,7 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
               <SwitchField
                 fieldApi={field}
                 field={{
-                  label: typo(`Клиенты и партнёры`),
-                }}
-              />
-            )}
-          />
-
-          <form.Field
-            name="showLicenses"
-            children={(field) => (
-              <SwitchField
-                fieldApi={field}
-                field={{
-                  label: typo(`Лицензии`),
+                  label: typo(`О нас`),
                 }}
               />
             )}
@@ -269,9 +257,7 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
     );
   }, [form, subcategoryOptions]);
 
-  const formButton = (
-    <CrudTableFormButton form={form} label={isCreation ? typo("Создать") : typo("Сохранить")} />
-  );
+  const formButton = <CrudTableFormButton form={form} label={isCreation ? typo("Создать") : typo("Сохранить")} />;
 
   return (
     <>
@@ -279,9 +265,7 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
         title={typo(`Детали`)}
         isOpen={!isCreation}
         onClose={props.onClose}
-        buttons={
-          <CrudTableSidePanelDetailsButtons onEdit={openEdit} onDelete={handleDelete} isDeleting={isDeleting} />
-        }
+        buttons={<CrudTableSidePanelDetailsButtons onEdit={openEdit} onDelete={handleDelete} isDeleting={isDeleting} />}
       >
         {isPending ? <Skeleton className="h-[400px]" /> : undefined}
         {data ? <CategoryDetails data={data} /> : undefined}

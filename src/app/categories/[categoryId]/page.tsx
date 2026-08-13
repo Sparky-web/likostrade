@@ -8,11 +8,11 @@ import { parseSections } from "~/sections/schema";
 import { api, HydrateClient } from "~/trpc/server";
 
 import {
+  AboutUs,
   CategoryCompactHeader,
   CategoryCtaButton,
   CategorySidebar,
   CategoryTilesSection,
-  ClientsPartnersSection,
   CompletedProjects,
   Contacts,
   getCategoryPath,
@@ -20,7 +20,6 @@ import {
   getSidebarContext,
   getSiteBaseUrl,
   JsonLd,
-  Licenses,
   metalHeadlineImage,
   RequestForm,
   RequestQuoteBlock,
@@ -140,10 +139,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   // LIST — компактные строки (исполнения, серии)
   const cards =
     category.childrenMode !== "TILES" && visibleSubcategories.length > 0 && !hasSubcategoryListSection ? (
-      <SubcategoryCards
-        categories={visibleSubcategories}
-        variant={category.childrenMode === "LIST" ? "list" : "cards"}
-      />
+      <SubcategoryCards categories={visibleSubcategories} variant={category.childrenMode === "LIST" ? "list" : "cards"} />
     ) : null;
 
   return (
@@ -201,6 +197,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
             {cards ? <Container>{cards}</Container> : null}
           </>
         )}
+        {category.showClientsPartners ? <AboutUs /> : null}
         {/* Повторная CTA сразу после контента — ближайшая точка конверсии до отвлекающих блоков ниже.
             Не дублируем, если «Запрос цены» уже стоит отдельной секцией в контенте категории. */}
         {!hasRequestQuoteSection ? (
@@ -211,9 +208,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         {category.showCompletedProjects ? (
           <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
         ) : null}
-        {category.showClientsPartners ? <ClientsPartnersSection /> : null}
         <Videos videos={previewVideos} />
-        {category.showLicenses ? <Licenses /> : null}
         {category.showRequestForm ? <RequestForm categoryId={categoryId} /> : null}
       </VStack>
       {category.showContacts ? <Contacts /> : null}

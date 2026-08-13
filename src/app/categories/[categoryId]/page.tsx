@@ -9,6 +9,7 @@ import { api, HydrateClient } from "~/trpc/server";
 
 import {
   AboutUs,
+  CategoryBreadcrumbs,
   CategoryCompactHeader,
   CategoryCtaButton,
   CategorySidebar,
@@ -148,14 +149,15 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
     <HydrateClient>
       <JsonLd data={breadcrumbJsonLd} />
       {hasCompactHeader ? (
-        <CategoryCompactHeader
-          title={title}
-          description={category.shortDescription ? typo(category.shortDescription) : undefined}
-          breadcrumbs={breadcrumbs}
-          variant={category.headerMode === "MINIMAL" ? "minimal" : "compact"}
-          cta={titleInCatalogContent ? undefined : ctaButton}
-          breadcrumbsOnly={titleInCatalogContent}
-        />
+        titleInCatalogContent ? null : (
+          <CategoryCompactHeader
+            title={title}
+            description={category.shortDescription ? typo(category.shortDescription) : undefined}
+            breadcrumbs={breadcrumbs}
+            variant={category.headerMode === "MINIMAL" ? "minimal" : "compact"}
+            cta={ctaButton}
+          />
+        )
       ) : (
         <Headline
           title={title}
@@ -188,6 +190,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
                 <VStack gap="section" className="min-w-0">
                   {titleInCatalogContent ? (
                     <VStack gap="lg">
+                      <CategoryBreadcrumbs breadcrumbs={breadcrumbs} />
                       <VStack gap="md">
                         {category.headerMode === "MINIMAL" ? (
                           <Heading variant="h2" renderAs="h1">
@@ -202,7 +205,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
                           </Text>
                         ) : null}
                       </VStack>
-                      <div>{ctaButton}</div>
+                      {!hasRequestQuoteSection ? <div>{ctaButton}</div> : null}
                     </VStack>
                   ) : null}
                   {tiles}

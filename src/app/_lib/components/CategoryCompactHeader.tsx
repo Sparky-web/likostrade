@@ -31,9 +31,26 @@ type CategoryCompactHeaderProps = {
   variant?: "compact" | "minimal";
   /** CTA-кнопка под заголовком (заявка/запрос цены) — чтобы призыв был над сгибом. */
   cta?: ReactNode;
-  /** Только хлебные крошки: заголовок и CTA выводятся внутри каталожной колонки. */
-  breadcrumbsOnly?: boolean;
 };
+
+export const CategoryBreadcrumbs = ({ breadcrumbs }: { breadcrumbs: BreadcrumbEntry[] }) => (
+  <Breadcrumb>
+    <BreadcrumbList>
+      {breadcrumbs.map((crumb, index) => (
+        <Fragment key={index}>
+          {index > 0 ? <BreadcrumbSeparator /> : null}
+          <BreadcrumbItem>
+            {crumb.href ? (
+              <BreadcrumbLink href={crumb.href}>{typo(crumb.title)}</BreadcrumbLink>
+            ) : (
+              <BreadcrumbPage>{typo(crumb.title)}</BreadcrumbPage>
+            )}
+          </BreadcrumbItem>
+        </Fragment>
+      ))}
+    </BreadcrumbList>
+  </Breadcrumb>
+);
 
 /** Компактная шапка категории: хлебные крошки + заголовок (+ описание в compact-варианте) + CTA. */
 export const CategoryCompactHeader = ({
@@ -42,51 +59,31 @@ export const CategoryCompactHeader = ({
   breadcrumbs,
   variant = "compact",
   cta,
-  breadcrumbsOnly = false,
 }: CategoryCompactHeaderProps) => {
   const isMinimal = variant === "minimal";
 
   return (
     <div className={isMinimal ? undefined : "border-b"}>
-      <Container className={breadcrumbsOnly ? "py-5 md:py-6" : isMinimal ? "pt-8 pb-2 md:pt-10" : "py-10 md:py-12"}>
-        <VStack gap={breadcrumbsOnly ? "sm" : isMinimal ? "md" : "lg"}>
-          <Breadcrumb>
-            <BreadcrumbList>
-              {breadcrumbs.map((crumb, index) => (
-                <Fragment key={index}>
-                  {index > 0 ? <BreadcrumbSeparator /> : null}
-                  <BreadcrumbItem>
-                    {crumb.href ? (
-                      <BreadcrumbLink href={crumb.href}>{typo(crumb.title)}</BreadcrumbLink>
-                    ) : (
-                      <BreadcrumbPage>{typo(crumb.title)}</BreadcrumbPage>
-                    )}
-                  </BreadcrumbItem>
-                </Fragment>
-              ))}
-            </BreadcrumbList>
-          </Breadcrumb>
-          {!breadcrumbsOnly ? (
-            <>
-              <VStack gap="md">
-                {isMinimal ? (
-                  <Heading variant="h2" renderAs="h1">
-                    {typo(title)}
-                  </Heading>
-                ) : (
-                  <Heading variant="h1">{typo(title)}</Heading>
-                )}
-                {!isMinimal && description ? (
-                  <div className="max-w-3xl">
-                    <Text variant="large" color="supplementary">
-                      {typo(description)}
-                    </Text>
-                  </div>
-                ) : null}
-              </VStack>
-              {cta ? <div>{cta}</div> : null}
-            </>
-          ) : null}
+      <Container className={isMinimal ? "pt-8 pb-2 md:pt-10" : "py-10 md:py-12"}>
+        <VStack gap={isMinimal ? "md" : "lg"}>
+          <CategoryBreadcrumbs breadcrumbs={breadcrumbs} />
+          <VStack gap="md">
+            {isMinimal ? (
+              <Heading variant="h2" renderAs="h1">
+                {typo(title)}
+              </Heading>
+            ) : (
+              <Heading variant="h1">{typo(title)}</Heading>
+            )}
+            {!isMinimal && description ? (
+              <div className="max-w-3xl">
+                <Text variant="large" color="supplementary">
+                  {typo(description)}
+                </Text>
+              </div>
+            ) : null}
+          </VStack>
+          {cta ? <div>{cta}</div> : null}
         </VStack>
       </Container>
     </div>

@@ -1,5 +1,5 @@
 export { AboutUs } from "./components/AboutUs";
-export { CategoryCompactHeader } from "./components/CategoryCompactHeader";
+export { CategoryBreadcrumbs, CategoryCompactHeader } from "./components/CategoryCompactHeader";
 export { CategoryCtaButton } from "./components/CategoryCtaButton";
 export { CategorySidebar } from "./components/CategorySidebar";
 export { CategoryTilesSection } from "./components/CategoryTilesSection";

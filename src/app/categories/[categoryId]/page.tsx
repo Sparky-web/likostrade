@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
-import { Container, Heading, Headline, VStack } from "~/components";
+import { Container, Heading, Headline, Text, VStack } from "~/components";
 import { parseSections } from "~/sections/schema";
 import { api, HydrateClient } from "~/trpc/server";
 
@@ -83,6 +83,8 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const sidebarContextRaw = getSidebarContext(visibleCategories, category.id);
   const sidebarContext = sidebarContextRaw && sidebarContextRaw.tree.length > 0 ? sidebarContextRaw : null;
   const parsedSections = parseSections(category.sections);
+  const hasCompactHeader = category.headerMode === "COMPACT" || category.headerMode === "MINIMAL";
+  const titleInCatalogContent = Boolean(sidebarContext && hasCompactHeader);
 
   const uploadSrc: `/uploads/${string}` | undefined = category.imageId ? `/uploads/${category.imageId}` : undefined;
 
@@ -145,13 +147,14 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   return (
     <HydrateClient>
       <JsonLd data={breadcrumbJsonLd} />
-      {category.headerMode === "COMPACT" || category.headerMode === "MINIMAL" ? (
+      {hasCompactHeader ? (
         <CategoryCompactHeader
           title={title}
           description={category.shortDescription ? typo(category.shortDescription) : undefined}
           breadcrumbs={breadcrumbs}
           variant={category.headerMode === "MINIMAL" ? "minimal" : "compact"}
-          cta={ctaButton}
+          cta={titleInCatalogContent ? undefined : ctaButton}
+          breadcrumbsOnly={titleInCatalogContent}
         />
       ) : (
         <Headline
@@ -183,6 +186,25 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
               <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[minmax(0,17rem)_1fr] lg:grid-cols-[minmax(0,19rem)_1fr] lg:gap-12">
                 <CategorySidebar context={sidebarContext} />
                 <VStack gap="section" className="min-w-0">
+                  {titleInCatalogContent ? (
+                    <VStack gap="lg">
+                      <VStack gap="md">
+                        {category.headerMode === "MINIMAL" ? (
+                          <Heading variant="h2" renderAs="h1">
+                            {title}
+                          </Heading>
+                        ) : (
+                          <Heading variant="h1">{title}</Heading>
+                        )}
+                        {category.headerMode === "COMPACT" && category.shortDescription ? (
+                          <Text variant="large" color="supplementary">
+                            {typo(category.shortDescription)}
+                          </Text>
+                        ) : null}
+                      </VStack>
+                      <div>{ctaButton}</div>
+                    </VStack>
+                  ) : null}
                   {tiles}
                   {cards}
                   {sections}

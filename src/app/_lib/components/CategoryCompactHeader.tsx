@@ -31,16 +31,25 @@ type CategoryCompactHeaderProps = {
   variant?: "compact" | "minimal";
   /** CTA-кнопка под заголовком (заявка/запрос цены) — чтобы призыв был над сгибом. */
   cta?: ReactNode;
+  /** Только хлебные крошки: заголовок и CTA выводятся внутри каталожной колонки. */
+  breadcrumbsOnly?: boolean;
 };
 
 /** Компактная шапка категории: хлебные крошки + заголовок (+ описание в compact-варианте) + CTA. */
-export const CategoryCompactHeader = ({ title, description, breadcrumbs, variant = "compact", cta }: CategoryCompactHeaderProps) => {
+export const CategoryCompactHeader = ({
+  title,
+  description,
+  breadcrumbs,
+  variant = "compact",
+  cta,
+  breadcrumbsOnly = false,
+}: CategoryCompactHeaderProps) => {
   const isMinimal = variant === "minimal";
 
   return (
     <div className={isMinimal ? undefined : "border-b"}>
-      <Container className={isMinimal ? "pt-8 pb-2 md:pt-10" : "py-10 md:py-12"}>
-        <VStack gap={isMinimal ? "md" : "lg"}>
+      <Container className={breadcrumbsOnly ? "py-5 md:py-6" : isMinimal ? "pt-8 pb-2 md:pt-10" : "py-10 md:py-12"}>
+        <VStack gap={breadcrumbsOnly ? "sm" : isMinimal ? "md" : "lg"}>
           <Breadcrumb>
             <BreadcrumbList>
               {breadcrumbs.map((crumb, index) => (
@@ -57,23 +66,27 @@ export const CategoryCompactHeader = ({ title, description, breadcrumbs, variant
               ))}
             </BreadcrumbList>
           </Breadcrumb>
-          <VStack gap="md">
-            {isMinimal ? (
-              <Heading variant="h2" renderAs="h1">
-                {typo(title)}
-              </Heading>
-            ) : (
-              <Heading variant="h1">{typo(title)}</Heading>
-            )}
-            {!isMinimal && description ? (
-              <div className="max-w-3xl">
-                <Text variant="large" color="supplementary">
-                  {typo(description)}
-                </Text>
-              </div>
-            ) : null}
-          </VStack>
-          {cta ? <div>{cta}</div> : null}
+          {!breadcrumbsOnly ? (
+            <>
+              <VStack gap="md">
+                {isMinimal ? (
+                  <Heading variant="h2" renderAs="h1">
+                    {typo(title)}
+                  </Heading>
+                ) : (
+                  <Heading variant="h1">{typo(title)}</Heading>
+                )}
+                {!isMinimal && description ? (
+                  <div className="max-w-3xl">
+                    <Text variant="large" color="supplementary">
+                      {typo(description)}
+                    </Text>
+                  </div>
+                ) : null}
+              </VStack>
+              {cta ? <div>{cta}</div> : null}
+            </>
+          ) : null}
         </VStack>
       </Container>
     </div>

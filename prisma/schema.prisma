@@ -120,6 +120,8 @@ model Category {
 
   /// Блок «Наши завершённые проекты».
   showCompletedProjects Boolean @default(true)
+  /// Использовать для блока «Наши работы» категорию-источник родителя (рекурсивно по тому же флагу).
+  inheritProjectsFromParent Boolean @default(false)
   /// Блок «Клиенты и партнёры» внизу страницы.
   showClientsPartners Boolean @default(true)
   /// Блок «Лицензии».

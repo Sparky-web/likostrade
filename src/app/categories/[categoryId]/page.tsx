@@ -74,11 +74,12 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const category = await getCategoryById(categoryId);
   if (!category || category.isHidden) notFound();
 
-  const [allCategories, completedProjects, previewVideos] = await Promise.all([
+  const [allCategories, completedProjectsPreview, previewVideos] = await Promise.all([
     api.categories.getTree(),
     api.projects.getPreviewByCategory({ categoryId }),
     api.videos.getPreviewByCategory({ categoryId }),
   ]);
+  const { projects: completedProjects, sourceCategoryId: completedProjectsSourceCategoryId } = completedProjectsPreview;
 
   const visibleCategories = allCategories.filter((item) => !item.isHidden);
   const visibleSubcategories = category.subcategories.filter((sub) => !sub.isHidden);
@@ -161,7 +162,10 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
         break;
       case "completedProjects":
         block = category.showCompletedProjects ? (
-          <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
+          <CompletedProjects
+            projects={completedProjects}
+            viewAllHref={getCompletedProjectsViewAllHref(completedProjectsSourceCategoryId)}
+          />
         ) : null;
         break;
       case "requestForm":

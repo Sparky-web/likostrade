@@ -35,6 +35,7 @@ const categoryFieldsInput = zodRussian.object({
   pageBlocksOrder: categoryPageBlockOrderSchema,
   subcategories: zodRussian.array(zodRussian.string()),
   showCompletedProjects: zodRussian.boolean(),
+  inheritProjectsFromParent: zodRussian.boolean(),
   showClientsPartners: zodRussian.boolean(),
   showLicenses: zodRussian.boolean(),
   showContacts: zodRussian.boolean(),

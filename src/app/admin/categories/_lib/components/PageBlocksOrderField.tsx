@@ -78,5 +78,29 @@ export const PageBlocksOrderField = ({ form }: PageBlocksOrderFieldProps) => (
         );
       }}
     </form.Field>
+    <form.Field name="inheritProjectsFromParent">
+      {(field: AnyFieldApi) => (
+        <Card size="sm">
+          <CardContent>
+            <HStack align="center" justify="between" gap="sm">
+              <div className="min-w-0 flex-1">
+                <Text bold breakWords>
+                  {typo("Брать «Наши работы» из родительской категории")}
+                </Text>
+                <Text variant="muted" breakWords>
+                  {typo("Если у родителя включён тот же флаг, источник будет найден выше по дереву.")}
+                </Text>
+              </div>
+              <Switch
+                checked={Boolean(field.state.value)}
+                aria-label={typo("Брать «Наши работы» из родительской категории")}
+                onCheckedChange={(checked) => field.handleChange(checked)}
+                onBlur={field.handleBlur}
+              />
+            </HStack>
+          </CardContent>
+        </Card>
+      )}
+    </form.Field>
   </VStack>
 );

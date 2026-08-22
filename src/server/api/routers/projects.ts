@@ -1,6 +1,6 @@
 import { isoDateStringSchema, zodRussian } from "lib";
 
-import { getCategoriesForPreview } from "../lib/getCategoriesForPreview";
+import { getProjectCategoriesForPreview } from "../lib/getCategoriesForPreview";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 const PREVIEW_LIMIT = 3;
@@ -96,10 +96,10 @@ export const projectsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const categoryIds = await getCategoriesForPreview(ctx.db, input.categoryId);
-      if (categoryIds.length === 0) return [];
+      const { categoryIds, sourceCategoryId } = await getProjectCategoriesForPreview(ctx.db, input.categoryId);
+      if (categoryIds.length === 0) return { projects: [], sourceCategoryId };
 
-      return ctx.db.project.findMany({
+      const projects = await ctx.db.project.findMany({
         where: {
           isHidden: false,
           categories: { some: { id: { in: categoryIds }, isHidden: false } },
@@ -108,5 +108,7 @@ export const projectsRouter = createTRPCRouter({
         include: projectListInclude,
         take: PREVIEW_LIMIT,
       });
+
+      return { projects, sourceCategoryId };
     }),
 });

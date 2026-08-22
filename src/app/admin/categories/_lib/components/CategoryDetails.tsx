@@ -71,6 +71,11 @@ export const CategoryDetails = ({ data }: CategoryDetailsProps) => {
       </FieldContent>
 
       <FieldContent>
+        <FieldLabel>{typo("Брать «Наши работы» из родительской категории")}</FieldLabel>
+        <FieldDescription>{data.inheritProjectsFromParent ? typo("Да") : typo("Нет")}</FieldDescription>
+      </FieldContent>
+
+      <FieldContent>
         <FieldLabel>{typo("Подкатегории")}</FieldLabel>
         <FieldDescription>{joinTitles(data.subcategories)}</FieldDescription>
       </FieldContent>

@@ -115,6 +115,9 @@ model Category {
   /// Секции контента страницы; jsonb-массив, схема — src/sections/schema.ts.
   sections     Json                 @default("[]")
 
+  /// Порядок системных блоков нижней части страницы; ключи — src/categories/pageBlocks.ts.
+  pageBlocksOrder String[] @default(["aboutUs", "completedProjects", "requestForm", "contacts"])
+
   /// Блок «Наши завершённые проекты».
   showCompletedProjects Boolean @default(true)
   /// Блок «Клиенты и партнёры» внизу страницы.

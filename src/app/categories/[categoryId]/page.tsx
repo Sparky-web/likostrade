@@ -1,8 +1,9 @@
 import { typo } from "lib";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cache } from "react";
+import { cache, Fragment, type ReactNode } from "react";
 
+import { type CategoryPageBlockKey, normalizeCategoryPageBlockOrder } from "~/categories/pageBlocks";
 import { Container, Heading, Headline, Text, VStack } from "~/components";
 import { parseSections } from "~/sections/schema";
 import { api, HydrateClient } from "~/trpc/server";
@@ -145,6 +146,47 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       <SubcategoryCards categories={visibleSubcategories} variant={category.childrenMode === "LIST" ? "list" : "cards"} />
     ) : null;
 
+  const pageBlocksOrder = normalizeCategoryPageBlockOrder(category.pageBlocksOrder);
+  // Контакты исторически замыкают страницу без дополнительного gap. Сохраняем эту вёрстку, пока блок последний;
+  // если администратор поднимет его выше, он становится обычным элементом общего потока секций.
+  const hasTrailingContacts = pageBlocksOrder.at(-1) === "contacts";
+  const pageBlocksInFlow = hasTrailingContacts ? pageBlocksOrder.slice(0, -1) : pageBlocksOrder;
+
+  const renderPageBlockSlot = (blockKey: CategoryPageBlockKey) => {
+    let block: ReactNode = null;
+
+    switch (blockKey) {
+      case "aboutUs":
+        block = category.showClientsPartners ? <AboutUs /> : null;
+        break;
+      case "completedProjects":
+        block = category.showCompletedProjects ? (
+          <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
+        ) : null;
+        break;
+      case "requestForm":
+        block = category.showRequestForm ? <RequestForm categoryId={categoryId} /> : null;
+        break;
+      case "contacts":
+        block = category.showContacts ? <Contacts /> : null;
+        break;
+    }
+
+    return (
+      <Fragment key={blockKey}>
+        {block}
+        {/* Эти два блока не управляются комбинированным списком. Они сохраняют прежние опорные места:
+            CTA следует за «О нас», видео — за завершёнными проектами, даже если опорный блок выключен. */}
+        {blockKey === "aboutUs" && !hasRequestQuoteSection ? (
+          <Container>
+            <RequestQuoteBlock categoryId={category.id} />
+          </Container>
+        ) : null}
+        {blockKey === "completedProjects" ? <Videos videos={previewVideos} /> : null}
+      </Fragment>
+    );
+  };
+
   return (
     <HydrateClient>
       <JsonLd data={breadcrumbJsonLd} />
@@ -222,21 +264,9 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
             {cards ? <Container>{cards}</Container> : null}
           </>
         )}
-        {category.showClientsPartners ? <AboutUs /> : null}
-        {/* Повторная CTA сразу после контента — ближайшая точка конверсии до отвлекающих блоков ниже.
-            Не дублируем, если «Запрос цены» уже стоит отдельной секцией в контенте категории. */}
-        {!hasRequestQuoteSection ? (
-          <Container>
-            <RequestQuoteBlock categoryId={category.id} />
-          </Container>
-        ) : null}
-        {category.showCompletedProjects ? (
-          <CompletedProjects projects={completedProjects} viewAllHref={getCompletedProjectsViewAllHref(categoryId)} />
-        ) : null}
-        <Videos videos={previewVideos} />
-        {category.showRequestForm ? <RequestForm categoryId={categoryId} /> : null}
+        {pageBlocksInFlow.map(renderPageBlockSlot)}
       </VStack>
-      {category.showContacts ? <Contacts /> : null}
+      {hasTrailingContacts && category.showContacts ? <Contacts /> : null}
     </HydrateClient>
   );
 }

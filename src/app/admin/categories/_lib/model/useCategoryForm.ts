@@ -5,6 +5,7 @@ import { translit, typo } from "lib";
 import { useCallback, useMemo } from "react";
 import { toast } from "sonner";
 
+import { DEFAULT_CATEGORY_PAGE_BLOCK_ORDER, normalizeCategoryPageBlockOrder } from "~/categories/pageBlocks";
 import type { CategorySection } from "~/sections/schema";
 import { normalizeSectionsForSave, parseSections } from "~/sections/schema";
 import { api } from "~/trpc/react";
@@ -53,6 +54,7 @@ export const useCategoryForm = ({ selectedId, isCreation, onCreated, onUpdated, 
       catalogTitle: data.catalogTitle ?? "",
       sortOrder: data.sortOrder,
       sections: parseSections(data.sections),
+      pageBlocksOrder: normalizeCategoryPageBlockOrder(data.pageBlocksOrder),
       subcategories: data.subcategories.map((sub) => sub.id),
       showCompletedProjects: data.showCompletedProjects ?? true,
       showClientsPartners: data.showClientsPartners ?? true,
@@ -76,6 +78,7 @@ export const useCategoryForm = ({ selectedId, isCreation, onCreated, onUpdated, 
           catalogTitle: "",
           sortOrder: 0,
           sections: [] satisfies CategorySection[] as CategorySection[],
+          pageBlocksOrder: [...DEFAULT_CATEGORY_PAGE_BLOCK_ORDER],
           subcategories: [] satisfies string[] as string[],
           showCompletedProjects: true,
           showClientsPartners: true,

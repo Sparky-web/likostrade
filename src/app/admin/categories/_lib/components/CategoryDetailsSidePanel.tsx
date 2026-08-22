@@ -8,7 +8,6 @@ import {
   CrudTableFormButton,
   CrudTableSidePanelDetailsButtons,
   FileUploadField,
-  Label,
   NumberField,
   SelectField,
   SelectMultipleField,
@@ -24,6 +23,7 @@ import {
 import { CHILDREN_MODE_OPTIONS, HEADER_MODE_OPTIONS } from "../model/displayModeOptions";
 import { useCategoryForm } from "../model/useCategoryForm";
 import { CategoryDetails } from "./CategoryDetails";
+import { PageBlocksOrderField } from "./PageBlocksOrderField";
 import { SectionsEditorField } from "./sections-editor/SectionsEditorField";
 
 // Дискриминируемое объединение: либо просмотр существующей записи, либо создание новой
@@ -202,57 +202,7 @@ export const CategoryDetailsSidePanel = (props: CategoryDetailsSidePanelProps) =
           )}
         />
 
-        <VStack gap="sm">
-          <Label>{typo(`Блоки страницы`)}</Label>
-
-          <form.Field
-            name="showCompletedProjects"
-            children={(field) => (
-              <SwitchField
-                fieldApi={field}
-                field={{
-                  label: typo(`Завершённые проекты`),
-                }}
-              />
-            )}
-          />
-
-          <form.Field
-            name="showClientsPartners"
-            children={(field) => (
-              <SwitchField
-                fieldApi={field}
-                field={{
-                  label: typo(`О нас`),
-                }}
-              />
-            )}
-          />
-
-          <form.Field
-            name="showContacts"
-            children={(field) => (
-              <SwitchField
-                fieldApi={field}
-                field={{
-                  label: typo(`Контакты`),
-                }}
-              />
-            )}
-          />
-
-          <form.Field
-            name="showRequestForm"
-            children={(field) => (
-              <SwitchField
-                fieldApi={field}
-                field={{
-                  label: typo(`Форма заявки`),
-                }}
-              />
-            )}
-          />
-        </VStack>
+        <PageBlocksOrderField form={form} />
       </VStack>
     );
   }, [form, subcategoryOptions]);

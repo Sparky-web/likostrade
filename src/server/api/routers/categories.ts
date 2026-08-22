@@ -3,6 +3,7 @@ import type { Prisma, PrismaClient } from "generated/prisma";
 import { CategoryChildrenMode, CategoryHeaderMode } from "generated/prisma";
 import { zodRussian } from "lib";
 
+import { categoryPageBlockOrderSchema } from "~/categories/pageBlocks";
 import { categorySectionsSchema, extractSectionFileIds } from "~/sections/schema";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
@@ -31,6 +32,7 @@ const categoryFieldsInput = zodRussian.object({
   catalogTitle: zodRussian.string().nullable(),
   sortOrder: zodRussian.number().int(),
   sections: categorySectionsSchema,
+  pageBlocksOrder: categoryPageBlockOrderSchema,
   subcategories: zodRussian.array(zodRussian.string()),
   showCompletedProjects: zodRussian.boolean(),
   showClientsPartners: zodRussian.boolean(),
@@ -158,14 +160,12 @@ export const categoriesRouter = createTRPCRouter({
     }),
   ),
 
-  getById: publicProcedure
-    .input(zodRussian.object({ id: zodRussian.string() }))
-    .query(({ ctx, input }) =>
-      ctx.db.category.findUnique({
-        where: { id: input.id },
-        include: categoryInclude,
-      }),
-    ),
+  getById: publicProcedure.input(zodRussian.object({ id: zodRussian.string() })).query(({ ctx, input }) =>
+    ctx.db.category.findUnique({
+      where: { id: input.id },
+      include: categoryInclude,
+    }),
+  ),
 
   create: protectedProcedure.input(createCategoryInput).mutation(async ({ ctx, input }) => {
     const { id, ...fields } = input;
@@ -196,10 +196,8 @@ export const categoriesRouter = createTRPCRouter({
       return true;
     }),
 
-  delete: protectedProcedure
-    .input(zodRussian.object({ id: zodRussian.string() }))
-    .mutation(async ({ ctx, input }) => {
-      await ctx.db.category.delete({ where: { id: input.id } });
-      return true;
-    }),
+  delete: protectedProcedure.input(zodRussian.object({ id: zodRussian.string() })).mutation(async ({ ctx, input }) => {
+    await ctx.db.category.delete({ where: { id: input.id } });
+    return true;
+  }),
 });

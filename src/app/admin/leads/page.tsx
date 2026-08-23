@@ -3,7 +3,7 @@
 import { typo } from "lib";
 import { parseAsString, useQueryState } from "nuqs";
 
-import { DataTable, Heading, Skeleton, useDataTable, VStack } from "~/components";
+import { DataTable, DataTableToolbar, Heading, Skeleton, useDataTable, VStack } from "~/components";
 import { api } from "~/trpc/react";
 
 import { LeadDetailsSidePanel } from "./_lib/components/LeadDetailsSidePanel";
@@ -30,7 +30,9 @@ export default function LeadsPage() {
     <VStack gap="section" className="max-w-full overflow-x-auto">
       <Heading variant="h2">{typo("Заявки")}</Heading>
 
-      <DataTable table={table} />
+      <DataTable table={table}>
+        <DataTableToolbar table={table} />
+      </DataTable>
 
       {selectedId ? (
         <LeadDetailsSidePanel

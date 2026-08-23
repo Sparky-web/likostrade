@@ -24,7 +24,8 @@ export function DataTableToolbar<TData>({
   className,
   ...props
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
+  const globalFilter = String(table.getState().globalFilter ?? "");
+  const isFiltered = table.getState().columnFilters.length > 0 || globalFilter.length > 0;
 
   const columns = React.useMemo(
     () => table.getAllColumns().filter((column) => column.getCanFilter()),
@@ -33,6 +34,8 @@ export function DataTableToolbar<TData>({
 
   const onReset = React.useCallback(() => {
     table.resetColumnFilters();
+    table.setGlobalFilter("");
+    table.setPageIndex(0);
   }, [table]);
 
   return (
@@ -46,6 +49,17 @@ export function DataTableToolbar<TData>({
       {...props}
     >
       <div className="flex flex-1 flex-wrap items-center gap-2">
+        <Input
+          type="search"
+          aria-label={typo("Поиск по таблице")}
+          placeholder={typo("Поиск по таблице…")}
+          value={globalFilter}
+          onChange={(event) => {
+            table.setGlobalFilter(event.target.value);
+            table.setPageIndex(0);
+          }}
+          className="h-8 w-full sm:w-64"
+        />
         {columns.map((column) => (
           <DataTableToolbarFilter key={column.id} column={column} />
         ))}

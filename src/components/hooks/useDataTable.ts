@@ -141,6 +141,10 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
 
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(initialState?.rowSelection ?? {});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(initialState?.columnVisibility ?? {});
+  const initialGlobalFilter: unknown = initialState?.globalFilter;
+  const [globalFilter, setGlobalFilter] = React.useState<string>(
+    typeof initialGlobalFilter === "string" ? initialGlobalFilter : "",
+  );
 
   const [page, setPage] = useQueryState(pageKey, parseAsInteger.withOptions(queryStateOptions).withDefault(1));
   const [perPage, setPerPage] = useQueryState(
@@ -289,6 +293,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
       columnVisibility,
       rowSelection,
       columnFilters,
+      globalFilter,
     },
     defaultColumn: {
       enableColumnFilter: false,
@@ -299,6 +304,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     onPaginationChange,
     onSortingChange,
     onColumnFiltersChange,
+    onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

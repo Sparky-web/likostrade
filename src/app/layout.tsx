@@ -1,7 +1,7 @@
 import "~/components/globals.css";
 
 import { type Metadata } from "next";
-import { Geist_Mono, Golos_Text, Unbounded } from "next/font/google";
+import localFont from "next/font/local";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { AdaptiveProvider, Toaster, TooltipProvider, UserProvider, ZodLocaleInit } from "~/components";
@@ -49,22 +49,23 @@ export const metadata: Metadata = {
   },
 };
 
-const golos = Golos_Text({
-  subsets: ["latin", "cyrillic"],
+const golos = localFont({
+  src: "./_fonts/GolosText.ttf",
   variable: "--font-golos",
-  weight: ["400", "500", "600"],
+  weight: "400 600",
   display: "swap",
 });
 
-const unbounded = Unbounded({
-  subsets: ["latin", "cyrillic"],
+const unbounded = localFont({
+  src: "./_fonts/Unbounded.ttf",
   variable: "--font-unbounded",
-  weight: ["600"],
+  weight: "600",
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
+const geistMono = localFont({
+  src: "./_fonts/GeistMono.ttf",
+  weight: "100 900",
   variable: "--font-geist-mono",
   display: "swap",
 });

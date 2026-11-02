@@ -8,7 +8,7 @@ on:
 
 # Не отменяем идущий деплой новым пушем: prod-job может ждать ручного аппрува.
 concurrency:
-  group: deploy
+  group: deploy-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Test deployment script
+        run: bash .github/scripts/test-deploy-script.sh
       - uses: pnpm/action-setup@v4 # версия из package.json → packageManager
       - uses: actions/setup-node@v4
         with:
@@ -61,7 +63,11 @@ jobs:
             ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
       - name: Build and verify on server
         run: |
-          ssh "$DEPLOY_USER@$DEPLOY_HOST" bash -s -- "$DEPLOY_PATH" "$GITHUB_SHA" < .github/scripts/deploy-on-server.sh
+          ssh "$DEPLOY_USER@$DEPLOY_HOST" bash "$DEPLOY_PATH/.github/scripts/deploy-on-server.sh" "$DEPLOY_PATH" "$GITHUB_SHA" </dev/null
+      - name: Verify deployed revision
+        run: |
+          deployed_revision=$(ssh "$DEPLOY_USER@$DEPLOY_HOST" "cat '$DEPLOY_PATH/.deploy-revision'")
+          test "$deployed_revision" = "$GITHUB_SHA"
       - name: Check public HTTPS
         run: curl --fail --silent --show-error --retry 6 --retry-delay 5 --retry-connrefused --max-time 20 https://test.likostrade.com/
 
@@ -95,6 +101,10 @@ jobs:
             ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
       - name: Build and verify on server
         run: |
-          ssh "$DEPLOY_USER@$DEPLOY_HOST" bash -s -- "$DEPLOY_PATH" "$GITHUB_SHA" < .github/scripts/deploy-on-server.sh
+          ssh "$DEPLOY_USER@$DEPLOY_HOST" bash "$DEPLOY_PATH/.github/scripts/deploy-on-server.sh" "$DEPLOY_PATH" "$GITHUB_SHA" </dev/null
+      - name: Verify deployed revision
+        run: |
+          deployed_revision=$(ssh "$DEPLOY_USER@$DEPLOY_HOST" "cat '$DEPLOY_PATH/.deploy-revision'")
+          test "$deployed_revision" = "$GITHUB_SHA"
       - name: Check public HTTPS
         run: curl --fail --silent --show-error --retry 6 --retry-delay 5 --retry-connrefused --max-time 20 https://likostrade.com/
